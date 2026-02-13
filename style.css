@@ -699,12 +699,14 @@ p {
     margin-bottom: var(--spacing-sm);
     font-size: 1.1rem; 
     line-height: 1.8;  
+    
 }
 
 .footer-column a {
     color: white;
     font-size: 1.1rem; 
     line-height: 1.8;  
+
 }
 
 .footer-column a:hover {
@@ -1119,6 +1121,91 @@ p {
     color: #ccc;
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+
+.repair-status-container {
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    width: 90% !important; /* Sayfayı %100 kaplayıp sıkıştırmasın diye */
+    max-width: 1000px;
+    margin: 40px auto !important; /* Sağından solundan 'auto' vererek kendini ortalar */
+    position: relative !important;
+}
+
+.status-box {
+    display: block;
+    text-decoration: none;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Kutuya hover yapınca parlaması için */
+.status-box:hover {
+    transform: translateY(-5px);
+    border-color: #00d2ff; /* Senin seçtiğin bir renk olabilir */
+    box-shadow: 0 15px 40px rgba(0, 210, 255, 0.2);
+}
+
+.status-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    color: white;
+}
+
+.status-icon {
+    font-size: 2.5rem;
+    color: #00d2ff;
+}
+
+.status-text h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.status-text p {
+    margin: 5px 0 0;
+    opacity: 0.8;
+    font-size: 0.95rem;
+}
+
+.status-arrow {
+    background: #00d2ff;
+    color: #1a1a1a;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.status-box:hover .status-arrow {
+    background: white;
+    padding-right: 25px;
+}
+
+/* Mobil uyum için */
+@media (max-width: 768px) {
+    .status-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .status-arrow {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 
