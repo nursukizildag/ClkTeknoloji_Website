@@ -18,7 +18,7 @@ The main goal was to design, develop, and deploy a live website from scratch.
 - Java Script
 
 ### 🌐 Live Website
-[Live Website Link]
+https://clkteknoloji.com
 
 ### 🎯 What I Learned
 - Real-world project experience
