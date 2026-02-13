@@ -1,0 +1,5 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="150" r="150" fill="#94a3b8"/>
+  <text x="150" y="145" font-family="Arial" font-size="18" fill="white" text-anchor="middle" font-weight="bold">Team</text>
+  <text x="150" y="170" font-family="Arial" font-size="12" fill="white" text-anchor="middle"><!-- buraya ekip üyesi fotoğrafı koy --></text>
+</svg>

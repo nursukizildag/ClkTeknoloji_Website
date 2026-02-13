@@ -1,0 +1,5 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="150" r="150" fill="#cbd5e1"/>
+  <text x="150" y="145" font-family="Arial" font-size="18" fill="white" text-anchor="middle" font-weight="bold">Owner</text>
+  <text x="150" y="170" font-family="Arial" font-size="12" fill="white" text-anchor="middle"><!-- buraya sahip fotoğrafı koy --></text>
+</svg>
