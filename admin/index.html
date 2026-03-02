@@ -41,6 +41,9 @@
                 <a href="#" class="sidebar-link" data-page="secondhand">
                     <i class="fas fa-recycle"></i> 2. El Cihazlar
                 </a>
+                <a href="#" class="sidebar-link" data-page="carousel">
+                    <i class="fas fa-images"></i> Giriş Slider / Arka Plan
+                </a>
                 <a href="#" class="sidebar-link" data-page="sections">
                     <i class="fas fa-layer-group"></i> Bölüm Sıralama
                 </a>
@@ -335,8 +338,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="sh-price">Fiyat (₺) *</label>
-                                    <input type="number" id="sh-price" required placeholder="Örn: 25000">
+                                    <label for="sh-price">Fiyat (₺)</label>
+                                    <input type="number" id="sh-price" placeholder="Örn: 25000 (Opsiyonel)">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -361,8 +364,8 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="sh-battery"><i class="fas fa-battery-three-quarters"></i> Pil
-                                            Kapasitesi</label>
-                                        <input type="text" id="sh-battery" placeholder="Örn: 4352 mAh">
+                                            Ömrü</label>
+                                        <input type="text" id="sh-battery" placeholder="Örn: %85">
                                     </div>
                                     <div class="form-group">
                                         <label for="sh-screen"><i class="fas fa-mobile-alt"></i> Ekran Boyutu</label>
@@ -399,139 +402,164 @@
                         </form>
                     </div>
 
-                    <!-- 2. El Ürün Listesi -->
-                    <div class="table-card glass-card-admin" style="margin-top:20px;">
-                        <h3><i class="fas fa-recycle"></i> 2. El Ürün Listesi</h3>
-                        <div id="secondhand-product-list" class="secondhand-admin-grid">
-                            <p class="empty-message">Henüz 2. El ürün eklenmedi.</p>
-                        </div>
-                    </div>
-
-                    <!-- Carousel Fotoğraf Yönetimi -->
-                    <div class="form-card glass-card-admin" style="margin-top:20px;">
-                        <div class="page-header" style="margin-bottom: 16px;">
-                            <h3><i class="fas fa-images"></i> Carousel Arka Plan Fotoğrafları</h3>
-                            <button class="btn-admin btn-admin-primary btn-admin-sm" id="btn-add-carousel">
-                                <i class="fas fa-plus"></i> Fotoğraf Ekle
-                            </button>
-                        </div>
-                        <p class="page-desc">Ana sayfadaki kaydırmalı arka plan fotoğraflarını buradan yönetin.</p>
-
-                        <div class="form-card glass-card-admin" id="carousel-form"
-                            style="display:none; margin-top:12px;">
-                            <form id="carousel-add-form">
-                                <div class="form-group">
-                                    <label for="carousel-title">Başlık (opsiyonel)</label>
-                                    <input type="text" id="carousel-title" placeholder="Fotoğraf başlığı">
-                                </div>
-                                <div class="form-group">
-                                    <label for="carousel-image">Fotoğraf *</label>
-                                    <div class="file-upload" id="carousel-upload-area">
-                                        <i class="fas fa-cloud-upload-alt"></i>
-                                        <p>Fotoğraf yüklemek için tıklayın</p>
-                                        <input type="file" id="carousel-image" accept="image/*" required hidden>
-                                    </div>
-                                    <div id="carousel-preview" class="image-preview"></div>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-admin btn-admin-primary"><i
-                                            class="fas fa-save"></i> Yükle</button>
-                                    <button type="button" class="btn-admin btn-admin-ghost"
-                                        id="btn-cancel-carousel">İptal</button>
-                                </div>
-                            </form>
+                    <!-- 2. El Ürün Listesi (Kategorize Edilmiş) -->
+                    <div style="margin-top:24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <!-- Telefonlar -->
+                        <div class="table-card glass-card-admin">
+                            <h3 style="color: #60a5fa;"><i class="fas fa-mobile-alt"></i> 2. El Telefonlar</h3>
+                            <div id="secondhand-list-telefon" class="secondhand-admin-grid-vertical">
+                                <p class="empty-message">Yükleniyor...</p>
+                            </div>
                         </div>
 
-                        <div class="gallery-admin-grid" id="carousel-admin-grid" style="margin-top: 12px;">
-                            <p class="empty-message">Henüz carousel fotoğrafı eklenmedi. Varsayılan fotoğraflar
-                                kullanılıyor.</p>
+                        <!-- Bilgisayarlar -->
+                        <div class="table-card glass-card-admin">
+                            <h3 style="color: #fca5a5;"><i class="fas fa-laptop"></i> 2. El Bilgisayarlar</h3>
+                            <div id="secondhand-list-bilgisayar" class="secondhand-admin-grid-vertical">
+                                <p class="empty-message">Yükleniyor...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ========== BÖLÜM SIRALAMA ========== -->
-                <div class="admin-page" id="page-sections">
+                <!-- ========== CAROUSEL YÖNETİMİ ========== -->
+                <div class="admin-page" id="page-carousel">
                     <div class="page-header">
-                        <h2>Anasayfa Bölüm Sıralaması</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-save-order">
-                            <i class="fas fa-save"></i> Sırayı Kaydet
+                        <h2>Giriş Slider & Arka Plan Yönetimi</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-add-carousel">
+                            <i class="fas fa-plus"></i> Fotoğraf Ekle
                         </button>
                     </div>
+                    <p class="page-desc">Ana sayfa ve diğer bölümlerdeki kaydırmalı arka plan veya slider fotoğraflarını
+                        yönetin.</p>
 
-                    <p class="page-desc">Bölümleri sürükleyerek sıralayın. Kaydettikten sonra anasayfada bu sıraya göre
-                        gösterilir.</p>
-
-                    <div class="sortable-list" id="sortable-sections">
-                        <div class="sortable-item" draggable="true" data-section-id="hero-carousel">
-                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="sortable-info">
-                                <h3>Hero Slider (Carousel)</h3>
-                                <p>Ana karşılama slayt gösterisi</p>
-                            </div>
-                            <span class="sortable-badge">Üst</span>
-                        </div>
-
-                        <div class="sortable-item" draggable="true" data-section-id="services-overview">
-                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="sortable-info">
-                                <h3>Hizmetlerimiz</h3>
-                                <p>Ürün Satışı, Teknik Servis, Saat kartları</p>
-                            </div>
-                            <span class="sortable-badge badge-green">Aktif</span>
-                        </div>
-                        <div class="sortable-item" draggable="true" data-section-id="mission">
-                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="sortable-info">
-                                <h3>Misyon & Dükkan</h3>
-                                <p>Dükkan fotoğrafı ve misyon metni</p>
-                            </div>
-                            <span class="sortable-badge badge-green">Aktif</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========== FOTOGALERİ ========== -->
-                <div class="admin-page" id="page-gallery">
-                    <div class="page-header">
-                        <h2>FotoGaleri Yönetimi</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-add-gallery">
-                            <i class="fas fa-plus"></i> Fotoğraf Yükle
-                        </button>
-                    </div>
-
-                    <!-- Upload Form -->
-                    <div class="form-card glass-card-admin" id="gallery-form" style="display:none;">
-                        <h3>Fotoğraf Yükle</h3>
-                        <form id="gallery-add-form">
-                            <div class="form-group">
-                                <label for="gallery-title">Başlık</label>
-                                <input type="text" id="gallery-title" placeholder="Fotoğraf başlığı (opsiyonel)">
+                    <div class="form-card glass-card-admin" id="carousel-form" style="display:none;">
+                        <h3 id="carousel-form-title"><i class="fas fa-images"></i> Yeni Fotoğraf Ekle</h3>
+                        <form id="carousel-add-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="carousel-title">Başlık (Opsiyonel)</label>
+                                    <input type="text" id="carousel-title" placeholder="Slider üzerinde görünecek yazı">
+                                </div>
+                                <div class="form-group">
+                                    <label for="carousel-target">Göründüğü Sayfa / Bölüm *</label>
+                                    <select id="carousel-target" required>
+                                        <option value="home">Anasayfa Hero Slider</option>
+                                        <option value="secondhand">2. El Bölümü Arka Planı</option>
+                                        <option value="service">Teknik Servis Arka Planı</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="gallery-image">Fotoğraf *</label>
-                                <div class="file-upload" id="gallery-upload-area">
+                                <label for="carousel-image">Fotoğraf *</label>
+                                <div class="file-upload" id="carousel-upload-area">
                                     <i class="fas fa-cloud-upload-alt"></i>
                                     <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-                                    <input type="file" id="gallery-image" accept="image/*" required hidden>
+                                    <input type="file" id="carousel-image" accept="image/*" required hidden>
                                 </div>
-                                <div id="gallery-preview" class="image-preview"></div>
+                                <div id="carousel-preview" class="image-preview"></div>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
                                     Yükle</button>
                                 <button type="button" class="btn-admin btn-admin-ghost"
-                                    id="btn-cancel-gallery">İptal</button>
+                                    id="btn-cancel-carousel">İptal</button>
                             </div>
                         </form>
                     </div>
 
-                    <div class="gallery-admin-grid" id="gallery-admin-grid">
-                        <p class="empty-message">Henüz fotoğraf yüklenmedi.</p>
+                    <div class="table-card glass-card-admin" style="margin-top:20px;">
+                        <h3><i class="fas fa-images"></i> Mevcut Fotoğraflar</h3>
+                        <div class="gallery-admin-grid" id="carousel-admin-grid">
+                            <p class="empty-message">Yükleniyor...</p>
+                        </div>
                     </div>
                 </div>
-
             </div>
-        </main>
+
+            <!-- ========== BÖLÜM SIRALAMA ========== -->
+            <div class="admin-page" id="page-sections">
+                <div class="page-header">
+                    <h2>Anasayfa Bölüm Sıralaması</h2>
+                    <button class="btn-admin btn-admin-primary" id="btn-save-order">
+                        <i class="fas fa-save"></i> Sırayı Kaydet
+                    </button>
+                </div>
+
+                <p class="page-desc">Bölümleri sürükleyerek sıralayın. Kaydettikten sonra anasayfada bu sıraya göre
+                    gösterilir.</p>
+
+                <div class="sortable-list" id="sortable-sections">
+                    <div class="sortable-item" draggable="true" data-section-id="hero-carousel">
+                        <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                        <div class="sortable-info">
+                            <h3>Hero Slider (Carousel)</h3>
+                            <p>Ana karşılama slayt gösterisi</p>
+                        </div>
+                        <span class="sortable-badge">Üst</span>
+                    </div>
+
+                    <div class="sortable-item" draggable="true" data-section-id="services-overview">
+                        <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                        <div class="sortable-info">
+                            <h3>Hizmetlerimiz</h3>
+                            <p>Ürün Satışı, Teknik Servis, Saat kartları</p>
+                        </div>
+                        <span class="sortable-badge badge-green">Aktif</span>
+                    </div>
+                    <div class="sortable-item" draggable="true" data-section-id="mission">
+                        <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                        <div class="sortable-info">
+                            <h3>Misyon & Dükkan</h3>
+                            <p>Dükkan fotoğrafı ve misyon metni</p>
+                        </div>
+                        <span class="sortable-badge badge-green">Aktif</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== FOTOGALERİ ========== -->
+            <div class="admin-page" id="page-gallery">
+                <div class="page-header">
+                    <h2>FotoGaleri Yönetimi</h2>
+                    <button class="btn-admin btn-admin-primary" id="btn-add-gallery">
+                        <i class="fas fa-plus"></i> Fotoğraf Yükle
+                    </button>
+                </div>
+
+                <!-- Upload Form -->
+                <div class="form-card glass-card-admin" id="gallery-form" style="display:none;">
+                    <h3>Fotoğraf Yükle</h3>
+                    <form id="gallery-add-form">
+                        <div class="form-group">
+                            <label for="gallery-title">Başlık</label>
+                            <input type="text" id="gallery-title" placeholder="Fotoğraf başlığı (opsiyonel)">
+                        </div>
+                        <div class="form-group">
+                            <label for="gallery-image">Fotoğraf *</label>
+                            <div class="file-upload" id="gallery-upload-area">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
+                                <input type="file" id="gallery-image" accept="image/*" required hidden>
+                            </div>
+                            <div id="gallery-preview" class="image-preview"></div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
+                                Yükle</button>
+                            <button type="button" class="btn-admin btn-admin-ghost"
+                                id="btn-cancel-gallery">İptal</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="gallery-admin-grid" id="gallery-admin-grid">
+                    <p class="empty-message">Henüz fotoğraf yüklenmedi.</p>
+                </div>
+            </div>
+
+    </div>
+    </main>
     </div>
 
     <script src="admin.js"></script>

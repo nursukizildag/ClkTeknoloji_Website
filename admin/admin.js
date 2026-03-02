@@ -74,6 +74,7 @@ function initSidebar() {
         products: 'Ürün Yönetimi',
         announcements: 'Duyurular / Kampanya',
         secondhand: '2. El Cihazlar',
+        carousel: 'Giriş Slider / Arka Plan',
         sections: 'Bölüm Sıralama',
         gallery: 'FotoGaleri'
     };
@@ -96,10 +97,9 @@ function initSidebar() {
             // Close sidebar on mobile
             if (sidebar) sidebar.classList.remove('open');
 
-            // Refresh secondhand product list when switching to that page
-            if (page === 'secondhand') {
-                renderSecondHandProducts();
-            }
+            // Refresh lists when switching
+            if (page === 'secondhand') renderSecondHandProducts();
+            if (page === 'carousel') renderCarousel();
         });
     });
 
@@ -115,6 +115,7 @@ function initSidebar() {
 // PRODUCT MANAGEMENT
 // ============================================
 function initProducts() {
+    console.log("Initializing Product Manager...");
     const addBtn = document.getElementById('btn-add-product');
     const cancelBtn = document.getElementById('btn-cancel-product');
     const form = document.getElementById('product-form');
@@ -124,19 +125,21 @@ function initProducts() {
     const preview = document.getElementById('product-preview');
 
     if (addBtn && form) {
-        addBtn.addEventListener('click', () => {
+        addBtn.onclick = (e) => {
+            e.preventDefault();
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        });
+        };
     }
 
     if (cancelBtn && form) {
-        cancelBtn.addEventListener('click', () => {
+        cancelBtn.onclick = (e) => {
+            e.preventDefault();
             form.style.display = 'none';
             addForm.reset();
             document.getElementById('edit-product-id').value = '';
             document.getElementById('product-form-title').textContent = 'Yeni Ürün Ekle';
             if (preview) preview.innerHTML = '';
-        });
+        };
     }
 
     // File upload
@@ -737,6 +740,7 @@ async function deleteGalleryItem(id) {
 // 2. EL CİHAZLAR MANAGEMENT
 // ============================================
 function initSecondHand() {
+    console.log("Initializing Second Hand Manager...");
     const addBtn = document.getElementById('btn-add-secondhand');
     const cancelBtn = document.getElementById('btn-cancel-secondhand');
     const form = document.getElementById('secondhand-form');
@@ -767,25 +771,6 @@ function initSecondHand() {
     // File upload
     if (uploadArea && fileInput) {
         uploadArea.addEventListener('click', () => fileInput.click());
-
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#e8872a';
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = '';
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '';
-            if (e.dataTransfer.files.length > 0) {
-                fileInput.files = e.dataTransfer.files;
-                showImagePreview(fileInput.files[0], preview);
-            }
-        });
-
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
                 showImagePreview(fileInput.files[0], preview);
@@ -822,7 +807,7 @@ function initSecondHand() {
                     brand: document.getElementById('sh-brand').value,
                     category: category,
                     condition: 'ikinci-el',
-                    price: document.getElementById('sh-price').value,
+                    price: document.getElementById('sh-price').value || 0,
                     description: document.getElementById('sh-desc').value,
                     image: imageData,
                     specs: specs
@@ -882,16 +867,17 @@ function initSecondHand() {
     }
 
     renderSecondHandProducts();
-    initCarousel();
 }
 
 window.currentSecondHandProducts = [];
 
 async function renderSecondHandProducts() {
-    const container = document.getElementById('secondhand-product-list');
-    if (!container) return;
+    const listTelefon = document.getElementById('secondhand-list-telefon');
+    const listBilgisayar = document.getElementById('secondhand-list-bilgisayar');
+    if (!listTelefon || !listBilgisayar) return;
 
-    container.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
+    listTelefon.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
+    listBilgisayar.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
 
     try {
         const response = await fetch('/api/products');
@@ -900,45 +886,51 @@ async function renderSecondHandProducts() {
         const products = allProducts.filter(p => p.condition === 'ikinci-el');
         window.currentSecondHandProducts = products;
 
-        if (products.length === 0) {
-            container.innerHTML = '<p class="empty-message">Henüz 2. El ürün eklenmedi.</p>';
+        const telefons = products.filter(p => p.category === 'telefon');
+        const bilgisayars = products.filter(p => p.category === 'bilgisayar');
+
+        renderItems(telefons, listTelefon, 'Henüz 2. El telefon eklenmedi.');
+        renderItems(bilgisayars, listBilgisayar, 'Henüz 2. El bilgisayar eklenmedi.');
+
+    } catch (err) {
+        listTelefon.innerHTML = '<p class="empty-message" style="color:#ef4444;">Hata oluştu.</p>';
+        listBilgisayar.innerHTML = '<p class="empty-message" style="color:#ef4444;">Hata oluştu.</p>';
+    }
+
+    function renderItems(items, container, emptyMsg) {
+        if (items.length === 0) {
+            container.innerHTML = `<p class="empty-message">${emptyMsg}</p>`;
             return;
         }
 
-        container.innerHTML = products.map(p => {
+        container.innerHTML = items.map(p => {
             const specs = (typeof p.specs === 'string' ? JSON.parse(p.specs || '{}') : p.specs) || {};
             const specItems = [
                 specs.storage ? `<span class="sh-spec-tag"><i class="fas fa-hdd"></i> ${specs.storage}</span>` : '',
-                specs.ram ? `<span class="sh-spec-tag"><i class="fas fa-memory"></i> ${specs.ram}</span>` : '',
-                specs.battery ? `<span class="sh-spec-tag"><i class="fas fa-battery-three-quarters"></i> ${specs.battery}</span>` : '',
-                specs.screen ? `<span class="sh-spec-tag"><i class="fas fa-mobile-alt"></i> ${specs.screen}</span>` : '',
-                specs.processor ? `<span class="sh-spec-tag"><i class="fas fa-bolt"></i> ${specs.processor}</span>` : '',
-                specs.color ? `<span class="sh-spec-tag"><i class="fas fa-palette"></i> ${specs.color}</span>` : ''
+                specs.ram ? `<span class="sh-spec-tag"><i class="fas fa-memory"></i> ${specs.ram}</span>` : ''
             ].filter(Boolean).join('');
 
             return `
-            <div class="secondhand-admin-card">
-                ${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<div class="no-image"><i class="fas fa-image"></i></div>'}
-                <div class="secondhand-admin-info">
-                    <strong>${p.name}</strong>
-                    ${p.brand ? `<span class="brand-tag">${p.brand}</span>` : ''}
-                    ${p.code ? `<span class="code-tag">Kod: ${p.code}</span>` : ''}
-                    ${specItems ? `<div class="sh-spec-tags">${specItems}</div>` : ''}
-                    ${p.price ? `<span class="price-tag">₺${Number(p.price).toLocaleString('tr-TR')}</span>` : ''}
+            <div class="secondhand-admin-card-list">
+                <div class="sh-card-preview">
+                    ${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<div class="no-image-sm"><i class="fas fa-image"></i></div>'}
                 </div>
-                <div class="secondhand-admin-actions">
-                    <button class="btn-admin btn-admin-primary btn-admin-sm" onclick="editSecondHand('${p.id}')" title="Düzenle">
+                <div class="sh-card-details">
+                    <strong>${p.name}</strong>
+                    <div class="sh-specs-compact">${specItems}</div>
+                    ${p.price && Number(p.price) > 0 ? `<span class="price-badge-sm">₺${Number(p.price).toLocaleString('tr-TR')}</span>` : '<span class="price-badge-sm" style="color: #9ca3af; background: rgba(156, 163, 175, 0.1);">Fiyat Belirtilmemiş</span>'}
+                </div>
+                <div class="sh-card-actions">
+                    <button class="btn-admin-icon" onclick="editSecondHand('${p.id}')" title="Düzenle">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn-admin btn-admin-danger btn-admin-sm" onclick="deleteSecondHand('${p.id}')" title="Sil">
+                    <button class="btn-admin-icon danger" onclick="deleteSecondHand('${p.id}')" title="Sil">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
             </div>
             `;
         }).join('');
-    } catch (err) {
-        container.innerHTML = '<p class="empty-message" style="color:#ef4444;">Ürünler yüklenirken hata oluştu.</p>';
     }
 }
 
@@ -994,7 +986,11 @@ async function deleteSecondHand(id) {
 // ============================================
 // CAROUSEL MANAGEMENT
 // ============================================
+// ============================================
+// CAROUSEL MANAGEMENT
+// ============================================
 function initCarousel() {
+    console.log("Initializing Carousel Manager...");
     const addBtn = document.getElementById('btn-add-carousel');
     const cancelBtn = document.getElementById('btn-cancel-carousel');
     const form = document.getElementById('carousel-form');
@@ -1004,22 +1000,22 @@ function initCarousel() {
     const preview = document.getElementById('carousel-preview');
 
     if (addBtn && form) {
-        addBtn.addEventListener('click', () => {
+        addBtn.onclick = () => {
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        });
+        };
     }
 
     if (cancelBtn && form) {
-        cancelBtn.addEventListener('click', () => {
+        cancelBtn.onclick = () => {
             form.style.display = 'none';
             if (addForm) addForm.reset();
             if (preview) preview.innerHTML = '';
-        });
+        };
     }
 
     // File upload
     if (uploadArea && fileInput) {
-        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.onclick = () => fileInput.click();
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
                 showImagePreview(fileInput.files[0], preview);
@@ -1029,7 +1025,7 @@ function initCarousel() {
 
     // Submit
     if (addForm) {
-        addForm.addEventListener('submit', async (e) => {
+        addForm.onsubmit = async (e) => {
             e.preventDefault();
 
             let imageData = preview?.querySelector('img')?.src || null;
@@ -1044,6 +1040,7 @@ function initCarousel() {
             const item = {
                 id: Date.now().toString(),
                 title: document.getElementById('carousel-title').value || '',
+                target_page: document.getElementById('carousel-target').value,
                 image: imageData
             };
 
@@ -1061,11 +1058,11 @@ function initCarousel() {
                 form.style.display = 'none';
 
                 renderCarousel();
-                showNotification('Carousel fotoğrafı yüklendi!', 'success');
+                showNotification('Fotoğraf başarıyla yüklendi!', 'success');
             } catch (err) {
                 showNotification('Hata: ' + err.message, 'error');
             }
-        });
+        };
     }
 
     renderCarousel();
@@ -1083,20 +1080,29 @@ async function renderCarousel() {
         const images = await response.json();
 
         if (images.length === 0) {
-            grid.innerHTML = '<p class="empty-message">Henüz carousel fotoğrafı eklenmedi. Varsayılan fotoğraflar kullanılıyor.</p>';
+            grid.innerHTML = '<p class="empty-message">Henüz fotoğraf eklenmedi.</p>';
             return;
         }
+
+        const pageLabels = {
+            home: 'Anasayfa Hero',
+            secondhand: '2. El Arkaplan',
+            service: 'Teknik Servis'
+        };
 
         grid.innerHTML = images.map(img => `
             <div class="gallery-admin-item">
                 <img src="${img.image}" alt="${img.title || 'Carousel'}">
-                <button class="gallery-delete" onclick="deleteCarouselImage('${img.id}')" title="Sil">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="carousel-item-overlay">
+                    <span class="page-badge">${pageLabels[img.target_page] || img.target_page}</span>
+                    <button class="gallery-delete" onclick="deleteCarouselImage('${img.id}')" title="Sil">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
         `).join('');
     } catch (err) {
-        grid.innerHTML = '<p class="empty-message" style="color:#ef4444;">Carousel yüklenirken hata oluştu.</p>';
+        grid.innerHTML = '<p class="empty-message" style="color:#ef4444;">Yüklenirken hata oluştu.</p>';
     }
 }
 
@@ -1304,6 +1310,10 @@ window.deleteProduct = deleteProduct;
 window.deleteAnnouncement = deleteAnnouncement;
 window.deleteGalleryItem = deleteGalleryItem;
 window.editProduct = editProduct;
+window.deleteSecondHand = deleteSecondHand;
+window.editSecondHand = editSecondHand;
+window.deleteCarouselImage = deleteCarouselImage;
+window.renderCarousel = renderCarousel;
 window.editSecondHand = editSecondHand;
 window.deleteSecondHand = deleteSecondHand;
 window.deleteCarouselImage = deleteCarouselImage;

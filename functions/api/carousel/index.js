@@ -5,7 +5,13 @@ export async function onRequestGet(context) {
     const { env } = context;
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL is missing" }, { status: 500 });
+        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     try {
@@ -19,7 +25,13 @@ export async function onRequestGet(context) {
             }
         });
     } catch (e) {
-        return Response.json({ error: e.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 }
 
@@ -28,11 +40,23 @@ export async function onRequestPost(context) {
 
     const authed = await isAuthenticated(request, env);
     if (!authed) {
-        return Response.json({ error: "Unauthorized" }, { status: 401 });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL is missing" }, { status: 500 });
+        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     try {
@@ -40,13 +64,35 @@ export async function onRequestPost(context) {
         const data = await request.json();
 
         const result = await sql`
-            INSERT INTO carousel_images (id, title, image, sort_order)
-            VALUES (${data.id}, ${data.title || ''}, ${data.image || ''}, ${data.sort_order || 0})
+            INSERT INTO carousel_images (id, title, image, target_page, sort_order)
+            VALUES (${data.id}, ${data.title || ''}, ${data.image || ''}, ${data.target_page || 'home'}, ${data.sort_order || 0})
             RETURNING *
         `;
 
-        return Response.json({ success: true, item: result[0] });
+        return new Response(JSON.stringify({ success: true, item: result[0] }), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     } catch (e) {
-        return Response.json({ error: e.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
+}
+
+export async function onRequestOptions() {
+    return new Response(null, {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Max-Age': '86400'
+        }
+    });
 }

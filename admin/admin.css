@@ -852,35 +852,162 @@ body {
     color: var(--admin-highlight);
 }
 
-.sh-spec-tag i {
-    font-size: 0.6rem;
-}
-
-.secondhand-admin-info .code-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    background: rgba(139, 92, 246, 0.15);
-    color: #a78bfa;
-    margin-left: 4px;
-}
-
-.secondhand-admin-actions {
+/* ===== CATEGORIZED 2. EL LISTS ===== */
+.secondhand-admin-grid-vertical {
     display: flex;
-    gap: 6px;
-    padding: 8px 12px;
-    border-top: 1px solid var(--admin-border);
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
 }
 
-.spec-fields-section {
-    padding: 16px;
-    margin: 12px 0;
-    border-radius: var(--radius);
-    background: rgba(232, 135, 42, 0.04);
-    border: 1px solid rgba(232, 135, 42, 0.15);
+.secondhand-admin-card-list {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.secondhand-admin-card-list:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--admin-highlight);
+    transform: translateX(4px);
+}
+
+.sh-card-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sh-card-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image-sm {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1.2rem;
+}
+
+.sh-card-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sh-card-details strong {
+    font-size: 0.9rem;
+    color: var(--admin-text);
+}
+
+.sh-specs-compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.price-badge-sm {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--admin-highlight);
+}
+
+.sh-card-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-admin-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: var(--admin-text-soft);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-admin-icon:hover {
+    background: var(--admin-primary);
+    color: white;
+}
+
+.btn-admin-icon.danger:hover {
+    background: #ef4444;
+}
+
+/* ===== CAROUSEL OVERLAYS ===== */
+.carousel-item-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 5;
+}
+
+.page-badge {
+    padding: 4px 10px;
+    background: var(--admin-primary);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-admin-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
+
+.gallery-admin-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-delete {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+
+.gallery-delete:hover {
+    transform: scale(1.1);
+    background: #ef4444;
 }
 
 /* ===== RESPONSIVE ===== */

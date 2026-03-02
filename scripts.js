@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollEffects();
     loadSectionOrder();
     loadGallery();
+    loadHeroCarousel();
     loadSecondHandProducts();
     initWhatsAppContactForm();
     handleInitialHash();
@@ -297,10 +298,69 @@ function updateBreadcrumb(sectionId) {
 }
 
 // ============================================
-// CAROUSEL
 // ============================================
+// CAROUSEL (Hero Slider)
+// ============================================
+async function loadHeroCarousel() {
+    const carouselInner = document.querySelector('#hero-carousel .carousel-inner');
+    const carouselIndicators = document.querySelector('#hero-carousel .carousel-indicators');
+    if (!carouselInner) return;
+
+    try {
+        const response = await fetch('/api/carousel');
+        if (!response.ok) throw new Error('Carousel API error');
+        const allImages = await response.json();
+        const heroImages = allImages.filter(img => img.target_page === 'home');
+
+        if (heroImages.length === 0) {
+            // Keep default if empty or show a placeholder? 
+            // For now, if empty we just leave the hardcoded one or show first one
+            return;
+        }
+
+        // Render slides
+        carouselInner.innerHTML = heroImages.map((img, i) => `
+            <div class="carousel-slide ${i === 0 ? 'active' : ''}">
+                <img src="${img.image}" alt="${img.title || 'CLK Teknoloji'}" loading="lazy">
+                <div class="carousel-overlay"></div>
+                ${img.title ? `
+                <div class="carousel-content">
+                    <h1 class="carousel-title animate-fade-up">${img.title}</h1>
+                    <div class="carousel-actions animate-fade-up delay-2">
+                        <a href="#products" class="btn btn-primary" onclick="navigateToSection('products'); return false;">Ürünleri İncele</a>
+                        <a href="#contact" class="btn btn-outline" onclick="navigateToSection('contact'); return false;">Bize Ulaşın</a>
+                    </div>
+                </div>` : ''}
+            </div>
+        `).join('');
+
+        // Render indicators
+        if (carouselIndicators) {
+            carouselIndicators.innerHTML = heroImages.map((_, i) => `
+                <div class="indicator ${i === 0 ? 'active' : ''}" data-slide="${i}"></div>
+            `).join('');
+        }
+
+        // Re-init logic
+        initCarousel();
+
+    } catch (e) {
+        console.warn('Hero carousel loading failed:', e);
+    }
+}
+
 function initCarousel() {
-    if (!elements.carousel || !elements.slides || elements.slides.length === 0) return;
+    const carousel = document.getElementById('hero-carousel');
+    if (!carousel) return;
+
+    // Refresh elements after dynamic load
+    elements.carousel = carousel;
+    elements.slides = carousel.querySelectorAll('.carousel-slide');
+    elements.indicators = carousel.querySelectorAll('.indicator');
+    elements.prevBtn = carousel.querySelector('.carousel-control.prev');
+    elements.nextBtn = carousel.querySelector('.carousel-control.next');
+
+    if (!elements.slides || elements.slides.length === 0) return;
 
     // Control buttons
     if (elements.prevBtn) {
@@ -568,9 +628,10 @@ async function loadSecondHandProducts() {
     try {
         const carouselRes = await fetch('/api/carousel');
         if (carouselRes.ok) {
-            const carouselImages = await carouselRes.json();
-            if (carouselImages.length > 0 && parallaxBg) {
-                parallaxBg.style.backgroundImage = `url(${carouselImages[0].image})`;
+            const allImages = await carouselRes.json();
+            const shImages = allImages.filter(img => img.target_page === 'secondhand');
+            if (shImages.length > 0 && parallaxBg) {
+                parallaxBg.style.backgroundImage = `url(${shImages[0].image})`;
                 parallaxBg.classList.add('has-image');
             }
         }

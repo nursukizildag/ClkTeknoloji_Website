@@ -8,11 +8,23 @@ export async function onRequestPut(context) {
     // Auth Check
     const authed = await isAuthenticated(request, env);
     if (!authed) {
-        return Response.json({ error: "Unauthorized" }, { status: 401 });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL is missing" }, { status: 500 });
+        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     try {
@@ -35,13 +47,30 @@ export async function onRequestPut(context) {
         `;
 
         if (result.length === 0) {
-            return Response.json({ error: "Product not found" }, { status: 404 });
+            return new Response(JSON.stringify({ error: "Product not found" }), {
+                status: 404,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            });
         }
 
-        return Response.json({ success: true, product: result[0] });
+        return new Response(JSON.stringify({ success: true, product: result[0] }), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     } catch (e) {
         console.error("DB Update Error:", e);
-        return Response.json({ error: e.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 }
 
@@ -52,11 +81,23 @@ export async function onRequestDelete(context) {
     // Auth Check
     const authed = await isAuthenticated(request, env);
     if (!authed) {
-        return Response.json({ error: "Unauthorized" }, { status: 401 });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL is missing" }, { status: 500 });
+        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     try {
@@ -67,12 +108,40 @@ export async function onRequestDelete(context) {
         `;
 
         if (result.length === 0) {
-            return Response.json({ error: "Product not found" }, { status: 404 });
+            return new Response(JSON.stringify({ error: "Product not found" }), {
+                status: 404,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                }
+            });
         }
 
-        return Response.json({ success: true, deleted_id: id });
+        return new Response(JSON.stringify({ success: true, deleted_id: id }), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     } catch (e) {
         console.error("DB Delete Error:", e);
-        return Response.json({ error: e.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
+}
+
+export async function onRequestOptions() {
+    return new Response(null, {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Max-Age': '86400'
+        }
+    });
 }

@@ -5,14 +5,19 @@ export async function onRequestGet(context) {
     const { env } = context;
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL environment variable is missing" }, { status: 500 });
+        return new Response(JSON.stringify({ error: "DATABASE_URL environment variable is missing" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     try {
         const sql = neon(env.DATABASE_URL);
         const products = await sql`SELECT * FROM products ORDER BY created_at DESC`;
 
-        // Return products as JSON application
         return new Response(JSON.stringify(products), {
             headers: {
                 'Content-Type': 'application/json',
@@ -20,7 +25,13 @@ export async function onRequestGet(context) {
             }
         });
     } catch (e) {
-        return Response.json({ error: e.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 }
 
@@ -30,11 +41,23 @@ export async function onRequestPost(context) {
     // Auth Check
     const authed = await isAuthenticated(request, env);
     if (!authed) {
-        return Response.json({ error: "Unauthorized" }, { status: 401 });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL is missing" }, { status: 500 });
+        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
 
     try {
@@ -48,9 +71,31 @@ export async function onRequestPost(context) {
             RETURNING *
         `;
 
-        return Response.json({ success: true, product: result[0] });
+        return new Response(JSON.stringify({ success: true, product: result[0] }), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     } catch (e) {
         console.error("DB Insert Error:", e);
-        return Response.json({ error: e.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: e.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
     }
+}
+
+export async function onRequestOptions() {
+    return new Response(null, {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Max-Age': '86400'
+        }
+    });
 }

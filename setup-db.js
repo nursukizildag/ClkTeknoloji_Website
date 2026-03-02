@@ -57,11 +57,13 @@ async function setup() {
                 id VARCHAR(100) PRIMARY KEY,
                 title VARCHAR(255),
                 image TEXT,
+                target_page VARCHAR(100) DEFAULT 'home',
                 sort_order INTEGER DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
-        console.log('Carousel images table created successfully.');
+        await sql`ALTER TABLE carousel_images ADD COLUMN IF NOT EXISTS target_page VARCHAR(100) DEFAULT 'home'`;
+        console.log('Carousel images table created/updated successfully.');
 
         console.log('Database setup complete.');
     } catch (error) {
