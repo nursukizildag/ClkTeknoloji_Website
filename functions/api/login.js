@@ -5,6 +5,34 @@
  * Başarılıysa oturum token'ı oluşturup cookie olarak set eder.
  */
 
+// Teşhis için GET metodu eklendi
+export async function onRequestGet(context) {
+    const { env } = context;
+
+    // KV bağlantısını test et
+    const hasKV = !!env.ADMIN_AUTH;
+    let testValue = "okunamadı";
+    let error = null;
+
+    if (hasKV) {
+        try {
+            testValue = await env.ADMIN_AUTH.get('admin_credentials', 'json') ? "bağlantı başarılı, veri var" : "bağlantı başarılı, veri yok";
+        } catch (e) {
+            error = e.message;
+        }
+    }
+
+    return new Response(JSON.stringify({
+        status: "Diagnostic Mode",
+        kv_binding_exists: hasKV,
+        kv_test_result: testValue,
+        error: error,
+        env_keys: Object.keys(env)
+    }, null, 2), {
+        headers: { 'Content-Type': 'application/json' }
+    });
+}
+
 export async function onRequestPost(context) {
     const { request, env } = context;
 
@@ -15,6 +43,10 @@ export async function onRequestPost(context) {
     };
 
     try {
+        if (!env.ADMIN_AUTH) {
+            throw new Error("ADMIN_AUTH KV namespace is not bound to this Function!");
+        }
+
         const body = await request.json();
         const { username, password } = body;
 
@@ -26,13 +58,18 @@ export async function onRequestPost(context) {
         }
 
         // KV'den kayıtlı kimlik bilgilerini al
-        const storedCreds = await env.ADMIN_AUTH.get('admin_credentials', 'json');
+        let storedCreds;
+        try {
+            storedCreds = await env.ADMIN_AUTH.get('admin_credentials', 'json');
+        } catch (e) {
+            throw new Error("Girdiğiniz ayarlar okunurken KV hatası oluştu: " + e.message);
+        }
 
         if (!storedCreds) {
             console.error('KV\'de admin_credentials bulunamadı!');
             return new Response(JSON.stringify({
                 success: false,
-                message: 'Sistem yapılandırması eksik. Lütfen yöneticiyle iletişime geçin.'
+                message: 'Sistem yapılandırması eksik (admin_credentials bulunamadı). Cloudflare KV ayarlarını kontrol edin.'
             }), { status: 500, headers: corsHeaders });
         }
 
@@ -75,10 +112,11 @@ export async function onRequestPost(context) {
         }), { status: 401, headers: corsHeaders });
 
     } catch (err) {
-        console.error('Login hatası:', err);
+        console.error('Login Hatası (Detaylı):', err);
         return new Response(JSON.stringify({
             success: false,
-            message: 'Sunucu hatası oluştu.'
+            error_details: err.message,
+            message: 'Sunucu hatası: ' + err.message
         }), { status: 500, headers: corsHeaders });
     }
 }
@@ -88,7 +126,7 @@ export async function onRequestOptions(context) {
     return new Response(null, {
         headers: {
             'Access-Control-Allow-Origin': new URL(context.request.url).origin,
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }
     });
