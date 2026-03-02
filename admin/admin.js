@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAnnouncements();
     initSectionOrdering();
     initGallery();
+    initCarousel();
     initSecondHand();
     updateDashboardStats();
 });
