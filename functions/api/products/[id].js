@@ -1,5 +1,5 @@
 import { neon } from '@neondatabase/serverless';
-import { isAuthenticated } from '../../_shared/auth.js';
+import { isAuthenticated } from '../_shared/auth.js';
 
 export async function onRequestPut(context) {
     const { request, env, params } = context;
