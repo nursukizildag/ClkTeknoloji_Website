@@ -1458,8 +1458,14 @@ p {
 
 .product-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: var(--spacing-md);
+}
+
+@media (max-width: 400px) {
+    .product-list {
+        grid-template-columns: 1fr;
+    }
 }
 
 .product-item {
@@ -1959,9 +1965,15 @@ p {
 
 .secondhand-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
+}
+
+@media (max-width: 600px) {
+    .secondhand-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .secondhand-card {

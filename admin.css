@@ -498,9 +498,13 @@ body {
 /* ===== TABLE ===== */
 .table-card {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
 }
 
 .admin-table {
+    min-width: 600px;
+    /* Ensure table doesn't compress too much */
     width: 100%;
     border-collapse: collapse;
 }
