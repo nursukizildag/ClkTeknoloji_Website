@@ -170,21 +170,21 @@ function initProducts() {
 
     // Submit form
     if (addForm) {
-        addForm.addEventListener('submit', (e) => {
+        addForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             try {
                 const editId = document.getElementById('edit-product-id').value;
                 const category = document.getElementById('product-category').value;
 
-                // Fotoğrafı sıkıştır (localStorage quota aşımını önlemek için)
+                // Fotoğrafı sıkıştır (veritabanı alanını idareli kullanmak için)
                 let imageData = preview ? (preview.querySelector('img')?.src || null) : null;
                 if (imageData && imageData.length > 500000) {
                     imageData = compressImage(imageData);
                 }
 
                 const product = {
-                    id: editId ? parseInt(editId) : Date.now(),
+                    id: editId ? editId : Date.now().toString(), // IDs should be strings since PG schema uses VARCHAR for ID
                     name: document.getElementById('product-name').value,
                     brand: document.getElementById('product-brand').value,
                     category: category,
@@ -194,29 +194,38 @@ function initProducts() {
                     image: imageData
                 };
 
-                const products = getFromStorage(STORAGE_KEYS.products);
+                const saveBtn = addForm.querySelector('button[type="submit"]');
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+                saveBtn.disabled = true;
 
                 if (editId) {
-                    // Update existing product
-                    const index = products.findIndex(p => p.id === parseInt(editId));
-                    if (index !== -1) {
-                        product.code = products[index].code || generateProductCode(category);
-                        if (!product.image && products[index].image) {
-                            product.image = products[index].image; // Keep old image if no new one provided
-                        }
-                        products[index] = product;
-                    } else {
-                        showNotification('Ürün bulunamadı!', 'error');
-                        return;
+                    // Orijinal ürünü bul
+                    const existingProduct = window.currentAdminProducts?.find(p => p.id === product.id);
+                    product.code = existingProduct?.code || generateProductCode(category);
+                    if (!product.image && existingProduct?.image) {
+                        product.image = existingProduct.image; // resim değişmediyse eskisini tut
                     }
                 } else {
-                    // Add new product
                     product.code = generateProductCode(category);
-                    products.push(product);
                 }
 
-                const saved = saveToStorage(STORAGE_KEYS.products, products);
-                if (!saved) return; // saveToStorage handles error notification
+                const endpoint = editId ? `/api/products/${product.id}` : '/api/products';
+                const method = editId ? 'PUT' : 'POST';
+
+                const response = await fetch(endpoint, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(product)
+                });
+
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+
+                if (!response.ok) {
+                    const errObj = await response.json();
+                    throw new Error(errObj.error || `Server fault: ${response.status}`);
+                }
 
                 showNotification(editId ? 'Ürün başarıyla güncellendi!' : 'Ürün başarıyla eklendi!', 'success');
 
@@ -228,10 +237,14 @@ function initProducts() {
                 form.style.display = 'none';
 
                 renderProducts();
-                updateDashboardStats();
             } catch (err) {
                 console.error('Ürün kaydetme hatası:', err);
                 showNotification('Ürün kaydedilirken bir hata oluştu: ' + err.message, 'error');
+                const saveBtn = addForm.querySelector('button[type="submit"]');
+                if (saveBtn) {
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
+                    saveBtn.disabled = false;
+                }
             }
         });
     }
@@ -239,14 +252,32 @@ function initProducts() {
     renderProducts();
 }
 
-function renderProducts() {
+window.currentAdminProducts = [];
+
+async function renderProducts() {
     const tbody = document.getElementById('products-table-body');
     if (!tbody) return;
 
-    const products = getFromStorage(STORAGE_KEYS.products);
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="8"><i class="fas fa-spinner fa-spin"></i> Ürünler yükleniyor...</td></tr>';
+
+    let products = [];
+    try {
+        const response = await fetch('/api/products');
+        if (response.ok) {
+            products = await response.json();
+            window.currentAdminProducts = products;
+        } else {
+            console.error("API error", response.status);
+            throw new Error(`API Hatası: ${response.status}`);
+        }
+    } catch (err) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="8" style="color: #ef4444;">Ürünler yüklenemedi. Veritabanı bağlantınızı kontrol edin.</td></tr>';
+        return;
+    }
 
     if (products.length === 0) {
         tbody.innerHTML = '<tr class="empty-row"><td colspan="8">Henüz ürün eklenmedi.</td></tr>';
+        updateDashboardStats();
         return;
     }
 
@@ -257,29 +288,18 @@ function renderProducts() {
         aksesuar: '🎧 Aksesuar'
     };
 
-    // Grupları sıralamak için özel siralama
     const categoryOrder = ['telefon', 'bilgisayar', 'saat', 'aksesuar', 'ikinci-el'];
-
     let html = '';
 
-    // Gruplara ayır (fakat asıl array sırasını bozmadan, sadece render ederken araya başlık atacağız)
-    // Ya da daha temiz olması için: Seçilen sıraya göre ürünleri baştan sıralayalım.
-    // Ancak kullanıcı sürükle bırak ile sıralama yapıyorsa, kategoriyi tamamen değiştiremez.
-    // Şimdilik sadece aynı kategoriler ardışık gelsin diye başlık basalım:
-
-    // Ürünleri kategoriye göre grupla
     const groupedProducts = {};
     categoryOrder.forEach(cat => groupedProducts[cat] = []);
 
-    // Var olan ama listede olmayan kategoriler
     products.forEach((p, originalIndex) => {
         const cat = p.category || 'diger';
         if (!groupedProducts[cat]) groupedProducts[cat] = [];
-        // Orijinal indexi sakla ki sürükle-bırak aynı objeyi güncellesin
         groupedProducts[cat].push({ ...p, originalIndex });
     });
 
-    // HTML oluştur
     categoryOrder.concat(Object.keys(groupedProducts).filter(k => !categoryOrder.includes(k))).forEach(cat => {
         if (groupedProducts[cat].length > 0) {
             const catName = categoryNames[cat] || (cat === 'ikinci-el' ? '🔥 2. El Cihazlar' : cat.toUpperCase());
@@ -299,10 +319,10 @@ function renderProducts() {
                     <td>${p.price ? `₺${Number(p.price).toLocaleString('tr-TR')}` : '—'}</td>
                     <td>${p.condition === 'ikinci-el' ? '<span style="color:#e8872a">2. El</span>' : 'Sıfır'}</td>
                     <td style="white-space: nowrap;">
-                        <button class="btn-admin btn-admin-primary btn-admin-sm" onclick="editProduct(${p.id})" style="margin-right: 5px;" title="Düzenle">
+                        <button class="btn-admin btn-admin-primary btn-admin-sm" onclick="editProduct('${p.id}')" style="margin-right: 5px;" title="Düzenle">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn-admin btn-admin-danger btn-admin-sm" onclick="deleteProduct(${p.id})" title="Sil">
+                        <button class="btn-admin btn-admin-danger btn-admin-sm" onclick="deleteProduct('${p.id}')" title="Sil">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -313,6 +333,7 @@ function renderProducts() {
     });
 
     tbody.innerHTML = html;
+    updateDashboardStats();
 
     // Sürükle-bırak olaylarını ekle
     const rows = tbody.querySelectorAll('.draggable-row');
@@ -323,19 +344,14 @@ function renderProducts() {
 
         row.addEventListener('dragstart', function (e) {
             e.dataTransfer.effectAllowed = 'move';
-            // Sadece görsel efektler için innerHTML veriyoruz
             e.dataTransfer.setData('text/plain', this.getAttribute('data-index'));
             this.classList.add('dragging');
-
-            // Sürüklenen elemanı belirginleştir
             setTimeout(() => this.style.opacity = '0.5', 0);
         });
 
         row.addEventListener('dragover', function (e) {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
-
-            // Farenin konumuna göre hedefi seç (öncesi/sonrası)
             const targetRow = e.target.closest('tr');
             if (targetRow && targetRow !== row) {
                 targetRow.classList.add('drag-over');
@@ -348,29 +364,7 @@ function renderProducts() {
 
         row.addEventListener('drop', function (e) {
             e.preventDefault();
-
-            // Sürüklenen öğenin indeksini al
-            const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
-            const targetRow = e.target.closest('tr.draggable-row');
-
-            if (!targetRow) return;
-
-            const targetIndex = parseInt(targetRow.getAttribute('data-index'));
-
-            if (draggedIndex !== targetIndex && !isNaN(draggedIndex)) {
-                // Diziyi güncelle
-                const currentProducts = getFromStorage(STORAGE_KEYS.products);
-                const draggedItem = currentProducts[draggedIndex];
-
-                // Elemanı çıkart ve yeni yerine ekle
-                currentProducts.splice(draggedIndex, 1);
-                currentProducts.splice(targetIndex, 0, draggedItem);
-
-                // Kaydet ve yeniden çiz
-                saveToStorage(STORAGE_KEYS.products, currentProducts);
-                renderProducts(); // Ekranı yenile
-                showNotification('Sıralama güncellendi.', 'success');
-            }
+            showNotification('Sürükle-bırak özelliği veritabanı sürümünde henüz desteklenmiyor.', 'error');
         });
 
         row.addEventListener('dragend', function () {
@@ -381,15 +375,25 @@ function renderProducts() {
     });
 }
 
-function deleteProduct(id) {
+async function deleteProduct(id) {
     if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
 
-    let products = getFromStorage(STORAGE_KEYS.products);
-    products = products.filter(p => p.id !== id);
-    saveToStorage(STORAGE_KEYS.products, products);
-    renderProducts();
-    updateDashboardStats();
-    showNotification('Ürün silindi.', 'success');
+    try {
+        const response = await fetch(`/api/products/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            const errObj = await response.json();
+            throw new Error(errObj.error || `HTTP error ${response.status}`);
+        }
+
+        showNotification('Ürün silindi.', 'success');
+        renderProducts();
+    } catch (err) {
+        console.error('Ürün silme hatası:', err);
+        showNotification('Ürün silinirken bir hata oluştu: ' + err.message, 'error');
+    }
 }
 
 // ============================================
@@ -901,8 +905,7 @@ function generateProductCode(category) {
 // Ürün Düzenleme
 function editProduct(id) {
     try {
-        const products = getFromStorage(STORAGE_KEYS.products);
-        const product = products.find(p => p.id === id);
+        const product = window.currentAdminProducts?.find(p => p.id === id);
         if (!product) {
             showNotification('Ürün bulunamadı!', 'error');
             return;

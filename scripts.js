@@ -566,12 +566,12 @@ function openGalleryLightbox(src, title) {
 // ============================================
 // 2. EL CİHAZLAR (localStorage bağlantılı)
 // ============================================
-function loadSecondHandProducts() {
+async function loadSecondHandProducts() {
     const grid = document.getElementById('secondhand-grid');
     const parallaxBg = document.getElementById('secondhand-parallax');
     if (!grid) return;
 
-    // Load parallax background
+    // Load parallax background (still in localStorage for now)
     try {
         const bgImage = localStorage.getItem('clk_secondhand_bg');
         if (bgImage && parallaxBg) {
@@ -580,15 +580,20 @@ function loadSecondHandProducts() {
         }
     } catch (e) { /* ignore */ }
 
-    // Load products
-    try {
-        const saved = localStorage.getItem('clk_admin_products');
-        if (!saved) return;
+    grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-light);"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top: 10px;">Ürünler yükleniyor...</p></div>';
 
-        const allProducts = JSON.parse(saved);
+    // Load products from API
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('API hatası');
+
+        const allProducts = await response.json();
         const secondHandProducts = allProducts.filter(p => p.condition === 'ikinci-el');
 
-        if (secondHandProducts.length === 0) return;
+        if (secondHandProducts.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-light);"><p>Şu an satılık 2. el cihazımız bulunmamaktadır.</p></div>';
+            return;
+        }
 
         grid.innerHTML = secondHandProducts.map(p => `
             <div class="secondhand-card glass-card" style="position: relative;">
@@ -599,39 +604,51 @@ function loadSecondHandProducts() {
                 </div>
                 <div class="secondhand-card-body">
                     <h3 class="secondhand-card-title">${p.name}</h3>
-                    ${p.brand ? `<span class="secondhand-brand"><i class="fas fa-tag"></i> ${p.brand}</span>` : ''}
-                    ${p.description ? `<p class="secondhand-desc">${p.description}</p>` : ''}
-                    ${p.price ? `<div class="secondhand-price">₺${Number(p.price).toLocaleString('tr-TR')}</div>` : ''}
-                    <a href="${getWhatsAppUrl(p.name, p.brand, p.code)}" target="_blank" class="btn btn-whatsapp-sm">
-                        <i class="fab fa-whatsapp"></i> Mesaj At
-                    </a>
+                    <div class="secondhand-card-meta">
+                        ${p.brand ? `<span class="meta-tag"><i class="fas fa-tag"></i> ${p.brand}</span>` : ''}
+                        <span class="meta-tag"><i class="fas fa-info-circle"></i> 2. El</span>
+                    </div>
+                    <p class="secondhand-card-desc">${p.description || 'Detaylı bilgi için bizimle iletişime geçin.'}</p>
+                    <div class="secondhand-card-footer">
+                        <span class="secondhand-price">₺${Number(p.price || 0).toLocaleString('tr-TR')}</span>
+                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=Merhaba, sitenizdeki '${p.name}' ${p.code ? `(Kod: ${p.code})` : ''} isimli 2. el cihaz hakkında detaylı bilgi almak istiyorum."
+                           target="_blank" class="secondhand-btn">
+                           <i class="fab fa-whatsapp"></i> Bilgi Al
+                        </a>
+                    </div>
                 </div>
             </div>
         `).join('');
-    } catch (e) {
-        console.warn('Could not load second-hand products:', e);
+    } catch (err) {
+        console.error("2. el ürünleri çekerken hata:", err);
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #ef4444;"><p>Ürünler yüklenirken bir sorun oluştu.</p></div>';
     }
 }
 
 // ============================================
 // ANA ÜRÜNLER (localStorage bağlantılı)
 // ============================================
-function loadMainProducts() {
+async function loadMainProducts() {
+    // Kategori container'ları
+    const containers = {
+        'telefon': document.getElementById('products-telefon'),
+        'bilgisayar': document.getElementById('products-bilgisayar'),
+        'saat': document.getElementById('products-saat'),
+        'aksesuar': document.getElementById('products-aksesuar')
+    };
+
+    // Her kategori için loading durumunu göster
+    Object.values(containers).forEach(container => {
+        if (container) container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</div>';
+    });
+
     try {
-        const saved = localStorage.getItem('clk_admin_products');
-        if (!saved) return;
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('API Hatası');
 
-        const allProducts = JSON.parse(saved);
+        const allProducts = await response.json();
 
-        // Kategori container'ları
-        const containers = {
-            'telefon': document.getElementById('products-telefon'),
-            'bilgisayar': document.getElementById('products-bilgisayar'),
-            'saat': document.getElementById('products-saat'),
-            'aksesuar': document.getElementById('products-aksesuar')
-        };
-
-        // Her kategori için container'ı temizle
+        // Container'ları temizle
         Object.values(containers).forEach(container => {
             if (container) container.innerHTML = '';
         });
@@ -654,7 +671,7 @@ function loadMainProducts() {
                         <h3 class="product-item-title">${p.name}</h3>
                         ${p.brand ? `<span class="product-item-brand"><i class="fas fa-tag"></i> ${p.brand}</span>` : ''}
                         ${p.price ? `<div class="product-item-price">₺${Number(p.price).toLocaleString('tr-TR')}</div>` : ''}
-                        <a href="${getWhatsAppUrl(p.name, p.brand, p.code)}" target="_blank" class="btn btn-whatsapp-sm mt-3" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 6px;">
+                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Merhaba, ${p.code ? `[Kod: ${p.code}] ` : ''}${p.name}${p.brand ? ` (${p.brand})` : ''} hakkında bilgi almak istiyorum.`)}" target="_blank" class="btn btn-whatsapp-sm mt-3" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 6px;">
                             <i class="fab fa-whatsapp"></i> Mesaj At
                         </a>
                     </div>
@@ -672,7 +689,10 @@ function loadMainProducts() {
         });
 
     } catch (e) {
-        console.warn('Could not load main products:', e);
+        console.error('Anasayfa ürünleri yüklenemedi:', e);
+        Object.values(containers).forEach(container => {
+            if (container) container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px; color: #ef4444;">Ürünler yüklenirken bir sorun oluştu.</div>';
+        });
     }
 }
 
@@ -682,7 +702,7 @@ function loadMainProducts() {
 function getWhatsAppUrl(productName, brand, code) {
     const brandText = brand ? ` (${brand})` : '';
     const codeText = code ? ` [Kod: ${code}]` : '';
-    const message = encodeURIComponent(`Merhaba,${codeText} ${productName}${brandText} hakkında bilgi almak istiyorum.`);
+    const message = encodeURIComponent(`Merhaba, ${codeText} ${productName}${brandText} hakkında bilgi almak istiyorum.`);
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 }
 
