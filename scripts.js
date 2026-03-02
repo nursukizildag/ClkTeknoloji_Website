@@ -411,12 +411,25 @@ function initAnnouncementBand() {
 }
 
 function loadAnnouncementsFromStorage() {
+    const band = document.getElementById('announcement-band');
     try {
         const saved = localStorage.getItem('clk_admin_announcements');
-        if (!saved) return;
 
-        const announcements = JSON.parse(saved);
-        if (!Array.isArray(announcements) || announcements.length === 0) return;
+        let announcements = [];
+        if (saved) {
+            announcements = JSON.parse(saved);
+        }
+
+        if (!Array.isArray(announcements) || announcements.length === 0) {
+            // Hide the announcement band if empty
+            if (band) band.style.display = 'none';
+            document.documentElement.style.setProperty('--announcement-height', '0px');
+            return;
+        }
+
+        // Show the announcement band if there are announcements
+        if (band) band.style.display = 'block';
+        document.documentElement.style.setProperty('--announcement-height', '52px');
 
         // Replace default announcement items with admin ones
         elements.announcementSlider.innerHTML = announcements.map((a, i) => `
@@ -433,6 +446,8 @@ function loadAnnouncementsFromStorage() {
 
     } catch (e) {
         console.warn('Could not load announcements from storage:', e);
+        if (band) band.style.display = 'none';
+        document.documentElement.style.setProperty('--announcement-height', '0px');
     }
 }
 
