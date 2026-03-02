@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLK Teknoloji — Yönetici Girişi</title>
+    <link rel="icon" href="assets/img/ClkTeknoloji-logo.jpg" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(53, 0, 176, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(232, 135, 42, 0.08) 0%, transparent 40%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(-3%, -2%) scale(1.02);
+            }
+
+            66% {
+                transform: translate(2%, 1%) scale(0.98);
+            }
+        }
+
+        /* Login container */
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(15, 20, 40, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(37, 99, 235, 0.05);
+            animation: cardSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Logo & Header */
+        .login-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin-bottom: 16px;
+            border: 2px solid rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .login-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #475569;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: #475569;
+        }
+
+        .form-input:focus {
+            border-color: #2563eb;
+            background: rgba(37, 99, 235, 0.05);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input:focus~i,
+        .form-input:focus+i {
+            color: #2563eb;
+        }
+
+        .input-wrapper:focus-within i {
+            color: #2563eb;
+        }
+
+        /* Password toggle */
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #475569;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: #94a3b8;
+        }
+
+        /* Submit button */
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2563eb, #3500b0);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-login .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .btn-login.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn-login.loading .btn-text {
+            opacity: 0.8;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error message */
+        .error-message {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .error-message.show {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px);
+            }
+
+            75% {
+                transform: translateX(8px);
+            }
+        }
+
+        /* Lockout message */
+        .lockout-message {
+            display: none;
+            background: rgba(245, 158, 59, 0.1);
+            border: 1px solid rgba(245, 158, 59, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #f59e3b;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .lockout-message.show {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Back link */
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-link a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #2563eb;
+        }
+
+        .back-link a i {
+            margin-right: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 36px 24px;
+            }
+
+            .login-header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="assets/img/ClkTeknoloji-logo.jpg" alt="CLK Teknoloji" class="login-logo">
+                <h1>Yönetici Girişi</h1>
+                <p>Admin paneline erişmek için giriş yapın</p>
+            </div>
+
+            <div class="error-message" id="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="error-text">Geçersiz kullanıcı adı veya şifre.</span>
+            </div>
+
+            <div class="lockout-message" id="lockout-message">
+                <i class="fas fa-lock"></i>
+                <span id="lockout-text">Çok fazla başarısız deneme. Lütfen bekleyin...</span>
+            </div>
+
+            <form id="login-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" class="form-input" placeholder="Kullanıcı adınızı girin"
+                            required autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" class="form-input" placeholder="Şifrenizi girin" required
+                            autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="toggle-password" tabindex="-1">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login" id="btn-login">
+                    <span class="spinner"></span>
+                    <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Giriş Yap</span>
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="index.html"><i class="fas fa-arrow-left"></i> Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // LOGIN LOGIC
+        // ============================================
+        const form = document.getElementById('login-form');
+        const errorDiv = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const lockoutDiv = document.getElementById('lockout-message');
+        const lockoutText = document.getElementById('lockout-text');
+        const loginBtn = document.getElementById('btn-login');
+        const toggleBtn = document.getElementById('toggle-password');
+        const passwordInput = document.getElementById('password');
+
+        let failedAttempts = 0;
+        let lockoutUntil = 0;
+
+        // Şifre göster/gizle
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            toggleBtn.querySelector('i').className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+        });
+
+        // Form submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Lockout kontrolü
+            if (Date.now() < lockoutUntil) {
+                const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
+                lockoutText.textContent = `Çok fazla başarısız deneme. ${remaining} saniye bekleyin.`;
+                lockoutDiv.classList.add('show');
+                return;
+            }
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) return;
+
+            // Loading state
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
+            errorDiv.classList.remove('show');
+            lockoutDiv.classList.remove('show');
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Başarılı giriş — admin paneline yönlendir
+                    loginBtn.querySelector('.btn-text').innerHTML = '<i class="fas fa-check"></i> Yönlendiriliyorsunuz...';
+                    setTimeout(() => {
+                        window.location.href = '/admin/';
+                    }, 500);
+                } else {
+                    // Başarısız giriş
+                    failedAttempts++;
+                    errorText.textContent = data.message || 'Geçersiz kullanıcı adı veya şifre.';
+                    errorDiv.classList.add('show');
+
+                    // 3 başarısız denemeden sonra 30sn beklet
+                    if (failedAttempts >= 3) {
+                        lockoutUntil = Date.now() + 30000;
+                        lockoutText.textContent = 'Çok fazla başarısız deneme. 30 saniye bekleyin.';
+                        lockoutDiv.classList.add('show');
+                        errorDiv.classList.remove('show');
+                        failedAttempts = 0;
+
+                        // Geri sayım
+                        const interval = setInterval(() => {
+                            const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
+                            if (remaining <= 0) {
+                                lockoutDiv.classList.remove('show');
+                                clearInterval(interval);
+                            } else {
+                                lockoutText.textContent = `Çok fazla başarısız deneme. ${remaining} saniye bekleyin.`;
+                            }
+                        }, 1000);
+                    }
+
+                    // Şifre alanını temizle
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            } catch (err) {
+                console.error('Login hatası:', err);
+                errorText.textContent = 'Bağlantı hatası. Lütfen tekrar deneyin.';
+                errorDiv.classList.add('show');
+            } finally {
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+                loginBtn.querySelector('.btn-text').innerHTML = '<i class="fas fa-sign-in-alt"></i> Giriş Yap';
+            }
+        });
+
+        // Enter tuşu desteği
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+
+</html>

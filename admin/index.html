@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLK Teknoloji — Admin Paneli</title>
+    <link rel="icon" href="../assets/img/ClkTeknoloji-logo.jpg" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/img/ClkTeknoloji-logo.jpg" alt="Logo" class="sidebar-logo">
+                <div>
+                    <h2 class="sidebar-title">CLK Admin</h2>
+                    <p class="sidebar-subtitle">Yönetim Paneli</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link" data-page="products">
+                    <i class="fas fa-boxes"></i> Ürünler
+                </a>
+                <a href="#" class="sidebar-link" data-page="announcements">
+                    <i class="fas fa-bullhorn"></i> Duyurular / Kampanya
+                </a>
+                <a href="#" class="sidebar-link" data-page="secondhand">
+                    <i class="fas fa-recycle"></i> 2. El Cihazlar
+                </a>
+                <a href="#" class="sidebar-link" data-page="sections">
+                    <i class="fas fa-layer-group"></i> Bölüm Sıralama
+                </a>
+                <a href="#" class="sidebar-link" data-page="gallery">
+                    <i class="fas fa-images"></i> FotoGaleri
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="/" class="sidebar-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Siteyi Görüntüle
+                </a>
+                <a href="#" class="sidebar-link" id="btn-logout" style="color: #ef4444;">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                </a>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN AREA ===== -->
+        <main class="admin-main">
+
+            <!-- Top Bar -->
+            <header class="admin-topbar">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="topbar-title" id="topbar-title">Dashboard</h1>
+                <div class="topbar-user">
+                    <span class="user-name">Admin</span>
+                    <button class="btn-admin btn-admin-ghost" id="btn-logout-topbar"
+                        style="color: #ef4444; border-color: rgba(239,68,68,0.3); margin-left: 12px; padding: 6px 14px; font-size: 0.8rem;"
+                        title="Çıkış Yap">
+                        <i class="fas fa-sign-out-alt"></i> Çıkış
+                    </button>
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                </div>
+            </header>
+
+            <!-- Content Pages -->
+            <div class="admin-content">
+
+                <!-- ========== DASHBOARD ========== -->
+                <div class="admin-page active" id="page-dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #2563eb, #3500b0);">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-products">0</h3>
+                                <p>Toplam Ürün</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #e8872a, #f59e3b);">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-announcements">0</h3>
+                                <p>Aktif Duyuru</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-gallery">0</h3>
+                                <p>Galeri Fotoğrafı</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899, #d946ef);">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-sections">4</h3>
+                                <p>Anasayfa Bölümü</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-info glass-card-admin">
+                        <h2><i class="fas fa-info-circle"></i> Hoş Geldiniz</h2>
+                        <p>Bu panel üzerinden sitenizi kolayca yönetebilirsiniz:</p>
+                        <ul>
+                            <li><strong>Ürünler:</strong> Yeni ürün ekleyin, mevcut ürünleri düzenleyin veya silin.</li>
+                            <li><strong>Duyurular:</strong> Anasayfadaki kampanya bandını güncelleyin.</li>
+                            <li><strong>Bölüm Sıralama:</strong> Anasayfadaki bölümlerin sırasını sürükle-bırak ile
+                                değiştirin.</li>
+                            <li><strong>FotoGaleri:</strong> Galeri sayfasına fotoğraf yükleyin.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ========== ÜRÜNLER ========== -->
+                <div class="admin-page" id="page-products">
+                    <div class="page-header">
+                        <h2>Ürün Yönetimi</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-add-product">
+                            <i class="fas fa-plus"></i> Yeni Ürün Ekle
+                        </button>
+                    </div>
+
+                    <!-- Add Product Form (Hidden by default) -->
+                    <div class="form-card glass-card-admin" id="product-form" style="display:none;">
+                        <h3 id="product-form-title">Yeni Ürün Ekle</h3>
+                        <form id="product-add-form">
+                            <input type="hidden" id="edit-product-id" value="">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="product-name">Ürün Adı *</label>
+                                    <input type="text" id="product-name" required placeholder="Örn: iPhone 13 Pro">
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-brand">Marka</label>
+                                    <input type="text" id="product-brand" placeholder="Örn: Samsung, Apple, Xiaomi">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="product-category">Kategori *</label>
+                                    <select id="product-category" required>
+                                        <option value="">Seçin...</option>
+                                        <option value="telefon">📱 Telefon Ürünleri</option>
+                                        <option value="bilgisayar">💻 Bilgisayar Ürünleri</option>
+                                        <option value="saat">⌚ Saat</option>
+                                        <option value="aksesuar">🎧 Aksesuar</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-condition">Durum</label>
+                                    <select id="product-condition">
+                                        <option value="sifir">Sıfır</option>
+                                        <option value="ikinci-el">2. El</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="product-price">Fiyat (₺) <small
+                                            style="color:#64748b;">(Opsiyonel)</small></label>
+                                    <input type="number" id="product-price" placeholder="Örn: 15000">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-desc">Açıklama</label>
+                                <textarea id="product-desc" rows="3"
+                                    placeholder="Ürün hakkında kısa bir açıklama..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="product-image">Ürün Fotoğrafı</label>
+                                <div class="file-upload" id="product-upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
+                                    <input type="file" id="product-image" accept="image/*" hidden>
+                                </div>
+                                <div id="product-preview" class="image-preview"></div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
+                                    Kaydet</button>
+                                <button type="button" class="btn-admin btn-admin-ghost"
+                                    id="btn-cancel-product">İptal</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Product List -->
+                    <div class="table-card glass-card-admin">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th>Fotoğraf</th>
+                                    <th>Ürün Adı</th>
+                                    <th>Marka</th>
+                                    <th>Kategori</th>
+                                    <th>Fiyat</th>
+                                    <th>Durum</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr class="empty-row">
+                                    <td colspan="8">Henüz ürün eklenmedi. Yukarıdaki butonu kullanarak yeni ürün
+                                        ekleyin.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========== DUYURULAR / KAMPANYA ========== -->
+                <div class="admin-page" id="page-announcements">
+                    <div class="page-header">
+                        <h2>Duyuru / Kampanya Yönetimi</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-add-announcement">
+                            <i class="fas fa-plus"></i> Yeni Duyuru Ekle
+                        </button>
+                    </div>
+
+                    <p class="page-desc">Bu duyurular anasayfadaki turuncu kampanya bandında gösterilir. Birden fazla
+                        duyuru eklerseniz otomatik olarak döner.</p>
+
+                    <!-- Add Announcement Form -->
+                    <div class="form-card glass-card-admin" id="announcement-form" style="display:none;">
+                        <h3>Yeni Duyuru Ekle</h3>
+                        <form id="announcement-add-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ann-badge">Etiket *</label>
+                                    <select id="ann-badge" required>
+                                        <option value="FIRSAT">FIRSAT</option>
+                                        <option value="YENİ">YENİ</option>
+                                        <option value="KAMPANYA">KAMPANYA</option>
+                                        <option value="DUYURU">DUYURU</option>
+                                        <option value="ACİL">ACİL</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="flex:2;">
+                                    <label for="ann-text">Duyuru Metni *</label>
+                                    <input type="text" id="ann-text" required
+                                        placeholder="Örn: 2. El telefonlarda özel fiyatlar!">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ann-duration">Süre (saniye)</label>
+                                    <input type="number" id="ann-duration" min="1" max="30" value="4" placeholder="4">
+                                    <small style="color:#64748b;">Bu duyuru kaç saniye gösterilsin</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ann-link">"İncele" Butonu Hedefi</label>
+                                    <select id="ann-link">
+                                        <option value="products">Ürünler</option>
+                                        <option value="secondhand">2. El Cihazlar</option>
+                                        <option value="service">Teknik Servis</option>
+                                        <option value="watches">Saat</option>
+                                        <option value="contact">İletişim</option>
+                                        <option value="gallery">FotoGaleri</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
+                                    Kaydet</button>
+                                <button type="button" class="btn-admin btn-admin-ghost"
+                                    id="btn-cancel-announcement">İptal</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Announcement List -->
+                    <div class="announcements-list" id="announcements-list">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- ========== 2. EL CİHAZLAR ========== -->
+                <div class="admin-page" id="page-secondhand">
+                    <div class="page-header">
+                        <h2>2. El Cihazlar — Sayfa Ayarları</h2>
+                    </div>
+
+                    <p class="page-desc">2. El Cihazlar sayfasının arka plan fotoğrafını ve görünümünü buradan yönetin.
+                        Ürünler, ürün yönetimi sayfasından "2. El" olarak işaretlenen ürünlerden otomatik gelir.</p>
+
+                    <!-- Background Image Upload -->
+                    <div class="form-card glass-card-admin">
+                        <h3><i class="fas fa-image"></i> Arka Plan Fotoğrafı</h3>
+                        <p class="page-desc">Bu fotoğraf 2. El Cihazlar sayfasının arkasında parallax efektiyle
+                            gösterilir.
+                        </p>
+                        <form id="secondhand-bg-form">
+                            <div class="form-group">
+                                <div class="file-upload" id="secondhand-upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Arka plan fotoğrafı yüklemek için tıklayın veya sürükleyin</p>
+                                    <input type="file" id="secondhand-bg-image" accept="image/*" hidden>
+                                </div>
+                                <div id="secondhand-bg-preview" class="image-preview"></div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
+                                    Kaydet</button>
+                                <button type="button" class="btn-admin btn-admin-ghost"
+                                    id="btn-clear-secondhand-bg">Fotoğrafı Kaldır</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 2. El Ürün Listesi (Read-only) -->
+                    <div class="table-card glass-card-admin" style="margin-top:20px;">
+                        <h3><i class="fas fa-recycle"></i> 2. El Ürünler (Otomatik Listeleme)</h3>
+                        <p class="page-desc">Bu ürünler "Ürün Yönetimi" sayfasından "2. El" olarak eklenmiş ürünlerdir.
+                        </p>
+                        <div id="secondhand-product-list" class="secondhand-admin-grid">
+                            <p class="empty-message">Henüz 2. El ürün eklenmedi. Ürün Yönetimi sayfasından ürün ekleyip
+                                durumunu "2. El" olarak seçin.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== BÖLÜM SIRALAMA ========== -->
+                <div class="admin-page" id="page-sections">
+                    <div class="page-header">
+                        <h2>Anasayfa Bölüm Sıralaması</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-save-order">
+                            <i class="fas fa-save"></i> Sırayı Kaydet
+                        </button>
+                    </div>
+
+                    <p class="page-desc">Bölümleri sürükleyerek sıralayın. Kaydettikten sonra anasayfada bu sıraya göre
+                        gösterilir.</p>
+
+                    <div class="sortable-list" id="sortable-sections">
+                        <div class="sortable-item" draggable="true" data-section-id="hero-carousel">
+                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="sortable-info">
+                                <h3>Hero Slider (Carousel)</h3>
+                                <p>Ana karşılama slayt gösterisi</p>
+                            </div>
+                            <span class="sortable-badge">Üst</span>
+                        </div>
+
+                        <div class="sortable-item" draggable="true" data-section-id="services-overview">
+                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="sortable-info">
+                                <h3>Hizmetlerimiz</h3>
+                                <p>Ürün Satışı, Teknik Servis, Saat kartları</p>
+                            </div>
+                            <span class="sortable-badge badge-green">Aktif</span>
+                        </div>
+                        <div class="sortable-item" draggable="true" data-section-id="mission">
+                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="sortable-info">
+                                <h3>Misyon & Dükkan</h3>
+                                <p>Dükkan fotoğrafı ve misyon metni</p>
+                            </div>
+                            <span class="sortable-badge badge-green">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== FOTOGALERİ ========== -->
+                <div class="admin-page" id="page-gallery">
+                    <div class="page-header">
+                        <h2>FotoGaleri Yönetimi</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-add-gallery">
+                            <i class="fas fa-plus"></i> Fotoğraf Yükle
+                        </button>
+                    </div>
+
+                    <!-- Upload Form -->
+                    <div class="form-card glass-card-admin" id="gallery-form" style="display:none;">
+                        <h3>Fotoğraf Yükle</h3>
+                        <form id="gallery-add-form">
+                            <div class="form-group">
+                                <label for="gallery-title">Başlık</label>
+                                <input type="text" id="gallery-title" placeholder="Fotoğraf başlığı (opsiyonel)">
+                            </div>
+                            <div class="form-group">
+                                <label for="gallery-image">Fotoğraf *</label>
+                                <div class="file-upload" id="gallery-upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
+                                    <input type="file" id="gallery-image" accept="image/*" required hidden>
+                                </div>
+                                <div id="gallery-preview" class="image-preview"></div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
+                                    Yükle</button>
+                                <button type="button" class="btn-admin btn-admin-ghost"
+                                    id="btn-cancel-gallery">İptal</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="gallery-admin-grid" id="gallery-admin-grid">
+                        <p class="empty-message">Henüz fotoğraf yüklenmedi.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

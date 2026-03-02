@@ -4,361 +4,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="description" content="Teknoloji dükkanı - Ürün satışı, bilgisayar,clk, clk teknoloji,
-    telefon,aksesuar, telefon tamiri,bağcılar,göztepe, telefoncu, teknik servis ve saat hizmetleri">
-    <title>CLK Teknoloji </title>    
+    <meta name="description"
+        content="CLK Teknoloji - Telefon, bilgisayar, aksesuar satışı, teknik servis ve saat hizmetleri. Bağcılar, İstanbul.">
+    <title>CLK Teknoloji — Güvenilir Teknoloji Çözümleri</title>
     <link rel="icon" href="assets/img/ClkTeknoloji-logo.jpg" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Navigasyon kısmı- Sayfanın üstündeki şerit -->
-    <header class="site-header">
-        <nav class="site-nav">
-            
-            <div class="nav-container">
-                <div class="nav-brand">
-                  <a href="#home" onclick="navigateToSection('home'); return false;" style="display: contents; cursor: pointer;">
-        <img src="assets/img/ClkTeknoloji-logo-big.jpg" alt="CLK Teknoloji Logo" class="nav-logo">
-        <span class="store-name">
-            <span class="store-name-c">C</span><span class="store-name-l">L</span><span class="store-name-k">K</span>
-            <span class="store-name-teknoloji">Teknoloji</span>
-        </span>
-              </a>
+    <!-- ============================================
+         HEADER / NAVBAR
+         ============================================ -->
+    <header class="site-header" id="site-header">
+        <!-- FIRSAT ÜRÜNLERİ / DUYURULAR BANDI (TOP BAR) -->
+        <div class="announcement-band" id="announcement-band">
+            <div class="announcement-container">
+                <button class="announcement-arrow announcement-prev" id="announcement-prev" aria-label="Önceki duyuru">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="announcement-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="announcement-slider" id="announcement-slider">
+                    <div class="announcement-item active">
+                        <span class="announcement-badge">FIRSAT</span>
+                        <span class="announcement-text">2. El telefonlarda özel fiyatlar! Stoklar sınırlı, acele
+                            edin.</span>
+                    </div>
+                    <div class="announcement-item">
+                        <span class="announcement-badge">YENİ</span>
+                        <span class="announcement-text">iPhone ve Samsung aksesuar çeşitlerimiz yenilendi!</span>
+                    </div>
+                    <div class="announcement-item">
+                        <span class="announcement-badge">KAMPANYA</span>
+                        <span class="announcement-text">Ekran değişiminde %20 indirim fırsatını kaçırmayın!</span>
+                    </div>
+                </div>
+                <a href="#products" class="announcement-cta" id="announcement-cta"
+                    onclick="navigateToSection('products'); return false;">
+                    İncele <i class="fas fa-arrow-right"></i>
+                </a>
+                <button class="announcement-arrow announcement-next" id="announcement-next" aria-label="Sonraki duyuru">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
+        </div>
 
-                    
-                    
-            <!-- hamburger menüsü menüyü açıp kapatmaya yarar-->
-                <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <nav class="site-nav">
+            <div class="nav-container">
+
+                <!-- Logo -->
+                <a href="#home" class="nav-brand" onclick="navigateToSection('home'); return false;">
+                    <img src="assets/img/ClkTeknoloji-logo-big.jpg" alt="CLK Teknoloji Logo" class="nav-logo">
+                    <span class="store-name">
+                        <span class="store-name-c">C</span><span class="store-name-l">L</span><span
+                            class="store-name-k">K</span>
+                        <span class="store-name-teknoloji">Teknoloji</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <ul class="desktop-menu" id="desktop-menu">
+                    <li class="desktop-menu-item">
+                        <a href="#home" class="desktop-link" data-section="home"
+                            onclick="navigateToSection('home'); return false;">Anasayfa</a>
+                    </li>
+                    <li class="desktop-menu-item has-dropdown">
+                        <button class="desktop-link dropdown-trigger">Kurumsal <i
+                                class="fas fa-chevron-down dropdown-arrow"></i></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#about" class="dropdown-link" data-section="about"
+                                    onclick="navigateToSection('about'); return false;">Hakkımızda</a></li>
+                            <li><a href="#team" class="dropdown-link" data-section="team"
+                                    onclick="navigateToSection('team'); return false;">Ekibimiz</a></li>
+                        </ul>
+                    </li>
+                    <li class="desktop-menu-item has-dropdown">
+                        <button class="desktop-link dropdown-trigger">Hizmetler <i
+                                class="fas fa-chevron-down dropdown-arrow"></i></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#products" class="dropdown-link" data-section="products"
+                                    onclick="navigateToSection('products'); return false;">Ürün Satışı</a></li>
+                            <li><a href="#service" class="dropdown-link" data-section="service"
+                                    onclick="navigateToSection('service'); return false;">Teknik Servis</a></li>
+                            <li><a href="#watches" class="dropdown-link" data-section="watches"
+                                    onclick="navigateToSection('watches'); return false;">Saat</a></li>
+                        </ul>
+                    </li>
+                    <li class="desktop-menu-item">
+                        <a href="#products" class="desktop-link" data-section="products"
+                            onclick="navigateToSection('products'); return false;">
+                            Ürünler
+                        </a>
+                    </li>
+                    <li class="desktop-menu-item">
+                        <a href="#secondhand" class="desktop-link nav-link--highlight" data-section="secondhand"
+                            onclick="navigateToSection('secondhand'); return false;">
+                            <i class="fas fa-fire"></i> 2. El Cihazlar
+                        </a>
+                    </li>
+                    <li class="desktop-menu-item">
+                        <a href="#gallery" class="desktop-link" data-section="gallery"
+                            onclick="navigateToSection('gallery'); return false;">FotoGaleri</a>
+                    </li>
+                    <li class="desktop-menu-item">
+                        <a href="#contact" class="desktop-link" data-section="contact"
+                            onclick="navigateToSection('contact'); return false;">İletişim</a>
+                    </li>
+                </ul>
+
+                <!-- Mobile Hamburger (only visible on mobile) -->
+                <button class="hamburger" id="hamburger-btn" aria-label="Menüyü aç/kapat" aria-expanded="false">
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                     <span class="hamburger-line"></span>
                 </button>
             </div>
-
-            <div class="mobile-menu-overlay">
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#anasayfa" class="nav-link" data-section="home">Anasayfa</a>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <button class="nav-link submenu-toggle" aria-expanded="false">
-                            Kurumsal <span class="arrow">▶</span>
-                        </button>
-                        <ul class="submenu">
-                            <li><a href="#hakkimizda" class="nav-link" data-section="about">Hakkımızda</a></li>
-                            <li><a href="#ekibimiz" class="nav-link" data-section="team">Ekibimiz</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item has-submenu">
-                        <button class="nav-link submenu-toggle" aria-expanded="false">
-                            Hizmetler <span class="arrow">▶</span>
-                        </button>
-                        <ul class="submenu">
-                            <li><a href="#urun-satisi" class="nav-link" data-section="products">Ürün Satışı</a></li>
-                            <li><a href="#teknik-servis" class="nav-link" data-section="service">Teknik Servis</a></li>
-                            <li><a href="#saat" class="nav-link" data-section="watches">Saat</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#fotogaleri" class="nav-link" data-section="gallery">FotoGaleri</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#iletisim" class="nav-link" data-section="contact">İletişim</a>
-                    </li>
-                </ul>
-            </div>
         </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobile-menu">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link" data-section="home"
+                        onclick="navigateToSection('home'); return false;">Anasayfa</a>
+                </li>
+                <li class="nav-item has-submenu">
+                    <button class="nav-link submenu-toggle" aria-expanded="false">
+                        Kurumsal <span class="arrow">▶</span>
+                    </button>
+                    <ul class="submenu">
+                        <li><a href="#about" class="nav-link" data-section="about"
+                                onclick="navigateToSection('about'); return false;">Hakkımızda</a></li>
+                        <li><a href="#team" class="nav-link" data-section="team"
+                                onclick="navigateToSection('team'); return false;">Ekibimiz</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item has-submenu">
+                    <button class="nav-link submenu-toggle" aria-expanded="false">
+                        Hizmetler <span class="arrow">▶</span>
+                    </button>
+                    <ul class="submenu">
+                        <li><a href="#products" class="nav-link" data-section="products"
+                                onclick="navigateToSection('products'); return false;">Ürün Satışı</a></li>
+                        <li><a href="#service" class="nav-link" data-section="service"
+                                onclick="navigateToSection('service'); return false;">Teknik Servis</a></li>
+                        <li><a href="#watches" class="nav-link" data-section="watches"
+                                onclick="navigateToSection('watches'); return false;">Saat</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link" data-section="products"
+                        onclick="navigateToSection('products'); return false;">
+                        Ürünler
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#secondhand" class="nav-link nav-link--highlight-mobile" data-section="secondhand"
+                        onclick="navigateToSection('secondhand'); return false;">
+                        <i class="fas fa-fire"></i> 2. El Cihazlar
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gallery" class="nav-link" data-section="gallery"
+                        onclick="navigateToSection('gallery'); return false;">FotoGaleri</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" data-section="contact"
+                        onclick="navigateToSection('contact'); return false;">İletişim</a>
+                </li>
+            </ul>
+        </div>
     </header>
 
-    <!-- Yol gösteren navigasyon sayfanın üstünde anasayfaya dönmemizi kolaylastıran kısım hangi sayfadan hangisine gittiğin yer alır. -->
-    <nav class="breadcrumb" aria-label="Breadcrumb"></nav>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb"></nav>
 
-    <main class="main-content">
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="main-content" id="main-content">
 
-        <!-- AnaSayfa Bölümü -->
+        <!-- ============================
+             ANASAYFA BÖLÜMÜ
+             ============================ -->
         <section id="home" class="page-section active" data-title="Anasayfa">
 
-            <!-- anasayfada görsel kaydırmalı kısım -->
-            <div id="hero-carousel" class="carousel">
-                <div class="carousel-inner">
+            <!-- HERO CAROUSEL -->
+            <div class="home-section" data-section-id="hero-carousel" data-section-order="1">
+                <div id="hero-carousel" class="carousel">
+                    <div class="carousel-inner">
 
-                    <!-- birinci slayt kısmı-->
-                    <div class="carousel-slide active">
-                        <img src="assets/img/dışblur.jpg" alt="ServisCepte" loading="lazy">
-                        <div class="carousel-content">
-                            <h2 class="carousel-title">Cihaz Durum Sorgulama</h2>
-                            <p class="carousel-text">Tamirdeki cihazınızın son durumunu öğrenmek için tıklayın.</p>
-                            <a href="https://www.serviscep.com/track" target="_blank" class="btn btn-primary">
-                            Cihaz Durum Sorgulama </a>
+                        <!-- Slayt 1 -->
+                        <div class="carousel-slide active">
+                            <img src="assets/img/dışblur.jpg" alt="CLK Teknoloji Dükkanı" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-content">
+                                <h1 class="carousel-title animate-fade-up">Cihaz Durum Sorgulama</h1>
+                                <p class="carousel-text animate-fade-up delay-1">Tamirdeki cihazınızın son durumunu
+                                    öğrenmek için tıklayın.</p>
+                                <div class="carousel-actions animate-fade-up delay-2">
+                                    <a href="https://www.serviscep.com/track" target="_blank"
+                                        class="btn btn-primary btn-glow">
+                                        <i class="fas fa-search-location"></i> Cihaz Sorgula
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Slayt 2 -->
+                        <div class="carousel-slide">
+                            <img src="assets/img/iç2blur.jpg" alt="CLK Teknoloji İletişim" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-content">
+                                <h1 class="carousel-title animate-fade-up">Size Nasıl Yardımcı Olabiliriz?</h1>
+                                <p class="carousel-text animate-fade-up delay-1">Tüm sorularınız için bizimle iletişime
+                                    geçin.</p>
+                                <div class="carousel-actions animate-fade-up delay-2">
+                                    <a href="#contact" class="btn btn-primary btn-glow"
+                                        onclick="navigateToSection('contact'); return false;">
+                                        <i class="fas fa-envelope"></i> İletişim
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slayt 3 -->
+                        <div class="carousel-slide">
+                            <img src="assets/img/içblur.jpg" alt="CLK Teknoloji Hizmetler" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-content">
+                                <h1 class="carousel-title animate-fade-up">Geniş Hizmet Yelpazesi</h1>
+                                <p class="carousel-text animate-fade-up delay-1">Ürün satışından teknik servise kadar
+                                    her şey için yanınızdayız.</p>
+                                <div class="carousel-actions animate-fade-up delay-2">
+                                    <a href="#products" class="btn btn-primary btn-glow"
+                                        onclick="navigateToSection('products'); return false;">
+                                        <i class="fas fa-shopping-bag"></i> Ürünler
+                                    </a>
+                                    <a href="#service" class="btn btn-secondary"
+                                        onclick="navigateToSection('service'); return false;">
+                                        <i class="fas fa-tools"></i> Teknik Servis
+                                    </a>
+                                    <a href="#watches" class="btn btn-secondary"
+                                        onclick="navigateToSection('watches'); return false;">
+                                        <i class="fas fa-clock"></i> Saat
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slayt 4 (Yeni) -->
+                        <div class="carousel-slide">
+                            <img src="assets/img/dışblur.jpg" alt="2. El Cihazlar" loading="lazy">
+                            <div class="carousel-overlay"></div>
+                            <div class="carousel-content">
+                                <h1 class="carousel-title animate-fade-up">2. El Cihaz Alım Satım</h1>
+                                <p class="carousel-text animate-fade-up delay-1">Güvenilir, garantili ve uygun fiyatlı
+                                    2. el cihazlar CLK Teknoloji'de.</p>
+                                <div class="carousel-actions animate-fade-up delay-2">
+                                    <a href="#secondhand" class="btn btn-primary btn-glow"
+                                        onclick="navigateToSection('secondhand'); return false;">
+                                        <i class="fas fa-mobile-alt"></i> 2. El Ürünler
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- ikinci slayt kısmı-->
-                    <div class="carousel-slide">
-                        <img src="assets/img/iç2blur.jpg" alt="İletişim" loading="lazy">
-                        <div class="carousel-content">
-                            <h2 class="carousel-title">Size Nasıl Yardımcı Olabiliriz?</h2>
-                            <p class="carousel-text">Tüm sorularınız için bizimle iletişime geçin</p>
-                            <a href="#iletisim" class="btn btn-primary"
-                                onclick="navigateToSection('contact'); return false;">İletişim</a>
+                    <!-- Carousel Controls -->
+                    <button class="carousel-control prev" aria-label="Önceki slayt"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-control next" aria-label="Sonraki slayt"><i
+                            class="fas fa-chevron-right"></i></button>
 
-                        </div>
+                    <div class="carousel-indicators">
+                        <button class="indicator active" aria-label="Slayt 1" data-slide="0"></button>
+                        <button class="indicator" aria-label="Slayt 2" data-slide="1"></button>
+                        <button class="indicator" aria-label="Slayt 3" data-slide="2"></button>
+                        <button class="indicator" aria-label="Slayt 4" data-slide="3"></button>
                     </div>
-
-                    <!-- üçüncü slayt kısmı-->
-                    <div class="carousel-slide">
-                        <img src="assets/img/içblur.jpg" alt="Hizmetlerimiz" loading="lazy">
-                        <div class="carousel-content">
-                            <h2 class="carousel-title">Geniş Hizmet Yelpazesi</h2>
-                            <p class="carousel-text">Ürün satışından teknik servise kadar</p>
-
-                            <a href="#hizmet1" class="btn btn-primary"
-                                onclick="navigateToSection('products'); return false;">Ürün Satışı</a>
-                            <a href="#hizmet2" class="btn btn-primary"
-                                onclick="navigateToSection('service'); return false;">Teknik Servis</a>
-                            <a href="#hizmet3" class="btn btn-primary"
-                                onclick="navigateToSection('watches'); return false;">Saat</a>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="carousel-control prev" aria-label="Previous slide"><span>‹</span></button>
-                <button class="carousel-control next" aria-label="Next slide"><span>›</span></button>
-
-                <div class="carousel-indicators">
-                    <button class="indicator active" aria-label="Go to slide 1" data-slide="0"></button>
-                    <button class="indicator" aria-label="Go to slide 2" data-slide="1"></button>
-                    <button class="indicator" aria-label="Go to slide 3" data-slide="2"></button>
                 </div>
             </div>
-            
-    
 
-            <!-- anasayfada sayfanın alt kısmında dükkan fotoğrafı+ dükkan sahibi+ misyon kısmı -->
-            <section class="mission-section">
-                <div class="container">
-                    <div class="mission-grid">
-                        <div class="mission-images">
-                            <img src="assets/img/dış.jpg" alt="Dükkan İç Görünüm" class="store-image"
-                                loading="lazy">
-                        </div>
-                        <div class="mission-content">
-                            <img src="assets/img/celal_foto.jpg" alt="Dükkan Sahibi" class="owner-image"
-                                loading="lazy">
-                            <h2>Misyonumuz</h2>
-                             <p> CELAL KIZILDAĞ </p>
-                            <p>CLK Teknoloji olarak, müşterilerimize en kaliteli teknoloji ürünlerini uygun
-                                fiyatlarla sunmayı ve güvenilir teknik servis hizmeti vermeyi misyon edindik. CLK teknoloji 
-                            güvenilir hizmetiyle her zaman yanınızda.</p>
+
+
+            <!-- HİZMETLERİMİZ GENEL BAKIŞ -->
+            <div class="home-section" data-section-id="services-overview" data-section-order="3">
+                <section class="services-section">
+                    <div class="container">
+                        <h2 class="section-title reveal-on-scroll">Hizmetlerimiz</h2>
+                        <p class="section-subtitle reveal-on-scroll">İhtiyacınız olan tüm teknoloji çözümleri tek bir
+                            çatı altında</p>
+                        <div class="services-grid">
+                            <a href="#products" class="service-card glass-card reveal-on-scroll" data-section="products"
+                                onclick="navigateToSection('products'); return false;">
+                                <div class="service-card-icon">🛒</div>
+                                <h3 class="service-card-title">Ürün Satışı</h3>
+                                <p class="service-card-desc">Telefon, bilgisayar ve aksesuar çeşitlerimizi keşfedin.</p>
+                                <span class="service-card-link">Keşfet <i class="fas fa-arrow-right"></i></span>
+                            </a>
+                            <a href="#service" class="service-card glass-card reveal-on-scroll" data-section="service"
+                                onclick="navigateToSection('service'); return false;">
+                                <div class="service-card-icon">🔧</div>
+                                <h3 class="service-card-title">Teknik Servis</h3>
+                                <p class="service-card-desc">Profesyonel tamir ve onarım hizmetleri.</p>
+                                <span class="service-card-link">Detaylı Bilgi <i class="fas fa-arrow-right"></i></span>
+                            </a>
+                            <a href="#products" class="service-card glass-card reveal-on-scroll" data-section="products"
+                                onclick="navigateToSection('products'); setTimeout(() => { const saatAccordion = document.querySelector('#products-saat').closest('.product-category').querySelector('.accordion-header'); if(saatAccordion && saatAccordion.getAttribute('aria-expanded') === 'false') saatAccordion.click(); }, 300); return false;">
+                                <div class="service-card-icon">⌚</div>
+                                <h3 class="service-card-title">Saat</h3>
+                                <p class="service-card-desc">Saat satışı, pil değişimi ve tamir hizmetleri.</p>
+                                <span class="service-card-link">Göz At <i class="fas fa-arrow-right"></i></span>
+                            </a>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
 
-            <!-- Hizmetlerimiz kısmının detayları -->
-            <section class="services-section">
-                <div class="container">
-                    <h2 class="section-title">Hizmetlerimiz</h2>
-                    <div class="services-circles">
-
-                        <!-- ürün satışı kısmı-->
-                        <a href="#urun-satisi" class="service-circle" data-section="products" aria-label="Ürün Satışı">
-                            <div class="service-icon">🛒</div>
-                            <h3 class="service-name">Ürün Satışı</h3>
-                        </a>
-
-                        <!-- teknik servis kısmı-->
-                        <a href="#teknik-servis" class="service-circle" data-section="service"
-                            aria-label="Teknik Servis">
-                            <div class="service-icon">🔧</div>
-                            <h3 class="service-name">Teknik Servis</h3>
-                        </a>
-
-                        <!-- saat kısmı-->
-                        <a href="#saat" class="service-circle" data-section="watches" aria-label="Saat">
-                            <div class="service-icon">⌚</div>
-                            <h3 class="service-name">Saat</h3>
-                        </a>
+            <!-- MİSYON: DÜKKAN + SAHİBİ -->
+            <div class="home-section" data-section-id="mission" data-section-order="4">
+                <section class="mission-section">
+                    <div class="container">
+                        <div class="mission-grid">
+                            <div class="mission-images reveal-on-scroll">
+                                <img src="assets/img/dış.jpg" alt="CLK Teknoloji Dükkan Görünüm" class="store-image"
+                                    loading="lazy">
+                            </div>
+                            <div class="mission-content reveal-on-scroll">
+                                <img src="assets/img/celal_foto.jpg" alt="Celal Kızıldağ - Dükkan Sahibi"
+                                    class="owner-image" loading="lazy">
+                                <h2>Misyonumuz</h2>
+                                <p class="owner-name">CELAL KIZILDAĞ</p>
+                                <p>CLK Teknoloji olarak, müşterilerimize en kaliteli teknoloji ürünlerini uygun
+                                    fiyatlarla sunmayı ve güvenilir teknik servis hizmeti vermeyi misyon edindik. CLK
+                                    Teknoloji güvenilir hizmetiyle her zaman yanınızda.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </section>
-            
+                </section>
+            </div>
 
-            <!-- Hızlı menü sayfası -->
+            <!-- FOOTER (Anasayfa) -->
             <footer class="footer-section">
                 <div class="container">
                     <div class="footer-grid">
                         <div class="footer-column">
                             <h3>Hızlı Menü</h3>
                             <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
+                                <li><a href="#home" data-section="home"
+                                        onclick="navigateToSection('home'); return false;">Anasayfa</a></li>
+                                <li><a href="#about" data-section="about"
+                                        onclick="navigateToSection('about'); return false;">Hakkımızda</a></li>
+                                <li><a href="#products" data-section="products"
+                                        onclick="navigateToSection('products'); return false;">Ürünler</a></li>
+                                <li><a href="#gallery" data-section="gallery"
+                                        onclick="navigateToSection('gallery'); return false;">Galeri</a></li>
+                                <li><a href="#contact" data-section="contact"
+                                        onclick="navigateToSection('contact'); return false;">İletişim</a></li>
                             </ul>
                         </div>
 
                         <div class="footer-column footer-center">
                             <img src="assets/img/ClkTeknoloji-logo.jpg" alt="CLK Teknoloji Logo" class="footer-logo"
                                 loading="lazy">
-
                             <div class="social-media">
-    <a href="https://www.instagram.com/clkteknoloji/" class="social-link instagram-bg" aria-label="Instagram">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="social-icon">
-    </a>
-
-    <a href="https://wa.me/+905071651515" class="social-link whatsapp-bg" aria-label="WhatsApp">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="social-icon">
-    </a>
-</div>
+                                <a href="https://www.instagram.com/clkteknoloji/" class="social-link"
+                                    aria-label="Instagram" target="_blank">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="https://wa.me/+905071561515" class="social-link whatsapp-bg"
+                                    aria-label="WhatsApp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                            <p class="footer-copyright">&copy; 2024 CLK Teknoloji. Tüm hakları saklıdır.</p>
                         </div>
 
                         <div class="footer-column">
                             <h3>İletişim</h3>
-                            <p><strong>Tel:</strong> <a href="tel:+905071561515">+90 507 156 15 15</a></p>
-                            <p><strong>Email:</strong> <a href="mailto:info@clkteknoloji.com">info@clkteknoloji.com</a>
-                            </p>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+905071561515">+90 507 156 15 15</a></p>
+                            <p><i class="fas fa-envelope"></i> <a
+                                    href="mailto:info@clkteknoloji.com">info@clkteknoloji.com</a></p>
+                            <p><i class="fas fa-map-marker-alt"></i> Bağcılar / İstanbul</p>
                         </div>
                     </div>
                 </div>
             </footer>
         </section>
 
-        <!-- Hakkında sayfası -->
+        <!-- ============================
+             HAKKIMIZDA SAYFASI
+             ============================ -->
         <section id="about" class="page-section" data-title="Hakkımızda" data-parent="Kurumsal">
             <div class="container">
                 <h1 class="page-title">Hakkımızda</h1>
-                <div class="content-section">
-                    <!-- burası Hakkımızda metni -->
+                <div class="content-section glass-card content-card">
                     <p class="intro-text">CLK Teknoloji olarak, 2018 yılından bu yana müşterilerimize kaliteli hizmet
                         sunmanın gururunu yaşıyoruz.</p>
 
-                    <h2>Misyonumuz</h2>
-                    <p>Müşteri memnuniyetini ön planda tutarak, en kaliteli teknoloji ürünlerini uygun fiyatlarla
-                        sunmak.</p>
+                    <div class="about-block">
+                        <h2><i class="fas fa-bullseye"></i> Misyonumuz</h2>
+                        <p>Müşteri memnuniyetini ön planda tutarak, en kaliteli teknoloji ürünlerini uygun fiyatlarla
+                            sunmak.</p>
+                    </div>
 
-                    <h2>Vizyonumuz</h2>
-                    <p>Bölgemizin en güvenilir ve tercih edilen teknoloji mağazası olmak.</p>
+                    <div class="about-block">
+                        <h2><i class="fas fa-eye"></i> Vizyonumuz</h2>
+                        <p>Bölgemizin en güvenilir ve tercih edilen teknoloji mağazası olmak.</p>
+                    </div>
 
-                    <h2>Kuruluş Tarihimiz</h2>
-                    <p>CLK Teknoloji, 2018 yılında küçük bir dükkan olarak faaliyete başlamıştır. 9 yılı aşkın
-                        tecrübemizle kendimizi de geliştirerek sektörde köklü bir geçmişe sahibiz.</p>
+                    <div class="about-block">
+                        <h2><i class="fas fa-calendar-alt"></i> Kuruluş Tarihimiz</h2>
+                        <p>CLK Teknoloji, 2018 yılında küçük bir dükkan olarak faaliyete başlamıştır. 9 yılı aşkın
+                            tecrübemizle kendimizi de geliştirerek sektörde köklü bir geçmişe sahibiz.</p>
+                    </div>
                 </div>
 
-                <!-- bu sayfanın sonuna da hızlı menü ekleriz-->
-                  <br>
-                    <br>
-                    <br>
-                    <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
-                        </div>
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
+                </div>
             </div>
         </section>
 
-        <!-- ekibimiz sayfası -->
+        <!-- ============================
+             EKİBİMİZ SAYFASI
+             ============================ -->
         <section id="team" class="page-section" data-title="Ekibimiz" data-parent="Kurumsal">
             <div class="container">
                 <h1 class="page-title">Ekibimiz</h1>
                 <div class="team-grid">
-                    <div class="team-card">
-                        <img src="assets/img/celal_foto.jpg" alt="Celal Kızıldağ - Dükkan Sahibi" class="team-photo"
-                            loading="lazy">
+                    <div class="team-card glass-card">
+                        <img src="assets/img/celal_foto.jpg" alt="Celal Kızıldağ" class="team-photo" loading="lazy">
                         <h3 class="team-name">Celal Kızıldağ</h3>
-                        <p class="team-role">Dükkan Sahibi - Teknik Uzman</p>
-                        <p class="team-phone">
-                            <a href="tel:+905071651515" class="phone-link">📞 Ara: +90 507 156 15 15</a>
-                        </p>
+                        <p class="team-role">Dükkan Sahibi — Teknik Uzman</p>
+                        <a href="tel:+905071561515" class="phone-link"><i class="fas fa-phone"></i> +90 507 156 15
+                            15</a>
                     </div>
-
-                    <div class="team-card">
-                        <img src="assets/img/erkan_foto.jpg" alt="Erkan Subaşı - Satış Danışmanı" class="team-photo"
-                            loading="lazy">
+                    <div class="team-card glass-card">
+                        <img src="assets/img/erkan_foto.jpg" alt="Erkan Subaşı" class="team-photo" loading="lazy">
                         <h3 class="team-name">Erkan Subaşı</h3>
-                        <p class="team-role">Satış Danışmanı - Bilgisayar Uzmanı</p>
-                        <p class="team-phone">
-                            <a href="tel:+905055915610" class="phone-link">📞 Ara: +90 505 591 56 10</a>
-                        </p>
-                   
-                    </div>                    
+                        <p class="team-role">Satış Danışmanı — Bilgisayar Uzmanı</p>
+                        <a href="tel:+905055915610" class="phone-link"><i class="fas fa-phone"></i> +90 505 591 56
+                            10</a>
+                    </div>
                 </div>
 
-                <!-- yine sayfa sonuna hızlı menü ekleriz-->
-                  <br>
-                    <br>
-                    <br>
-                    <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
-                        </div>
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
+                </div>
             </div>
         </section>
 
-        <!-- fotogaleri sayfası -->
+        <!-- ============================
+             FOTOGALERI SAYFASI
+             ============================ -->
         <section id="gallery" class="page-section" data-title="FotoGaleri">
             <div class="container">
                 <h1 class="page-title">FotoGaleri</h1>
                 <div class="gallery-grid">
-                    <!-- buraya galeri görselleri koy -->
-                     <p>Bir fotoğraf eklemesi daha yapılmadı.</p>
-
-                           <!-- sayfa sonunda hızlı menü-->
-                            <br>
-                    <br>
-                    <br>
-                    <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
-                        </div>
+                    <p class="empty-state"><i class="fas fa-images"></i> Henüz bir fotoğraf eklenmedi. Yakında burada
+                        güzel kareler olacak!</p>
                 </div>
-
-                
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
+                </div>
             </div>
         </section>
 
-        <!-- İletişim sayfası-->
+        <!-- ============================
+             İLETİŞİM SAYFASI
+             ============================ -->
         <section id="contact" class="page-section" data-title="İletişim">
             <div class="container">
                 <h1 class="page-title">İletişim</h1>
                 <div class="contact-grid">
-                    <div class="contact-info">
+                    <div class="contact-info glass-card">
                         <h2>İletişim Bilgileri</h2>
 
                         <div class="contact-item">
                             <span class="contact-icon"><i class="fa-solid fa-location-dot"></i></span>
                             <div class="contact-details">
                                 <strong>Adres:</strong>
-                                <p><a href="https://maps.app.goo.gl/3GStCXZjjJ6F5o7m6"> Demirkapı, Maslak Cd. no:30/A, 34000 Bağcılar/İstanbul</a></p>
+                                <p><a href="https://maps.app.goo.gl/3GStCXZjjJ6F5o7m6" target="_blank">Demirkapı, Maslak
+                                        Cd. no:30/A, 34000 Bağcılar/İstanbul</a></p>
                             </div>
                         </div>
 
-                        
                         <div class="contact-item">
                             <span class="contact-icon"><i class="fa-solid fa-phone"></i></span>
                             <div class="contact-details">
                                 <strong>Telefon:</strong>
-                                <p><a href="tel:+905071651515">+90 507 156 15 15</a> /Celal Kızıldağ</p>
-                                <p><a href="tel:+905071651515">+90 505 591 56 10</a> /Erkan Subaşı</p>
+                                <p><a href="tel:+905071561515">+90 507 156 15 15</a> / Celal Kızıldağ</p>
+                                <p><a href="tel:+905055915610">+90 505 591 56 10</a> / Erkan Subaşı</p>
                             </div>
                         </div>
 
@@ -374,15 +526,14 @@
                             <span class="contact-icon"><i class="fa-solid fa-clock"></i></span>
                             <div class="contact-details">
                                 <strong>Çalışma Saatleri:</strong>
-                                <!-- çalışma saatleri -->
                                 <table class="hours-table">
                                     <tr>
                                         <td>Hafta İçi:</td>
-                                        <td> 09:00 - 21:00</td>
+                                        <td>09:00 - 21:00</td>
                                     </tr>
                                     <tr>
                                         <td>Cumartesi:</td>
-                                        <td> 09:00 - 21:00</td>
+                                        <td>09:00 - 21:00</td>
                                     </tr>
                                     <tr>
                                         <td>Pazar:</td>
@@ -393,196 +544,122 @@
                         </div>
                     </div>
 
-                    <div class="contact-map">
-                        <!-- harita -->
-                        <div class="map-placeholder">
-                            <p>📍 Harita</p>
-                            <p class="map-note"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.
-                                6766566907995!2d28.83458197590085!3d41.054199571344185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!
-                                4f13.1!3m3!1m2!1s0x14caa50bf4fdc603%3A0xc689252c3fa15340!2sCLK%20Teknoloji!5e0!3m2!1str!2str!
-                                4v1763544920236!5m2!1str!2str" width="600" height="450" style="border:0;" allowfullscreen="" 
-                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
-                        </div>
+                    <div class="contact-map glass-card">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.6766566907995!2d28.83458197590085!3d41.054199571344185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caa50bf4fdc603%3A0xc689252c3fa15340!2sCLK%20Teknoloji!5e0!3m2!1str!2str!4v1763544920236!5m2!1str!2str"
+                            width="100%" height="100%" style="border:0; border-radius: 12px; min-height: 350px;"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
                     </div>
                 </div>
 
-                <!-- sayfa sonuna tekrardan hızlı menü ekleriz-->
-                <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
+                <!-- WhatsApp Mesaj Gönder -->
+                <div class="contact-whatsapp-section glass-card" style="margin-top:30px;">
+                    <h2><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp ile Mesaj Gönderin</h2>
+                    <p class="contact-wp-desc">Aşağıdaki formu doldurarak bize WhatsApp üzerinden hızlıca ulaşın.</p>
+                    <form id="whatsapp-contact-form" class="wp-form">
+                        <div class="wp-form-row">
+                            <div class="wp-form-group">
+                                <label for="wp-name">Adınız</label>
+                                <input type="text" id="wp-name" placeholder="Adınızı yazın..." required>
+                            </div>
+                            <div class="wp-form-group">
+                                <label for="wp-subject">Konu</label>
+                                <select id="wp-subject">
+                                    <option value="Genel Bilgi">Genel Bilgi</option>
+                                    <option value="Ürün Bilgisi">Ürün Bilgisi</option>
+                                    <option value="2. El Cihaz">2. El Cihaz</option>
+                                    <option value="Teknik Servis">Teknik Servis</option>
+                                    <option value="Saat">Saat</option>
+                                </select>
+                            </div>
                         </div>
-
-                
+                        <div class="wp-form-group">
+                            <label for="wp-message">Mesajınız</label>
+                            <textarea id="wp-message" rows="3" placeholder="Mesajınızı yazın..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> WhatsApp ile Gönder
+                        </button>
                     </form>
+                </div>
+
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
                 </div>
             </div>
         </section>
 
-        <!-- Hizmetlerimiz kısmının alt başlığı ürün satışı sayfası-->
+        <!-- ============================
+             ÜRÜN SATIŞI SAYFASI
+             ============================ -->
         <section id="products" class="page-section" data-title="Ürün Satışı" data-parent="Hizmetler">
             <div class="container">
                 <h1 class="page-title">Ürün Satışı</h1>
 
+                <!-- Telefon Ürünleri -->
                 <div class="product-category">
                     <button class="accordion-header" aria-expanded="false">
-                        <h2>Telefon Ürünleri</h2>
+                        <h2><i class="fas fa-mobile-alt"></i> Telefon Ürünleri</h2>
                         <span class="accordion-icon">+</span>
                     </button>
                     <div class="accordion-content">
-                        <div class="product-list">
-                            <!-- buraya telefon ürünleri koy -->
-                          <div class="product-item"><img src="assets/img/phone.jpg" alt="sıfır telefon"
-                                    loading="lazy">
-                                <h3>Sıfır Telefon</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/phone2.jpg" alt="ikinci el telefon"
-                                    loading="lazy">
-                                <h3>İkinci El Telefon</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/kılıf.jpg" alt="Kılıf"
-                                    loading="lazy">
-                                <h3>Kılıf</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/şarj_aleti.jpg" alt="Şarj Aleti"
-                                    loading="lazy">
-                                <h3>Şarj Aleti</h3>
-                                 </div>
-                                <div class="product-item"><img src="assets/img/powerbank.jpg" alt="Powerbank"
-                                    loading="lazy">
-                                <h3>Powerbank</h3>
-                           
-                            </div>
-                            <div class="product-item"><img src="assets/img/kablolu_kulaklık.jpg"
-                                    alt="Kablolu Kulaklık" loading="lazy">
-                                <h3>Kablolu Kulaklık</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/kulaklık.jpg"
-                                    alt="Kablosuz Kulaklık" loading="lazy">
-                                <h3>Kablosuz Kulakiçi Kulaklık</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/jbl_kulaklık.jpg"
-                                    alt="Kablosuz Kulaklık" loading="lazy">
-                                <h3>Kablosuz Kulaküstü Kulaklık</h3>
-                            </div>
-                            
-                            <div class="product-item"><img src="assets/img/ekran_koruyucu.jpg" alt="Ekran Koruyucu"
-                                    loading="lazy">
-                                <h3>Ekran Koruyucu</h3>                           
-                       </div>
-                       <div class="product-item"><img src="assets/img/kulaklik_kılıfı.jpg" alt="kulaklık kılıfı"
-                                    loading="lazy">
-                                <h3>Kulaklık Kılıfı</h3>
-                            
-                       </div>
-                       <div class="product-item"><img src="assets/img/arac_tutacagi.jpg" alt="araç tutacağı"
-                                    loading="lazy">
-                                <h3>Araç Tutacağı</h3>
-                            
-                       </div>
-                       <div class="product-item"><img src="assets/img/hoparlör.jpg" alt="Bluetooth Hoparlör"
-                                    loading="lazy">
-                                <h3>Bluetooth Hoparlör </h3>
-                            
-                       </div>
-
+                        <div class="product-list" id="products-telefon">
+                            <!-- Dinamik olarak JS ile yüklenecek -->
                         </div>
                     </div>
                 </div>
 
+                <!-- Bilgisayar Ürünleri -->
                 <div class="product-category">
                     <button class="accordion-header" aria-expanded="false">
-                        <h2>Bilgisayar Ürünleri</h2>
+                        <h2><i class="fas fa-laptop"></i> Bilgisayar Ürünleri</h2>
                         <span class="accordion-icon">+</span>
                     </button>
                     <div class="accordion-content">
-                        <div class="product-list">
-                            <!-- buraya bilgisayar ürünleri koy -->
-                            <div class="product-item"><img src="assets/img/mouse.jpg" alt="Oyuncu Mouse"
-                                    loading="lazy">
-                                <h3>Oyuncu Mouse</h3>
-                            </div>
-                             <div class="product-item"><img src="assets/img/mouse_normal.jpg" alt="Mouse"
-                                    loading="lazy">
-                                <h3>Mouse</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/klavye_oyuncu.jpg" alt="Oyuncu Klavye"
-                                    loading="lazy">
-                                <h3>Oyuncu Klavye</h3>
-                            </div>
-                             <div class="product-item"><img src="assets/img/klavye.jpg" alt="Klavye"
-                                    loading="lazy">
-                                <h3>Klavye</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/mousepad.jpg" alt="Mouse Pad"
-                                    loading="lazy">
-                                <h3>Mouse Pad</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/oyuncu_kulaklik.jpg" alt="Kulaklık"
-                                    loading="lazy">
-                                <h3>Kulaklık</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/oyun_kolu.jpg" alt="Oyun Kolu"
-                                    loading="lazy">
-                                <h3>Oyun Kolu</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/flashbellek.jpg" alt="Flash Bellek"
-                                    loading="lazy">
-                                <h3>Flash Bellek</h3>
-                                </div>
-                                <div class="product-item"><img src="assets/img/kablolar.jpg" alt="Kablolar"
-                                    loading="lazy">
-                                <h3>Kablolar</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/dönüstürücüler.jpg" alt="Dönüştürücüler"
-                                    loading="lazy">
-                                <h3>Dönüştürücüler</h3>
-                            </div>
-                            <div class="product-item"><img src="assets/img/laptop.jpg" alt="2. El Laptop"
-                                    loading="lazy">
-                                <h3>2. El Laptop</h3>
-                            </div>
-                             <div class="product-item"><img src="assets/img/laptop_şarj.jpg" alt="Laptop Şarj Aletleri"
-                                    loading="lazy">
-                                <h3>Laptop Şarj Aletleri</h3>
-                            </div>
-                             <div class="product-item"><img src="assets/img/adaptör.jpg" alt="Wireless USB Adapter"
-                                    loading="lazy">
-                                <h3>Wireless USB Adapter</h3>
-                            </div>
-                             <div class="product-item"><img src="assets/img/adaptör2.jpg" alt="Bluetooth Dongle / Adapter"
-                                    loading="lazy">
-                                <h3>Bluetooth Dongle / Adapter</h3>
-                            </div>
-                            
-                           
-
-                            </div>
+                        <div class="product-list" id="products-bilgisayar">
+                            <!-- Dinamik olarak JS ile yüklenecek -->
                         </div>
                     </div>
+                </div>
 
-                    
-                    <br>
-                    <br>
-                    <br>
-                    <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
+                <!-- Saat -->
+                <div class="product-category">
+                    <button class="accordion-header" aria-expanded="false">
+                        <h2><i class="fas fa-clock"></i> Saat</h2>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="product-list" id="products-saat">
+                            <!-- Dinamik olarak JS ile yüklenecek -->
                         </div>
+                    </div>
+                </div>
+
+                <!-- Aksesuar -->
+                <div class="product-category">
+                    <button class="accordion-header" aria-expanded="false">
+                        <h2><i class="fas fa-headphones"></i> Aksesuar</h2>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="product-list" id="products-aksesuar">
+                            <!-- Dinamik olarak JS ile yüklenecek -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
                 </div>
             </div>
         </section>
 
-        <!-- hizmetlerimiz kısmının alt başlığı teknik servis sayfası-->
+        <!-- ============================
+             TEKNİK SERVİS SAYFASI
+             ============================ -->
         <section id="service" class="page-section" data-title="Teknik Servis" data-parent="Hizmetler">
             <div class="container">
                 <h1 class="page-title">Teknik Servis</h1>
@@ -592,7 +669,7 @@
                 </div>
 
                 <div class="service-list-section">
-                    <div class="service-item-card">
+                    <div class="service-item-card glass-card">
                         <h2>💻 Bilgisayar Onarımları</h2>
                         <ul>
                             <li>Ekran Değişimi</li>
@@ -600,12 +677,13 @@
                             <li>SSD/HDD Değişimi</li>
                             <li>Laptop/Kasa Temizliği</li>
                         </ul>
-                        
-                        <a href="#iletisim" class="btn btn-primary"
-                                onclick="navigateToSection('contact'); return false;">Fiyat için iletişim</a>
+                        <a href="https://wa.me/905071561515" target="_blank" class="btn btn-primary btn-whatsapp-bg"
+                            style="background:var(--whatsapp)!important;color:#fff!important;border:none!important;">
+                            <i class="fab fa-whatsapp"></i> Fiyat İçin WhatsApp'tan İletişime Geçin
+                        </a>
                     </div>
 
-                    <div class="service-item-card">
+                    <div class="service-item-card glass-card">
                         <h2>📱 Telefon Onarımları</h2>
                         <ul>
                             <li>Batarya Değişimi</li>
@@ -613,11 +691,13 @@
                             <li>Kamera Tamiri</li>
                             <li>Şarj Soketi Tamiri</li>
                         </ul>
-                       <a href="#iletisim" class="btn btn-primary"
-                                onclick="navigateToSection('contact'); return false;">Fiyat İçin İletişim</a>
+                        <a href="https://wa.me/905071561515" target="_blank" class="btn btn-primary btn-whatsapp-bg"
+                            style="background:var(--whatsapp)!important;color:#fff!important;border:none!important;">
+                            <i class="fab fa-whatsapp"></i> Fiyat İçin WhatsApp'tan İletişime Geçin
+                        </a>
                     </div>
 
-                    <div class="service-item-card">
+                    <div class="service-item-card glass-card">
                         <h2>⚙️ Yazılım Hizmetleri</h2>
                         <ul>
                             <li>İşletim Sistemi Kurulumu</li>
@@ -625,84 +705,112 @@
                             <li>Yazılım Güncelleme</li>
                             <li>Office Kurulumları</li>
                         </ul>
-                        <a href="#iletisim" class="btn btn-primary"
-                                onclick="navigateToSection('contact'); return false;">Fiyat için İletişim</a>                
-                                </div>
-                    <br>
-                    
-                    <section class="repair-status-container">
-                        <a href="https://www.serviscep.com/track" class="status-box">
-                          <div class="status-content">
-                               <div class="status-icon">
-                                <i class="fas fa-search-location"></i> </div>
-                               <div class="status-text">
-                               <h3>Cihaz Durum Sorgulama</h3>
-                                <p>Tamirdeki cihazınızın son durumunu ve tahmini teslim süresini öğrenmek için tıklayın.</p>
-                             </div>
-                         <div class="status-arrow">
-                               <span>Sorgula</span>
-                              <i class="fas fa-chevron-right"></i>
-                                  </div>
+                        <a href="https://wa.me/905071561515" target="_blank" class="btn btn-primary btn-whatsapp-bg"
+                            style="background:var(--whatsapp)!important;color:#fff!important;border:none!important;">
+                            <i class="fab fa-whatsapp"></i> Fiyat İçin WhatsApp'tan İletişime Geçin
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Cihaz Durum Sorgulama -->
+                <section class="repair-status-container">
+                    <a href="https://www.serviscep.com/track" target="_blank" class="status-box glass-card">
+                        <div class="status-content">
+                            <div class="status-icon"><i class="fas fa-search-location"></i></div>
+                            <div class="status-text">
+                                <h3>Cihaz Durum Sorgulama</h3>
+                                <p>Tamirdeki cihazınızın son durumunu ve tahmini teslim süresini öğrenmek için tıklayın.
+                                </p>
                             </div>
-                                  </a>
-                                        </section>
-                    <br>
-                    <div style="clear: both;"></div>
-                    <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
+                            <div class="status-arrow">
+                                <span>Sorgula</span> <i class="fas fa-chevron-right"></i>
+                            </div>
                         </div>
-                </div>           
+                    </a>
+                </section>
+
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
+                </div>
             </div>
         </section>
 
-        <!-- hizmetlerimiz kısmının alt başlığı saat sayfası -->
+        <!-- ============================
+             SAAT SAYFASI
+             ============================ -->
         <section id="watches" class="page-section" data-title="Saat" data-parent="Hizmetler">
             <div class="container">
                 <h1 class="page-title">Saat</h1>
-                    
-    <div class="service-card">
-        <div class="service-icon">⌚</div>
-        <h3>Saat Satışı</h3>
-        <p>Mağazamızda çeşitli markalara ait kaliteli saatler bulabilirsiz.</p>
-        <p>Lee Cooper / Daniel Klein / Mascionni Milano / Slazenger / Bigotti / Essence </p>
-    </div>
+                <div class="watches-grid">
+                    <a href="#products" class="service-card glass-card" data-section="products"
+                        onclick="navigateToSection('products'); setTimeout(() => { const saatAccordion = document.querySelector('#products-saat').closest('.product-category').querySelector('.accordion-header'); if(saatAccordion && saatAccordion.getAttribute('aria-expanded') === 'false') saatAccordion.click(); }, 300); return false;"
+                        style="text-decoration:none; color:inherit; display:block; cursor:pointer;">
+                        <div class="service-card-icon">⌚</div>
+                        <h3>Saat Satışı</h3>
+                        <p>Mağazamızda çeşitli markalara ait kaliteli saatler bulabilirsiniz.</p>
+                        <p class="brand-list">Lee Cooper / Daniel Klein / Mascionni Milano / Slazenger / Bigotti /
+                            Essence</p>
+                    </a>
+                    <div class="service-card glass-card">
+                        <div class="service-card-icon">🔋</div>
+                        <h3>Pil Değişimi</h3>
+                        <p>Her marka saate uygun, uzun ömürlü ve orijinal pil değişimini titizlikle yapıyoruz.</p>
+                    </div>
+                    <div class="service-card glass-card">
+                        <div class="service-card-icon">🛠️</div>
+                        <h3>Saat Tamiri</h3>
+                        <p>Mekanik veya dijital tüm saatleriniz için profesyonel teknik servis ve onarım desteği.</p>
+                    </div>
+                </div>
 
-    <div class="service-card">
-        <div class="service-icon">🔋</div>
-        <h3>Pil Değişimi</h3>
-        <p>Her marka saate uygun, uzun ömürlü ve orijinal pil değişimini titizlikle yapıyoruz.</p>
-    </div>
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
+                </div>
+            </div>
+        </section>
 
-    <div class="service-card">
-        <div class="service-icon">🛠️</div>
-        <h3>Saat Tamiri</h3>
-        <p>Mekanik veya dijital tüm saatleriniz için profesyonel teknik servis ve onarım desteği.</p>
-    </div>
-</div>
+        <!-- ============================
+             2. EL CİHAZLAR SAYFASI
+             ============================ -->
+        <section id="secondhand" class="page-section" data-title="2. El Cihazlar" data-parent="Hizmetler">
+            <!-- Parallax Background -->
+            <div class="secondhand-parallax" id="secondhand-parallax">
+                <div class="secondhand-parallax-overlay"></div>
+            </div>
 
-                    <br>
-                    <br>
-                    <br>
-                    <div class="footer-column">
-                            <h3>Hızlı Menü</h3>
-                            <ul class="footer-menu">
-                                <li><a href="#anasayfa" data-section="home">Anasayfa</a></li>
-                                <li><a href="#hakkimizda" data-section="about">Hakkımızda</a></li>
-                                <li><a href="#fotogaleri" data-section="gallery">Galeri</a></li>
-                                <li><a href="#iletisim" data-section="contact">İletişim</a></li>
-                            </ul>
-                        </div>
+            <div class="container secondhand-container">
+                <h1 class="page-title">2. El Cihazlar</h1>
+                <p class="secondhand-subtitle">Güvenilir, garantili ve uygun fiyatlı 2. el cihazlar. Her ürün kontrol
+                    edilmiş ve test edilmiştir.</p>
+
+                <div class="secondhand-grid" id="secondhand-grid">
+                    <!-- Filled by JS from localStorage -->
+                    <p class="empty-state"><i class="fas fa-mobile-alt"></i> Henüz 2. el ürün eklenmedi. Yakında burada
+                        uygun fiyatlı cihazlar olacak!</p>
+                </div>
+
+                <div class="page-footer-nav">
+                    <a href="#home" class="btn btn-secondary" onclick="navigateToSection('home'); return false;"><i
+                            class="fas fa-home"></i> Anasayfa</a>
+                    <a href="#contact" class="btn btn-primary" onclick="navigateToSection('contact'); return false;"><i
+                            class="fas fa-phone"></i> İletişim</a>
                 </div>
             </div>
         </section>
 
     </main>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/+905071561515" class="whatsapp-float" target="_blank" aria-label="WhatsApp ile iletişim">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scroll to top -->
+    <button class="scroll-top" id="scroll-top-btn" aria-label="Yukarı çık">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <script src="scripts.js"></script>
 </body>
