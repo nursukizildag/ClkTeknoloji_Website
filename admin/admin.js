@@ -737,16 +737,31 @@ async function deleteGalleryItem(id) {
 // 2. EL CİHAZLAR MANAGEMENT
 // ============================================
 function initSecondHand() {
-    const bgForm = document.getElementById('secondhand-bg-form');
-    const uploadArea = document.getElementById('secondhand-upload-area');
-    const fileInput = document.getElementById('secondhand-bg-image');
-    const preview = document.getElementById('secondhand-bg-preview');
-    const clearBtn = document.getElementById('btn-clear-secondhand-bg');
+    const addBtn = document.getElementById('btn-add-secondhand');
+    const cancelBtn = document.getElementById('btn-cancel-secondhand');
+    const form = document.getElementById('secondhand-form');
+    const addForm = document.getElementById('secondhand-add-form');
+    const uploadArea = document.getElementById('sh-upload-area');
+    const fileInput = document.getElementById('sh-image');
+    const preview = document.getElementById('sh-preview');
 
-    // Load existing background
-    const savedBg = localStorage.getItem(STORAGE_KEYS.secondhandBg);
-    if (savedBg && preview) {
-        preview.innerHTML = `<img src="${savedBg}" alt="Arka Plan">`;
+    if (addBtn && form) {
+        addBtn.addEventListener('click', () => {
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            document.getElementById('secondhand-form-title').innerHTML = '<i class="fas fa-recycle"></i> Yeni 2. El Ürün Ekle';
+            document.getElementById('edit-secondhand-id').value = '';
+            if (addForm) addForm.reset();
+            if (preview) preview.innerHTML = '';
+        });
+    }
+
+    if (cancelBtn && form) {
+        cancelBtn.addEventListener('click', () => {
+            form.style.display = 'none';
+            if (addForm) addForm.reset();
+            document.getElementById('edit-secondhand-id').value = '';
+            if (preview) preview.innerHTML = '';
+        });
     }
 
     // File upload
@@ -755,7 +770,7 @@ function initSecondHand() {
 
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.style.borderColor = '#2563eb';
+            uploadArea.style.borderColor = '#e8872a';
         });
 
         uploadArea.addEventListener('dragleave', () => {
@@ -778,54 +793,327 @@ function initSecondHand() {
         });
     }
 
-    // Save background
-    if (bgForm) {
-        bgForm.addEventListener('submit', (e) => {
+    // Submit form
+    if (addForm) {
+        addForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const imgSrc = preview?.querySelector('img')?.src;
-            if (imgSrc) {
-                localStorage.setItem(STORAGE_KEYS.secondhandBg, imgSrc);
-                showNotification('Arka plan fotoğrafı kaydedildi!', 'success');
-            } else {
-                alert('Lütfen bir fotoğraf seçin.');
+
+            try {
+                const editId = document.getElementById('edit-secondhand-id').value;
+                const category = document.getElementById('sh-category').value;
+
+                let imageData = preview ? (preview.querySelector('img')?.src || null) : null;
+                if (imageData && imageData.length > 500000) {
+                    imageData = compressImage(imageData);
+                }
+
+                const specs = {
+                    storage: document.getElementById('sh-storage').value || '',
+                    ram: document.getElementById('sh-ram').value || '',
+                    battery: document.getElementById('sh-battery').value || '',
+                    screen: document.getElementById('sh-screen').value || '',
+                    processor: document.getElementById('sh-processor').value || '',
+                    color: document.getElementById('sh-color').value || ''
+                };
+
+                const product = {
+                    id: editId ? editId : Date.now().toString(),
+                    name: document.getElementById('sh-name').value,
+                    brand: document.getElementById('sh-brand').value,
+                    category: category,
+                    condition: 'ikinci-el',
+                    price: document.getElementById('sh-price').value,
+                    description: document.getElementById('sh-desc').value,
+                    image: imageData,
+                    specs: specs
+                };
+
+                const saveBtn = addForm.querySelector('button[type="submit"]');
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+                saveBtn.disabled = true;
+
+                if (editId) {
+                    const existing = window.currentSecondHandProducts?.find(p => p.id === editId);
+                    product.code = existing?.code || generateProductCode(category);
+                    if (!product.image && existing?.image) {
+                        product.image = existing.image;
+                    }
+                } else {
+                    product.code = generateProductCode(category);
+                }
+
+                const endpoint = editId ? `/api/products/${product.id}` : '/api/products';
+                const method = editId ? 'PUT' : 'POST';
+
+                const response = await fetch(endpoint, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(product)
+                });
+
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+
+                if (!response.ok) {
+                    const errObj = await response.json();
+                    throw new Error(errObj.error || `Server fault: ${response.status}`);
+                }
+
+                showNotification(editId ? '2. El ürün güncellendi!' : '2. El ürün eklendi!', 'success');
+
+                addForm.reset();
+                document.getElementById('edit-secondhand-id').value = '';
+                if (preview) preview.innerHTML = '';
+                form.style.display = 'none';
+
+                renderSecondHandProducts();
+                updateDashboardStats();
+            } catch (err) {
+                console.error('2. El ürün kaydetme hatası:', err);
+                showNotification('Hata: ' + err.message, 'error');
+                const saveBtn = addForm.querySelector('button[type="submit"]');
+                if (saveBtn) {
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
+                    saveBtn.disabled = false;
+                }
             }
         });
     }
 
-    // Clear background
-    if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            localStorage.removeItem(STORAGE_KEYS.secondhandBg);
-            if (preview) preview.innerHTML = '';
-            showNotification('Arka plan fotoğrafı kaldırıldı.', 'success');
-        });
-    }
-
     renderSecondHandProducts();
+    initCarousel();
 }
 
-function renderSecondHandProducts() {
+window.currentSecondHandProducts = [];
+
+async function renderSecondHandProducts() {
     const container = document.getElementById('secondhand-product-list');
     if (!container) return;
 
-    const products = getFromStorage(STORAGE_KEYS.products).filter(p => p.condition === 'ikinci-el');
+    container.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
 
-    if (products.length === 0) {
-        container.innerHTML = '<p class="empty-message">Henüz 2. El ürün eklenmedi. Ürün Yönetimi sayfasından ürün ekleyip durumunu "2. El" olarak seçin.</p>';
-        return;
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) throw new Error('API hatası');
+        const allProducts = await response.json();
+        const products = allProducts.filter(p => p.condition === 'ikinci-el');
+        window.currentSecondHandProducts = products;
+
+        if (products.length === 0) {
+            container.innerHTML = '<p class="empty-message">Henüz 2. El ürün eklenmedi.</p>';
+            return;
+        }
+
+        container.innerHTML = products.map(p => {
+            const specs = (typeof p.specs === 'string' ? JSON.parse(p.specs || '{}') : p.specs) || {};
+            const specItems = [
+                specs.storage ? `<span class="sh-spec-tag"><i class="fas fa-hdd"></i> ${specs.storage}</span>` : '',
+                specs.ram ? `<span class="sh-spec-tag"><i class="fas fa-memory"></i> ${specs.ram}</span>` : '',
+                specs.battery ? `<span class="sh-spec-tag"><i class="fas fa-battery-three-quarters"></i> ${specs.battery}</span>` : '',
+                specs.screen ? `<span class="sh-spec-tag"><i class="fas fa-mobile-alt"></i> ${specs.screen}</span>` : '',
+                specs.processor ? `<span class="sh-spec-tag"><i class="fas fa-bolt"></i> ${specs.processor}</span>` : '',
+                specs.color ? `<span class="sh-spec-tag"><i class="fas fa-palette"></i> ${specs.color}</span>` : ''
+            ].filter(Boolean).join('');
+
+            return `
+            <div class="secondhand-admin-card">
+                ${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<div class="no-image"><i class="fas fa-image"></i></div>'}
+                <div class="secondhand-admin-info">
+                    <strong>${p.name}</strong>
+                    ${p.brand ? `<span class="brand-tag">${p.brand}</span>` : ''}
+                    ${p.code ? `<span class="code-tag">Kod: ${p.code}</span>` : ''}
+                    ${specItems ? `<div class="sh-spec-tags">${specItems}</div>` : ''}
+                    ${p.price ? `<span class="price-tag">₺${Number(p.price).toLocaleString('tr-TR')}</span>` : ''}
+                </div>
+                <div class="secondhand-admin-actions">
+                    <button class="btn-admin btn-admin-primary btn-admin-sm" onclick="editSecondHand('${p.id}')" title="Düzenle">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-admin btn-admin-danger btn-admin-sm" onclick="deleteSecondHand('${p.id}')" title="Sil">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            `;
+        }).join('');
+    } catch (err) {
+        container.innerHTML = '<p class="empty-message" style="color:#ef4444;">Ürünler yüklenirken hata oluştu.</p>';
+    }
+}
+
+function editSecondHand(id) {
+    const product = window.currentSecondHandProducts?.find(p => p.id === id);
+    if (!product) return showNotification('Ürün bulunamadı!', 'error');
+
+    const specs = (typeof product.specs === 'string' ? JSON.parse(product.specs || '{}') : product.specs) || {};
+
+    document.getElementById('edit-secondhand-id').value = product.id;
+    document.getElementById('sh-name').value = product.name || '';
+    document.getElementById('sh-brand').value = product.brand || '';
+    document.getElementById('sh-category').value = product.category || '';
+    document.getElementById('sh-price').value = product.price || '';
+    document.getElementById('sh-desc').value = product.description || '';
+    document.getElementById('sh-storage').value = specs.storage || '';
+    document.getElementById('sh-ram').value = specs.ram || '';
+    document.getElementById('sh-battery').value = specs.battery || '';
+    document.getElementById('sh-screen').value = specs.screen || '';
+    document.getElementById('sh-processor').value = specs.processor || '';
+    document.getElementById('sh-color').value = specs.color || '';
+
+    const preview = document.getElementById('sh-preview');
+    if (preview && product.image) {
+        preview.innerHTML = `<img src="${product.image}" alt="Preview" style="max-width:100%; height:100%; object-fit:cover;">`;
+    } else if (preview) {
+        preview.innerHTML = '';
     }
 
-    container.innerHTML = products.map(p => `
-        <div class="secondhand-admin-card">
-            ${p.image ? `<img src="${p.image}" alt="${p.name}">` : '<div class="no-image"><i class="fas fa-image"></i></div>'}
-            <div class="secondhand-admin-info">
-                <strong>${p.name}</strong>
-                ${p.brand ? `<span class="brand-tag">${p.brand}</span>` : ''}
-                ${p.price ? `<span class="price-tag">₺${Number(p.price).toLocaleString('tr-TR')}</span>` : ''}
-            </div>
-        </div>
-    `).join('');
+    document.getElementById('secondhand-form-title').innerHTML = '<i class="fas fa-edit"></i> 2. El Ürün Düzenle: ' + (product.code || product.name);
+    const form = document.getElementById('secondhand-form');
+    if (form) {
+        form.style.display = 'block';
+        form.scrollIntoView({ behavior: 'smooth' });
+    }
 }
+
+async function deleteSecondHand(id) {
+    if (!confirm('Bu 2. El ürünü silmek istediğinize emin misiniz?')) return;
+
+    try {
+        const response = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Ürün silinemedi');
+
+        renderSecondHandProducts();
+        updateDashboardStats();
+        showNotification('2. El ürün silindi.', 'success');
+    } catch (err) {
+        showNotification('Hata: ' + err.message, 'error');
+    }
+}
+
+// ============================================
+// CAROUSEL MANAGEMENT
+// ============================================
+function initCarousel() {
+    const addBtn = document.getElementById('btn-add-carousel');
+    const cancelBtn = document.getElementById('btn-cancel-carousel');
+    const form = document.getElementById('carousel-form');
+    const addForm = document.getElementById('carousel-add-form');
+    const uploadArea = document.getElementById('carousel-upload-area');
+    const fileInput = document.getElementById('carousel-image');
+    const preview = document.getElementById('carousel-preview');
+
+    if (addBtn && form) {
+        addBtn.addEventListener('click', () => {
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+
+    if (cancelBtn && form) {
+        cancelBtn.addEventListener('click', () => {
+            form.style.display = 'none';
+            if (addForm) addForm.reset();
+            if (preview) preview.innerHTML = '';
+        });
+    }
+
+    // File upload
+    if (uploadArea && fileInput) {
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                showImagePreview(fileInput.files[0], preview);
+            }
+        });
+    }
+
+    // Submit
+    if (addForm) {
+        addForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            let imageData = preview?.querySelector('img')?.src || null;
+            if (!imageData) {
+                alert('Lütfen bir fotoğraf seçin.');
+                return;
+            }
+            if (imageData.length > 500000) {
+                imageData = compressImage(imageData);
+            }
+
+            const item = {
+                id: Date.now().toString(),
+                title: document.getElementById('carousel-title').value || '',
+                image: imageData
+            };
+
+            try {
+                const response = await fetch('/api/carousel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(item)
+                });
+
+                if (!response.ok) throw new Error('Carousel fotoğrafı yüklenemedi');
+
+                addForm.reset();
+                if (preview) preview.innerHTML = '';
+                form.style.display = 'none';
+
+                renderCarousel();
+                showNotification('Carousel fotoğrafı yüklendi!', 'success');
+            } catch (err) {
+                showNotification('Hata: ' + err.message, 'error');
+            }
+        });
+    }
+
+    renderCarousel();
+}
+
+async function renderCarousel() {
+    const grid = document.getElementById('carousel-admin-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
+
+    try {
+        const response = await fetch('/api/carousel');
+        if (!response.ok) throw new Error('Carousel yüklenemedi');
+        const images = await response.json();
+
+        if (images.length === 0) {
+            grid.innerHTML = '<p class="empty-message">Henüz carousel fotoğrafı eklenmedi. Varsayılan fotoğraflar kullanılıyor.</p>';
+            return;
+        }
+
+        grid.innerHTML = images.map(img => `
+            <div class="gallery-admin-item">
+                <img src="${img.image}" alt="${img.title || 'Carousel'}">
+                <button class="gallery-delete" onclick="deleteCarouselImage('${img.id}')" title="Sil">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('');
+    } catch (err) {
+        grid.innerHTML = '<p class="empty-message" style="color:#ef4444;">Carousel yüklenirken hata oluştu.</p>';
+    }
+}
+
+async function deleteCarouselImage(id) {
+    if (!confirm('Bu carousel fotoğrafını silmek istediğinize emin misiniz?')) return;
+
+    try {
+        const response = await fetch(`/api/carousel/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Fotoğraf silinemedi');
+
+        renderCarousel();
+        showNotification('Carousel fotoğrafı silindi.', 'success');
+    } catch (err) {
+        showNotification('Hata: ' + err.message, 'error');
+    }
+}
+
 
 // ============================================
 // DASHBOARD STATS
@@ -1016,3 +1304,6 @@ window.deleteProduct = deleteProduct;
 window.deleteAnnouncement = deleteAnnouncement;
 window.deleteGalleryItem = deleteGalleryItem;
 window.editProduct = editProduct;
+window.editSecondHand = editSecondHand;
+window.deleteSecondHand = deleteSecondHand;
+window.deleteCarouselImage = deleteCarouselImage;

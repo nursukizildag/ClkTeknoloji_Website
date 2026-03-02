@@ -5,15 +5,14 @@ export async function onRequestGet(context) {
     const { env } = context;
 
     if (!env.DATABASE_URL) {
-        return Response.json({ error: "DATABASE_URL environment variable is missing" }, { status: 500 });
+        return Response.json({ error: "DATABASE_URL is missing" }, { status: 500 });
     }
 
     try {
         const sql = neon(env.DATABASE_URL);
-        const products = await sql`SELECT * FROM products ORDER BY created_at DESC`;
+        const images = await sql`SELECT * FROM carousel_images ORDER BY sort_order ASC, created_at DESC`;
 
-        // Return products as JSON application
-        return new Response(JSON.stringify(products), {
+        return new Response(JSON.stringify(images), {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
@@ -27,7 +26,6 @@ export async function onRequestGet(context) {
 export async function onRequestPost(context) {
     const { request, env } = context;
 
-    // Auth Check
     const authed = await isAuthenticated(request, env);
     if (!authed) {
         return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -41,16 +39,14 @@ export async function onRequestPost(context) {
         const sql = neon(env.DATABASE_URL);
         const data = await request.json();
 
-        // Using neon to insert
         const result = await sql`
-            INSERT INTO products (id, name, brand, category, condition, price, code, description, image, specs)
-            VALUES (${data.id}, ${data.name || ''}, ${data.brand || ''}, ${data.category || ''}, ${data.condition || ''}, ${data.price || null}, ${data.code || ''}, ${data.description || ''}, ${data.image || ''}, ${JSON.stringify(data.specs || {})})
+            INSERT INTO carousel_images (id, title, image, sort_order)
+            VALUES (${data.id}, ${data.title || ''}, ${data.image || ''}, ${data.sort_order || 0})
             RETURNING *
         `;
 
-        return Response.json({ success: true, product: result[0] });
+        return Response.json({ success: true, item: result[0] });
     } catch (e) {
-        console.error("DB Insert Error:", e);
         return Response.json({ error: e.message }, { status: 500 });
     }
 }

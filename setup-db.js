@@ -47,6 +47,22 @@ async function setup() {
         `;
         console.log('Gallery table created successfully.');
 
+        console.log('Adding specs column to products...');
+        await sql`ALTER TABLE products ADD COLUMN IF NOT EXISTS specs JSONB DEFAULT '{}'`;
+        console.log('Specs column added.');
+
+        console.log('Creating carousel_images table...');
+        await sql`
+            CREATE TABLE IF NOT EXISTS carousel_images (
+                id VARCHAR(100) PRIMARY KEY,
+                title VARCHAR(255),
+                image TEXT,
+                sort_order INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        console.log('Carousel images table created successfully.');
+
         console.log('Database setup complete.');
     } catch (error) {
         console.error('Error setting up database:', error);

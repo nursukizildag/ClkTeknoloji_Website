@@ -28,7 +28,8 @@ export async function onRequestPut(context) {
                 price = ${data.price || null}, 
                 code = ${data.code || ''}, 
                 description = ${data.description || ''}, 
-                image = ${data.image || ''}
+                image = ${data.image || ''},
+                specs = ${JSON.stringify(data.specs || {})}
             WHERE id = ${id}
             RETURNING *
         `;

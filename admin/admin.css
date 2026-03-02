@@ -832,6 +832,57 @@ body {
     padding: 40px;
 }
 
+/* Secondhand admin specs & actions */
+.sh-spec-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.sh-spec-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: rgba(232, 135, 42, 0.12);
+    color: var(--admin-highlight);
+}
+
+.sh-spec-tag i {
+    font-size: 0.6rem;
+}
+
+.secondhand-admin-info .code-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+    margin-left: 4px;
+}
+
+.secondhand-admin-actions {
+    display: flex;
+    gap: 6px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--admin-border);
+    justify-content: flex-end;
+}
+
+.spec-fields-section {
+    padding: 16px;
+    margin: 12px 0;
+    border-radius: var(--radius);
+    background: rgba(232, 135, 42, 0.04);
+    border: 1px solid rgba(232, 135, 42, 0.15);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .sidebar {

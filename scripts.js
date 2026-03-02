@@ -564,12 +564,15 @@ async function loadSecondHandProducts() {
     const parallaxBg = document.getElementById('secondhand-parallax');
     if (!grid) return;
 
-    // Load parallax background (still in localStorage for now)
+    // Load parallax background from carousel API
     try {
-        const bgImage = localStorage.getItem('clk_secondhand_bg');
-        if (bgImage && parallaxBg) {
-            parallaxBg.style.backgroundImage = `url(${bgImage})`;
-            parallaxBg.classList.add('has-image');
+        const carouselRes = await fetch('/api/carousel');
+        if (carouselRes.ok) {
+            const carouselImages = await carouselRes.json();
+            if (carouselImages.length > 0 && parallaxBg) {
+                parallaxBg.style.backgroundImage = `url(${carouselImages[0].image})`;
+                parallaxBg.classList.add('has-image');
+            }
         }
     } catch (e) { /* ignore */ }
 
@@ -588,12 +591,34 @@ async function loadSecondHandProducts() {
             return;
         }
 
-        grid.innerHTML = secondHandProducts.map(p => `
+        grid.innerHTML = secondHandProducts.map(p => {
+            const specs = (typeof p.specs === 'string' ? JSON.parse(p.specs || '{}') : p.specs) || {};
+
+            const specLabels = {
+                storage: { icon: 'fas fa-hdd', label: 'Depolama' },
+                ram: { icon: 'fas fa-memory', label: 'RAM' },
+                battery: { icon: 'fas fa-battery-three-quarters', label: 'Pil' },
+                screen: { icon: 'fas fa-mobile-alt', label: 'Ekran' },
+                processor: { icon: 'fas fa-bolt', label: 'İşlemci' },
+                color: { icon: 'fas fa-palette', label: 'Renk' }
+            };
+
+            const specHtml = Object.entries(specLabels)
+                .filter(([key]) => specs[key])
+                .map(([key, val]) => `
+                    <div class="sh-spec-item">
+                        <i class="${val.icon}"></i>
+                        <span class="sh-spec-label">${val.label}</span>
+                        <span class="sh-spec-value">${specs[key]}</span>
+                    </div>
+                `).join('');
+
+            return `
             <div class="secondhand-card glass-card" style="position: relative;">
                 ${p.code ? `<span class="product-item-code" style="position: absolute; top: 10px; right: 10px; background: rgba(37, 99, 235, 0.9); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; z-index: 2;">Kod: ${p.code}</span>` : ''}
                 <div class="secondhand-card-image">
                     ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : '<div class="no-image-placeholder"><i class="fas fa-mobile-alt"></i></div>'}
-                    ${p.condition === 'ikinci-el' ? '<span class="condition-badge">2. El</span>' : ''}
+                    <span class="condition-badge">2. El</span>
                 </div>
                 <div class="secondhand-card-body">
                     <h3 class="secondhand-card-title">${p.name}</h3>
@@ -601,6 +626,7 @@ async function loadSecondHandProducts() {
                         ${p.brand ? `<span class="meta-tag"><i class="fas fa-tag"></i> ${p.brand}</span>` : ''}
                         <span class="meta-tag"><i class="fas fa-info-circle"></i> 2. El</span>
                     </div>
+                    ${specHtml ? `<div class="sh-specs-grid">${specHtml}</div>` : ''}
                     <p class="secondhand-card-desc">${p.description || 'Detaylı bilgi için bizimle iletişime geçin.'}</p>
                     <div class="secondhand-card-footer">
                         <span class="secondhand-price">₺${Number(p.price || 0).toLocaleString('tr-TR')}</span>
@@ -611,7 +637,7 @@ async function loadSecondHandProducts() {
                     </div>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     } catch (err) {
         console.error("2. el ürünleri çekerken hata:", err);
         grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #ef4444;"><p>Ürünler yüklenirken bir sorun oluştu.</p></div>';
