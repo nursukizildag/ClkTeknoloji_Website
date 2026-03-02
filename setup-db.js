@@ -36,6 +36,17 @@ async function setup() {
         `;
         console.log('Announcements table created successfully.');
 
+        console.log('Creating gallery table...');
+        await sql`
+            CREATE TABLE IF NOT EXISTS gallery (
+                id VARCHAR(100) PRIMARY KEY,
+                title VARCHAR(255),
+                image TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        console.log('Gallery table created successfully.');
+
         console.log('Database setup complete.');
     } catch (error) {
         console.error('Error setting up database:', error);

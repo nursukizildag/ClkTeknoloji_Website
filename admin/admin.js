@@ -419,79 +419,101 @@ function initAnnouncements() {
     }
 
     if (addForm) {
-        addForm.addEventListener('submit', (e) => {
+        addForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const announcement = {
-                id: Date.now(),
+                id: Date.now().toString(),
                 badge: document.getElementById('ann-badge').value,
                 text: document.getElementById('ann-text').value,
                 duration: parseInt(document.getElementById('ann-duration').value) || 4,
                 link: document.getElementById('ann-link').value || 'products'
             };
 
-            const announcements = getFromStorage(STORAGE_KEYS.announcements);
-            announcements.push(announcement);
-            saveToStorage(STORAGE_KEYS.announcements, announcements);
+            try {
+                const response = await fetch('/api/announcements', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(announcement)
+                });
 
-            addForm.reset();
-            form.style.display = 'none';
+                if (!response.ok) throw new Error('Duyuru kaydedilemedi');
 
-            renderAnnouncements();
-            updateDashboardStats();
-            showNotification('Duyuru başarıyla kaydedildi!', 'success');
+                addForm.reset();
+                form.style.display = 'none';
+
+                renderAnnouncements();
+                updateDashboardStats();
+                showNotification('Duyuru başarıyla kaydedildi!', 'success');
+            } catch (err) {
+                console.error(err);
+                showNotification('Hata: ' + err.message, 'error');
+            }
         });
     }
 
     renderAnnouncements();
 }
 
-function renderAnnouncements() {
+async function renderAnnouncements() {
     const list = document.getElementById('announcements-list');
     if (!list) return;
 
-    const announcements = getFromStorage(STORAGE_KEYS.announcements);
+    list.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
 
-    if (announcements.length === 0) {
-        list.innerHTML = '<p class="empty-message">Henüz duyuru eklenmedi. Varsayılan duyurular gösteriliyor.</p>';
-        return;
+    try {
+        const response = await fetch('/api/announcements');
+        if (!response.ok) throw new Error('Duyurular yüklenemedi');
+        const announcements = await response.json();
+
+        if (announcements.length === 0) {
+            list.innerHTML = '<p class="empty-message">Henüz duyuru eklenmedi.</p>';
+            return;
+        }
+
+        const linkNames = {
+            products: 'Ürünler',
+            secondhand: '2. El Cihazlar',
+            service: 'Teknik Servis',
+            watches: 'Saat',
+            contact: 'İletişim',
+            gallery: 'FotoGaleri'
+        };
+
+        list.innerHTML = announcements.map(a => `
+            <div class="announcement-card">
+                <span class="announcement-card-badge">${a.badge}</span>
+                <span class="announcement-card-text">${a.text}</span>
+                <div class="announcement-card-meta">
+                    <span class="meta-tag"><i class="fas fa-clock"></i> ${a.duration || 4}sn</span>
+                    <span class="meta-tag"><i class="fas fa-link"></i> ${linkNames[a.link] || 'Ürünler'}</span>
+                </div>
+                <div class="announcement-card-actions">
+                    <button class="btn-admin btn-admin-danger btn-admin-sm" onclick="deleteAnnouncement('${a.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        updateDashboardStats();
+    } catch (err) {
+        list.innerHTML = '<p class="empty-message" style="color:#ef4444;">Duyurular yüklenirken hata oluştu.</p>';
     }
-
-    const linkNames = {
-        products: 'Ürünler',
-        secondhand: '2. El Cihazlar',
-        service: 'Teknik Servis',
-        watches: 'Saat',
-        contact: 'İletişim',
-        gallery: 'FotoGaleri'
-    };
-
-    list.innerHTML = announcements.map(a => `
-        <div class="announcement-card">
-            <span class="announcement-card-badge">${a.badge}</span>
-            <span class="announcement-card-text">${a.text}</span>
-            <div class="announcement-card-meta">
-                <span class="meta-tag"><i class="fas fa-clock"></i> ${a.duration || 4}sn</span>
-                <span class="meta-tag"><i class="fas fa-link"></i> ${linkNames[a.link] || 'Ürünler'}</span>
-            </div>
-            <div class="announcement-card-actions">
-                <button class="btn-admin btn-admin-danger btn-admin-sm" onclick="deleteAnnouncement(${a.id})">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
 }
 
-function deleteAnnouncement(id) {
+async function deleteAnnouncement(id) {
     if (!confirm('Bu duyuruyu silmek istediğinize emin misiniz?')) return;
 
-    let announcements = getFromStorage(STORAGE_KEYS.announcements);
-    announcements = announcements.filter(a => a.id !== id);
-    saveToStorage(STORAGE_KEYS.announcements, announcements);
-    renderAnnouncements();
-    updateDashboardStats();
-    showNotification('Duyuru silindi.', 'success');
+    try {
+        const response = await fetch(`/api/announcements/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Duyuru silinemedi');
+
+        renderAnnouncements();
+        updateDashboardStats();
+        showNotification('Duyuru silindi.', 'success');
+    } catch (err) {
+        showNotification('Hata: ' + err.message, 'error');
+    }
 }
 
 // ============================================
@@ -620,13 +642,19 @@ function initGallery() {
     }
 
     if (addForm) {
-        addForm.addEventListener('submit', (e) => {
+        addForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            // Sıkıştırılmamış resim verisi (veya compressImage ile sıkıştırılmış)
+            let imageData = preview.querySelector('img')?.src || null;
+            if (imageData && imageData.length > 500000) {
+                imageData = compressImage(imageData);
+            }
+
             const photo = {
-                id: Date.now(),
+                id: Date.now().toString(),
                 title: document.getElementById('gallery-title').value || 'Fotoğraf',
-                image: preview.querySelector('img')?.src || null
+                image: imageData
             };
 
             if (!photo.image) {
@@ -634,53 +662,75 @@ function initGallery() {
                 return;
             }
 
-            const gallery = getFromStorage(STORAGE_KEYS.gallery);
-            gallery.push(photo);
-            saveToStorage(STORAGE_KEYS.gallery, gallery);
+            try {
+                const response = await fetch('/api/gallery', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(photo)
+                });
 
-            addForm.reset();
-            preview.innerHTML = '';
-            form.style.display = 'none';
+                if (!response.ok) throw new Error('Fotoğraf yüklenemedi');
 
-            renderGallery();
-            updateDashboardStats();
-            showNotification('Fotoğraf başarıyla yüklendi!', 'success');
+                addForm.reset();
+                preview.innerHTML = '';
+                form.style.display = 'none';
+
+                renderGallery();
+                updateDashboardStats();
+                showNotification('Fotoğraf başarıyla yüklendi!', 'success');
+            } catch (err) {
+                console.error(err);
+                showNotification('Hata: ' + err.message, 'error');
+            }
         });
     }
 
     renderGallery();
 }
 
-function renderGallery() {
+async function renderGallery() {
     const grid = document.getElementById('gallery-admin-grid');
     if (!grid) return;
 
-    const gallery = getFromStorage(STORAGE_KEYS.gallery);
+    grid.innerHTML = '<p class="empty-message"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</p>';
 
-    if (gallery.length === 0) {
-        grid.innerHTML = '<p class="empty-message">Henüz fotoğraf yüklenmedi.</p>';
-        return;
+    try {
+        const response = await fetch('/api/gallery');
+        if (!response.ok) throw new Error('Galeri yüklenemedi');
+        const gallery = await response.json();
+
+        if (gallery.length === 0) {
+            grid.innerHTML = '<p class="empty-message">Henüz fotoğraf yüklenmedi.</p>';
+            return;
+        }
+
+        grid.innerHTML = gallery.map(photo => `
+            <div class="gallery-admin-item">
+                <img src="${photo.image}" alt="${photo.title}">
+                <button class="gallery-delete" onclick="deleteGalleryItem('${photo.id}')" title="Sil">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('');
+        updateDashboardStats();
+    } catch (err) {
+        grid.innerHTML = '<p class="empty-message" style="color:#ef4444;">Galeri yüklenirken hata oluştu.</p>';
     }
-
-    grid.innerHTML = gallery.map(photo => `
-        <div class="gallery-admin-item">
-            <img src="${photo.image}" alt="${photo.title}">
-            <button class="gallery-delete" onclick="deleteGalleryItem(${photo.id})" title="Sil">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `).join('');
 }
 
-function deleteGalleryItem(id) {
+async function deleteGalleryItem(id) {
     if (!confirm('Bu fotoğrafı silmek istediğinize emin misiniz?')) return;
 
-    let gallery = getFromStorage(STORAGE_KEYS.gallery);
-    gallery = gallery.filter(g => g.id !== id);
-    saveToStorage(STORAGE_KEYS.gallery, gallery);
-    renderGallery();
-    updateDashboardStats();
-    showNotification('Fotoğraf silindi.', 'success');
+    try {
+        const response = await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Fotoğraf silinemedi');
+
+        renderGallery();
+        updateDashboardStats();
+        showNotification('Fotoğraf silindi.', 'success');
+    } catch (err) {
+        showNotification('Hata: ' + err.message, 'error');
+    }
 }
 
 // ============================================
@@ -780,18 +830,28 @@ function renderSecondHandProducts() {
 // ============================================
 // DASHBOARD STATS
 // ============================================
-function updateDashboardStats() {
-    const products = getFromStorage(STORAGE_KEYS.products);
-    const announcements = getFromStorage(STORAGE_KEYS.announcements);
-    const gallery = getFromStorage(STORAGE_KEYS.gallery);
+async function updateDashboardStats() {
+    try {
+        const [prodRes, annRes, galRes] = await Promise.all([
+            fetch('/api/products'),
+            fetch('/api/announcements'),
+            fetch('/api/gallery')
+        ]);
 
-    const statProducts = document.getElementById('stat-products');
-    const statAnnouncements = document.getElementById('stat-announcements');
-    const statGallery = document.getElementById('stat-gallery');
+        const products = prodRes.ok ? await prodRes.json() : [];
+        const announcements = annRes.ok ? await annRes.json() : [];
+        const gallery = galRes.ok ? await galRes.json() : [];
 
-    if (statProducts) statProducts.textContent = products.length;
-    if (statAnnouncements) statAnnouncements.textContent = announcements.length;
-    if (statGallery) statGallery.textContent = gallery.length;
+        const statProducts = document.getElementById('stat-products');
+        const statAnnouncements = document.getElementById('stat-announcements');
+        const statGallery = document.getElementById('stat-gallery');
+
+        if (statProducts) statProducts.textContent = products.length;
+        if (statAnnouncements) statAnnouncements.textContent = announcements.length;
+        if (statGallery) statGallery.textContent = gallery.length;
+    } catch (err) {
+        console.error('Stats update error:', err);
+    }
 }
 
 // ============================================

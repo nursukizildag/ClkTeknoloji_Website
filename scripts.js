@@ -410,28 +410,22 @@ function initAnnouncementBand() {
     startAnnouncementBand();
 }
 
-function loadAnnouncementsFromStorage() {
+async function loadAnnouncementsFromStorage() {
     const band = document.getElementById('announcement-band');
     try {
-        const saved = localStorage.getItem('clk_admin_announcements');
-
-        let announcements = [];
-        if (saved) {
-            announcements = JSON.parse(saved);
-        }
+        const response = await fetch('/api/announcements');
+        if (!response.ok) throw new Error('API hatası');
+        const announcements = await response.json();
 
         if (!Array.isArray(announcements) || announcements.length === 0) {
-            // Hide the announcement band if empty
             if (band) band.style.display = 'none';
             document.documentElement.style.setProperty('--announcement-height', '0px');
             return;
         }
 
-        // Show the announcement band if there are announcements
         if (band) band.style.display = 'block';
         document.documentElement.style.setProperty('--announcement-height', '52px');
 
-        // Replace default announcement items with admin ones
         elements.announcementSlider.innerHTML = announcements.map((a, i) => `
             <div class="announcement-item ${i === 0 ? 'active' : ''}" data-duration="${a.duration || 4}" data-link="${a.link || 'products'}">
                 <span class="announcement-badge">${a.badge}</span>
@@ -440,12 +434,11 @@ function loadAnnouncementsFromStorage() {
         `).join('');
 
         state.announcementIndex = 0;
-
-        // Set the first announcement's link and duration
         updateAnnouncementCta();
+        startAnnouncementBand();
 
     } catch (e) {
-        console.warn('Could not load announcements from storage:', e);
+        console.warn('Could not load announcements:', e);
         if (band) band.style.display = 'none';
         document.documentElement.style.setProperty('--announcement-height', '0px');
     }
@@ -522,15 +515,15 @@ function changeAnnouncement(direction) {
 // ============================================
 // GALLERY (localStorage bağlantılı)
 // ============================================
-function loadGallery() {
+async function loadGallery() {
     const grid = document.querySelector('.gallery-grid');
     if (!grid) return;
 
     try {
-        const saved = localStorage.getItem('clk_admin_gallery');
-        if (!saved) return;
+        const response = await fetch('/api/gallery');
+        if (!response.ok) throw new Error('API hatası');
+        const gallery = await response.json();
 
-        const gallery = JSON.parse(saved);
         if (!Array.isArray(gallery) || gallery.length === 0) return;
 
         grid.innerHTML = gallery.map(photo => `

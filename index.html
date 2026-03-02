@@ -120,58 +120,6 @@
             </div>
         </nav>
 
-        <!-- Mobile Menu Overlay -->
-        <div class="mobile-menu-overlay" id="mobile-menu">
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link" data-section="home"
-                        onclick="navigateToSection('home'); return false;">Anasayfa</a>
-                </li>
-                <li class="nav-item has-submenu">
-                    <button class="nav-link submenu-toggle" aria-expanded="false">
-                        Kurumsal <span class="arrow">▶</span>
-                    </button>
-                    <ul class="submenu">
-                        <li><a href="#about" class="nav-link" data-section="about"
-                                onclick="navigateToSection('about'); return false;">Hakkımızda</a></li>
-                        <li><a href="#team" class="nav-link" data-section="team"
-                                onclick="navigateToSection('team'); return false;">Ekibimiz</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item has-submenu">
-                    <button class="nav-link submenu-toggle" aria-expanded="false">
-                        Hizmetler <span class="arrow">▶</span>
-                    </button>
-                    <ul class="submenu">
-                        <li><a href="#products" class="nav-link" data-section="products"
-                                onclick="navigateToSection('products'); return false;">Ürün Satışı</a></li>
-                        <li><a href="#service" class="nav-link" data-section="service"
-                                onclick="navigateToSection('service'); return false;">Teknik Servis</a></li>
-                        <li><a href="#watches" class="nav-link" data-section="watches"
-                                onclick="navigateToSection('watches'); return false;">Saat</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#products" class="nav-link" data-section="products"
-                        onclick="navigateToSection('products'); return false;">
-                        Ürünler
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#secondhand" class="nav-link nav-link--highlight-mobile" data-section="secondhand"
-                        onclick="navigateToSection('secondhand'); return false;">
-                        <i class="fas fa-fire"></i> 2. El Cihazlar
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#gallery" class="nav-link" data-section="gallery"
-                        onclick="navigateToSection('gallery'); return false;">FotoGaleri</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link" data-section="contact"
-                        onclick="navigateToSection('contact'); return false;">İletişim</a>
-                </li>
-            </ul>
         </div>
     </header>
 
@@ -794,6 +742,48 @@
     <a href="https://wa.me/+905071561515" class="whatsapp-float" target="_blank" aria-label="WhatsApp ile iletişim">
         <i class="fab fa-whatsapp"></i>
     </a>
+
+    <!-- Mobile Menu Overlay (Moved outside header for z-index safety) -->
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#home" class="nav-link" data-section="home">Anasayfa</a>
+            </li>
+            <li class="nav-item has-submenu">
+                <button class="nav-link submenu-toggle" aria-expanded="false">
+                    Kurumsal <span class="arrow">▶</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#about" class="nav-link" data-section="about">Hakkımızda</a></li>
+                    <li><a href="#team" class="nav-link" data-section="team">Ekibimiz</a></li>
+                </ul>
+            </li>
+            <li class="nav-item has-submenu">
+                <button class="nav-link submenu-toggle" aria-expanded="false">
+                    Hizmetler <span class="arrow">▶</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#products" class="nav-link" data-section="products">Ürün Satışı</a></li>
+                    <li><a href="#service" class="nav-link" data-section="service">Teknik Servis</a></li>
+                    <li><a href="#watches" class="nav-link" data-section="watches">Saat</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#products" class="nav-link" data-section="products">Ürünler</a>
+            </li>
+            <li class="nav-item">
+                <a href="#secondhand" class="nav-link nav-link--highlight-mobile" data-section="secondhand">
+                    <i class="fas fa-fire"></i> 2. El Cihazlar
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#gallery" class="nav-link" data-section="gallery">FotoGaleri</a>
+            </li>
+            <li class="nav-item">
+                <a href="#contact" class="nav-link" data-section="contact">İletişim</a>
+            </li>
+        </ul>
+    </div>
 
     <!-- Scroll to top -->
     <button class="scroll-top" id="scroll-top-btn" aria-label="Yukarı çık">
