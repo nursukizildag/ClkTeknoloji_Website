@@ -475,91 +475,90 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ========== BÖLÜM SIRALAMA ========== -->
-            <div class="admin-page" id="page-sections">
-                <div class="page-header">
-                    <h2>Anasayfa Bölüm Sıralaması</h2>
-                    <button class="btn-admin btn-admin-primary" id="btn-save-order">
-                        <i class="fas fa-save"></i> Sırayı Kaydet
-                    </button>
-                </div>
-
-                <p class="page-desc">Bölümleri sürükleyerek sıralayın. Kaydettikten sonra anasayfada bu sıraya göre
-                    gösterilir.</p>
-
-                <div class="sortable-list" id="sortable-sections">
-                    <div class="sortable-item" draggable="true" data-section-id="hero-carousel">
-                        <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                        <div class="sortable-info">
-                            <h3>Hero Slider (Carousel)</h3>
-                            <p>Ana karşılama slayt gösterisi</p>
-                        </div>
-                        <span class="sortable-badge">Üst</span>
+                <!-- ========== BÖLÜM SIRALAMA ========== -->
+                <div class="admin-page" id="page-sections">
+                    <div class="page-header">
+                        <h2>Anasayfa Bölüm Sıralaması</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-save-order">
+                            <i class="fas fa-save"></i> Sırayı Kaydet
+                        </button>
                     </div>
 
-                    <div class="sortable-item" draggable="true" data-section-id="services-overview">
-                        <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                        <div class="sortable-info">
-                            <h3>Hizmetlerimiz</h3>
-                            <p>Ürün Satışı, Teknik Servis, Saat kartları</p>
-                        </div>
-                        <span class="sortable-badge badge-green">Aktif</span>
-                    </div>
-                    <div class="sortable-item" draggable="true" data-section-id="mission">
-                        <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                        <div class="sortable-info">
-                            <h3>Misyon & Dükkan</h3>
-                            <p>Dükkan fotoğrafı ve misyon metni</p>
-                        </div>
-                        <span class="sortable-badge badge-green">Aktif</span>
-                    </div>
-                </div>
-            </div>
+                    <p class="page-desc">Bölümleri sürükleyerek sıralayın. Kaydettikten sonra anasayfada bu sıraya göre
+                        gösterilir.</p>
 
-            <!-- ========== FOTOGALERİ ========== -->
-            <div class="admin-page" id="page-gallery">
-                <div class="page-header">
-                    <h2>FotoGaleri Yönetimi</h2>
-                    <button class="btn-admin btn-admin-primary" id="btn-add-gallery">
-                        <i class="fas fa-plus"></i> Fotoğraf Yükle
-                    </button>
-                </div>
-
-                <!-- Upload Form -->
-                <div class="form-card glass-card-admin" id="gallery-form" style="display:none;">
-                    <h3>Fotoğraf Yükle</h3>
-                    <form id="gallery-add-form">
-                        <div class="form-group">
-                            <label for="gallery-title">Başlık</label>
-                            <input type="text" id="gallery-title" placeholder="Fotoğraf başlığı (opsiyonel)">
-                        </div>
-                        <div class="form-group">
-                            <label for="gallery-image">Fotoğraf *</label>
-                            <div class="file-upload" id="gallery-upload-area">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-                                <input type="file" id="gallery-image" accept="image/*" required hidden>
+                    <div class="sortable-list" id="sortable-sections">
+                        <div class="sortable-item" draggable="true" data-section-id="hero-carousel">
+                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="sortable-info">
+                                <h3>Hero Slider (Carousel)</h3>
+                                <p>Ana karşılama slayt gösterisi</p>
                             </div>
-                            <div id="gallery-preview" class="image-preview"></div>
+                            <span class="sortable-badge">Üst</span>
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
-                                Yükle</button>
-                            <button type="button" class="btn-admin btn-admin-ghost"
-                                id="btn-cancel-gallery">İptal</button>
+
+                        <div class="sortable-item" draggable="true" data-section-id="services-overview">
+                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="sortable-info">
+                                <h3>Hizmetlerimiz</h3>
+                                <p>Ürün Satışı, Teknik Servis, Saat kartları</p>
+                            </div>
+                            <span class="sortable-badge badge-green">Aktif</span>
                         </div>
-                    </form>
+                        <div class="sortable-item" draggable="true" data-section-id="mission">
+                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
+                            <div class="sortable-info">
+                                <h3>Misyon & Dükkan</h3>
+                                <p>Dükkan fotoğrafı ve misyon metni</p>
+                            </div>
+                            <span class="sortable-badge badge-green">Aktif</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="gallery-admin-grid" id="gallery-admin-grid">
-                    <p class="empty-message">Henüz fotoğraf yüklenmedi.</p>
+                <!-- ========== FOTOGALERİ ========== -->
+                <div class="admin-page" id="page-gallery">
+                    <div class="page-header">
+                        <h2>FotoGaleri Yönetimi</h2>
+                        <button class="btn-admin btn-admin-primary" id="btn-add-gallery">
+                            <i class="fas fa-plus"></i> Fotoğraf Yükle
+                        </button>
+                    </div>
+
+                    <!-- Upload Form -->
+                    <div class="form-card glass-card-admin" id="gallery-form" style="display:none;">
+                        <h3>Fotoğraf Yükle</h3>
+                        <form id="gallery-add-form">
+                            <div class="form-group">
+                                <label for="gallery-title">Başlık</label>
+                                <input type="text" id="gallery-title" placeholder="Fotoğraf başlığı (opsiyonel)">
+                            </div>
+                            <div class="form-group">
+                                <label for="gallery-image">Fotoğraf *</label>
+                                <div class="file-upload" id="gallery-upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
+                                    <input type="file" id="gallery-image" accept="image/*" required hidden>
+                                </div>
+                                <div id="gallery-preview" class="image-preview"></div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
+                                    Yükle</button>
+                                <button type="button" class="btn-admin btn-admin-ghost"
+                                    id="btn-cancel-gallery">İptal</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="gallery-admin-grid" id="gallery-admin-grid">
+                        <p class="empty-message">Henüz fotoğraf yüklenmedi.</p>
+                    </div>
                 </div>
+
             </div>
-
-    </div>
-    </main>
+        </main>
     </div>
 
     <script src="admin.js"></script>
