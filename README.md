@@ -50,4 +50,4 @@ Amaç, sıfırdan tasarlayıp canlıya alınmış bir web sitesi geliştirmekti.
 - Gerçek proje deneyimi
 - Domain ve DNS yönetimi
 - Hosting ve deployment süreci
-- Müşteri odaklı geliştirme pratiği
+- Müşteri odaklı geliştirme pratiği.
