@@ -46,8 +46,9 @@ Amaç, sıfırdan tasarlayıp canlıya alınmış bir web sitesi geliştirmekti.
 - CSS
 - Java Script
 
+
 ### 🎯 Bu Proje ile Kazandıklarım
 - Gerçek proje deneyimi
 - Domain ve DNS yönetimi
 - Hosting ve deployment süreci
-- Müşteri odaklı geliştirme pratiği
+- Müşteri odaklı geliştirme pratiği.
