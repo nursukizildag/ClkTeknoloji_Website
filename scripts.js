@@ -656,26 +656,47 @@ async function loadSecondHandProducts() {
             const specs = (typeof p.specs === 'string' ? JSON.parse(p.specs || '{}') : p.specs) || {};
 
             const specLabels = {
-                storage: { icon: 'fas fa-hdd', label: 'Depolama' },
-                ram: { icon: 'fas fa-memory', label: 'RAM' },
-                battery: { icon: 'fas fa-battery-three-quarters', label: 'Pil' },
-                screen: { icon: 'fas fa-mobile-alt', label: 'Ekran' },
-                processor: { icon: 'fas fa-bolt', label: 'İşlemci' },
-                color: { icon: 'fas fa-palette', label: 'Renk' }
+                storage: { emoji: '💾', label: 'Depolama' },
+                ram: { emoji: '🧠', label: 'RAM' },
+                battery: { emoji: '🔋', label: 'Pil' },
+                screen: { emoji: '📱', label: 'Ekran' },
+                processor: { emoji: '⚡', label: 'İşlemci' },
+                color: { emoji: '🎨', label: 'Renk' }
             };
 
             const specHtml = Object.entries(specLabels)
                 .filter(([key]) => specs[key])
                 .map(([key, val]) => `
-                    <div class="sh-spec-item">
-                        <i class="${val.icon}"></i>
-                        <span class="sh-spec-label">${val.label}</span>
+                    <div class="sh-spec-row">
+                        <span class="sh-spec-emoji">${val.emoji}</span>
+                        <span class="sh-spec-label">${val.label}:</span>
                         <span class="sh-spec-value">${specs[key]}</span>
                     </div>
                 `).join('');
 
+            // Prepare product data for modal
+            const productData = JSON.stringify({
+                name: p.name || '',
+                brand: p.brand || '',
+                code: p.code || '',
+                price: p.price || 0,
+                image: p.image || '',
+                description: p.description || '',
+                condition: 'ikinci-el',
+                specs: specs
+            }).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
             return `
-            <div class="secondhand-card glass-card" style="position: relative;">
+            <div class="secondhand-card glass-card" style="position: relative;" onclick='openProductModal(JSON.parse(this.dataset.product))' data-product='${JSON.stringify({
+                name: p.name || '',
+                brand: p.brand || '',
+                code: p.code || '',
+                price: p.price || 0,
+                image: p.image || '',
+                description: p.description || '',
+                condition: 'ikinci-el',
+                specs: specs
+            }).replace(/'/g, '&#39;')}'>
                 ${p.code ? `<span class="product-item-code" style="position: absolute; top: 10px; right: 10px; background: rgba(37, 99, 235, 0.9); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; z-index: 2;">Kod: ${p.code}</span>` : ''}
                 <div class="secondhand-card-image">
                     ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : '<div class="no-image-placeholder"><i class="fas fa-mobile-alt"></i></div>'}
@@ -685,14 +706,12 @@ async function loadSecondHandProducts() {
                     <h3 class="secondhand-card-title">${p.name}</h3>
                     <div class="secondhand-card-meta">
                         ${p.brand ? `<span class="meta-tag"><i class="fas fa-tag"></i> ${p.brand}</span>` : ''}
-                        <span class="meta-tag"><i class="fas fa-info-circle"></i> 2. El</span>
                     </div>
-                    ${specHtml ? `<div class="sh-specs-grid">${specHtml}</div>` : ''}
-                    <p class="secondhand-card-desc">${p.description || 'Detaylı bilgi için bizimle iletişime geçin.'}</p>
+                    ${specHtml ? `<div class="sh-specs-list">${specHtml}</div>` : ''}
                     <div class="secondhand-card-footer">
                         <span class="secondhand-price">₺${Number(p.price || 0).toLocaleString('tr-TR')}</span>
                         <a href="https://wa.me/${WHATSAPP_NUMBER}?text=Merhaba, sitenizdeki '${p.name}' ${p.code ? `(Kod: ${p.code})` : ''} isimli 2. el cihaz hakkında detaylı bilgi almak istiyorum."
-                           target="_blank" class="secondhand-btn">
+                           target="_blank" class="secondhand-btn" onclick="event.stopPropagation();">
                            <i class="fab fa-whatsapp"></i> Bilgi Al
                         </a>
                     </div>
@@ -740,8 +759,19 @@ async function loadMainProducts() {
             const container = containers[p.category];
             if (!container) return; // Geçersiz kategori ise atla
 
+            const productData = JSON.stringify({
+                name: p.name || '',
+                brand: p.brand || '',
+                code: p.code || '',
+                price: p.price || 0,
+                image: p.image || '',
+                description: p.description || '',
+                condition: 'sifir',
+                specs: {}
+            }).replace(/'/g, '&#39;');
+
             const productHtml = `
-                <div class="product-item glass-card product-card-hover" style="position: relative;">
+                <div class="product-item glass-card product-card-hover" style="position: relative;" onclick='openProductModal(JSON.parse(this.dataset.product))' data-product='${productData}'>
                     ${p.code ? `<span class="product-item-code" style="position: absolute; top: 10px; right: 10px; background: rgba(37, 99, 235, 0.9); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">Kod: ${p.code}</span>` : ''}
                     <div class="product-item-image">
                         ${p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : '<div class="no-image-placeholder"><i class="fas fa-box"></i></div>'}
@@ -751,7 +781,7 @@ async function loadMainProducts() {
                         <h3 class="product-item-title">${p.name}</h3>
                         ${p.brand ? `<span class="product-item-brand"><i class="fas fa-tag"></i> ${p.brand}</span>` : ''}
                         ${p.price ? `<div class="product-item-price">₺${Number(p.price).toLocaleString('tr-TR')}</div>` : ''}
-                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Merhaba, ${p.code ? `[Kod: ${p.code}] ` : ''}${p.name}${p.brand ? ` (${p.brand})` : ''} hakkında bilgi almak istiyorum.`)}" target="_blank" class="btn btn-whatsapp-sm mt-3" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 6px;">
+                        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Merhaba, ${p.code ? `[Kod: ${p.code}] ` : ''}${p.name}${p.brand ? ` (${p.brand})` : ''} hakkında bilgi almak istiyorum.`)}" target="_blank" class="btn btn-whatsapp-sm mt-3" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 6px;" onclick="event.stopPropagation();">
                             <i class="fab fa-whatsapp"></i> Mesaj At
                         </a>
                     </div>
@@ -916,6 +946,107 @@ function reorderSections(order) {
 window.navigateToSection = navigateToSection;
 window.openGalleryLightbox = openGalleryLightbox;
 window.sendWhatsAppMessage = sendWhatsAppMessage;
+window.openProductModal = openProductModal;
+window.closeProductModal = closeProductModal;
+
+// ============================================
+// PRODUCT DETAIL MODAL
+// ============================================
+function openProductModal(product) {
+    // Remove existing modal if any
+    closeProductModal();
+
+    const specs = product.specs || {};
+    const specLabels = {
+        storage: { emoji: '💾', label: 'Depolama' },
+        ram: { emoji: '🧠', label: 'RAM' },
+        battery: { emoji: '🔋', label: 'Pil' },
+        screen: { emoji: '📱', label: 'Ekran' },
+        processor: { emoji: '⚡', label: 'İşlemci' },
+        color: { emoji: '🎨', label: 'Renk' }
+    };
+
+    const specsHtml = Object.entries(specLabels)
+        .filter(([key]) => specs[key])
+        .map(([key, val]) => `
+            <div class="product-modal-spec-row">
+                <span class="spec-emoji">${val.emoji}</span>
+                <span class="spec-label">${val.label}:</span>
+                <span class="spec-value">${specs[key]}</span>
+            </div>
+        `).join('');
+
+    const isSecondHand = product.condition === 'ikinci-el';
+    const codeText = product.code ? `[Kod: ${product.code}] ` : '';
+    const waMessage = isSecondHand
+        ? `Merhaba, sitenizdeki '${product.name}' ${product.code ? `(Kod: ${product.code})` : ''} isimli 2. el cihaz hakkında detaylı bilgi almak istiyorum.`
+        : `Merhaba, ${codeText}${product.name}${product.brand ? ` (${product.brand})` : ''} hakkında bilgi almak istiyorum.`;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'product-modal-overlay';
+    overlay.id = 'product-modal-overlay';
+    overlay.innerHTML = `
+        <div class="product-modal">
+            <button class="product-modal-close" onclick="closeProductModal()" aria-label="Kapat">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="product-modal-image-wrap" id="modal-image-wrap" onclick="toggleModalZoom()">
+                ${product.image
+                    ? `<img src="${product.image}" alt="${product.name}">`
+                    : '<div class="no-image-placeholder" style="font-size:4rem;"><i class="fas fa-mobile-alt"></i></div>'
+                }
+                <span class="modal-zoom-hint"><i class="fas fa-search-plus"></i> Yakınlaştırmak için tıklayın</span>
+            </div>
+            <div class="product-modal-details">
+                <h2 class="product-modal-title">${product.name}</h2>
+                <div class="product-modal-meta">
+                    ${product.brand ? `<span class="product-modal-brand"><i class="fas fa-tag"></i> ${product.brand}</span>` : ''}
+                    ${product.code ? `<span class="product-modal-code">Kod: ${product.code}</span>` : ''}
+                    ${isSecondHand ? `<span class="product-modal-condition">2. El</span>` : ''}
+                </div>
+                ${specsHtml ? `<div class="product-modal-specs">${specsHtml}</div>` : ''}
+                ${product.description ? `<p class="product-modal-desc">${product.description}</p>` : ''}
+                ${product.price ? `<p class="product-modal-price">₺${Number(product.price).toLocaleString('tr-TR')}</p>` : ''}
+                <div class="product-modal-actions">
+                    <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}" target="_blank" class="btn-whatsapp-modal">
+                        <i class="fab fa-whatsapp"></i> WhatsApp ile Bilgi Al
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    // Close on overlay click (not modal itself)
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeProductModal();
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', handleModalEsc);
+}
+
+function closeProductModal() {
+    const overlay = document.getElementById('product-modal-overlay');
+    if (overlay) {
+        overlay.remove();
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleModalEsc);
+    }
+}
+
+function handleModalEsc(e) {
+    if (e.key === 'Escape') closeProductModal();
+}
+
+function toggleModalZoom() {
+    const wrap = document.getElementById('modal-image-wrap');
+    if (wrap) {
+        wrap.classList.toggle('zoomed');
+    }
+}
 
 // Console log
 console.log('CLK Teknoloji — Modern Site Initialized');
