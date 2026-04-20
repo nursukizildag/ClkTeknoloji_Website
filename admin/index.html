@@ -32,20 +32,14 @@
                 <a href="#" class="sidebar-link active" data-page="dashboard">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
+                <a href="#" class="sidebar-link" data-page="announcements">
+                    <i class="fas fa-bullhorn"></i> Duyurular
+                </a>
                 <a href="#" class="sidebar-link" data-page="products">
                     <i class="fas fa-boxes"></i> Ürünler
                 </a>
-                <a href="#" class="sidebar-link" data-page="announcements">
-                    <i class="fas fa-bullhorn"></i> Duyurular / Kampanya
-                </a>
                 <a href="#" class="sidebar-link" data-page="secondhand">
-                    <i class="fas fa-recycle"></i> 2. El Cihazlar
-                </a>
-                <a href="#" class="sidebar-link" data-page="carousel">
-                    <i class="fas fa-images"></i> Giriş Slider / Arka Plan
-                </a>
-                <a href="#" class="sidebar-link" data-page="sections">
-                    <i class="fas fa-layer-group"></i> Bölüm Sıralama
+                    <i class="fas fa-recycle"></i> 2. El Ürünler
                 </a>
                 <a href="#" class="sidebar-link" data-page="gallery">
                     <i class="fas fa-images"></i> FotoGaleri
@@ -115,15 +109,7 @@
                                 <p>Galeri Fotoğrafı</p>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899, #d946ef);">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-sections">4</h3>
-                                <p>Anasayfa Bölümü</p>
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="dashboard-info glass-card-admin">
@@ -132,8 +118,7 @@
                         <ul>
                             <li><strong>Ürünler:</strong> Yeni ürün ekleyin, mevcut ürünleri düzenleyin veya silin.</li>
                             <li><strong>Duyurular:</strong> Anasayfadaki kampanya bandını güncelleyin.</li>
-                            <li><strong>Bölüm Sıralama:</strong> Anasayfadaki bölümlerin sırasını sürükle-bırak ile
-                                değiştirin.</li>
+
                             <li><strong>FotoGaleri:</strong> Galeri sayfasına fotoğraf yükleyin.</li>
                         </ul>
                     </div>
@@ -422,100 +407,7 @@
                     </div>
                 </div>
 
-                <!-- ========== CAROUSEL YÖNETİMİ ========== -->
-                <div class="admin-page" id="page-carousel">
-                    <div class="page-header">
-                        <h2>Giriş Slider & Arka Plan Yönetimi</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-add-carousel">
-                            <i class="fas fa-plus"></i> Fotoğraf Ekle
-                        </button>
-                    </div>
-                    <p class="page-desc">Ana sayfa ve diğer bölümlerdeki kaydırmalı arka plan veya slider fotoğraflarını
-                        yönetin.</p>
 
-                    <div class="form-card glass-card-admin" id="carousel-form" style="display:none;">
-                        <h3 id="carousel-form-title"><i class="fas fa-images"></i> Yeni Fotoğraf Ekle</h3>
-                        <form id="carousel-add-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="carousel-title">Başlık (Opsiyonel)</label>
-                                    <input type="text" id="carousel-title" placeholder="Slider üzerinde görünecek yazı">
-                                </div>
-                                <div class="form-group">
-                                    <label for="carousel-target">Göründüğü Sayfa / Bölüm *</label>
-                                    <select id="carousel-target" required>
-                                        <option value="home">Anasayfa Hero Slider</option>
-                                        <option value="secondhand">2. El Bölümü Arka Planı</option>
-                                        <option value="service">Teknik Servis Arka Planı</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="carousel-image">Fotoğraf *</label>
-                                <div class="file-upload" id="carousel-upload-area">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-                                    <input type="file" id="carousel-image" accept="image/*" required hidden>
-                                </div>
-                                <div id="carousel-preview" class="image-preview"></div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
-                                    Yükle</button>
-                                <button type="button" class="btn-admin btn-admin-ghost"
-                                    id="btn-cancel-carousel">İptal</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="table-card glass-card-admin" style="margin-top:20px;">
-                        <h3><i class="fas fa-images"></i> Mevcut Fotoğraflar</h3>
-                        <div class="gallery-admin-grid" id="carousel-admin-grid">
-                            <p class="empty-message">Yükleniyor...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========== BÖLÜM SIRALAMA ========== -->
-                <div class="admin-page" id="page-sections">
-                    <div class="page-header">
-                        <h2>Anasayfa Bölüm Sıralaması</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-save-order">
-                            <i class="fas fa-save"></i> Sırayı Kaydet
-                        </button>
-                    </div>
-
-                    <p class="page-desc">Bölümleri sürükleyerek sıralayın. Kaydettikten sonra anasayfada bu sıraya göre
-                        gösterilir.</p>
-
-                    <div class="sortable-list" id="sortable-sections">
-                        <div class="sortable-item" draggable="true" data-section-id="hero-carousel">
-                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="sortable-info">
-                                <h3>Hero Slider (Carousel)</h3>
-                                <p>Ana karşılama slayt gösterisi</p>
-                            </div>
-                            <span class="sortable-badge">Üst</span>
-                        </div>
-
-                        <div class="sortable-item" draggable="true" data-section-id="services-overview">
-                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="sortable-info">
-                                <h3>Hizmetlerimiz</h3>
-                                <p>Ürün Satışı, Teknik Servis, Saat kartları</p>
-                            </div>
-                            <span class="sortable-badge badge-green">Aktif</span>
-                        </div>
-                        <div class="sortable-item" draggable="true" data-section-id="mission">
-                            <div class="sortable-handle"><i class="fas fa-grip-vertical"></i></div>
-                            <div class="sortable-info">
-                                <h3>Misyon & Dükkan</h3>
-                                <p>Dükkan fotoğrafı ve misyon metni</p>
-                            </div>
-                            <span class="sortable-badge badge-green">Aktif</span>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- ========== FOTOGALERİ ========== -->
                 <div class="admin-page" id="page-gallery">
