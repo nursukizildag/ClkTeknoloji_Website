@@ -75,16 +75,16 @@ var require_strip_cf_connecting_ip_header = __commonJS({
 });
 
 // .wrangler/tmp/bundle-A4FJ2T/middleware-loader.entry.ts
-var import_checked_fetch25 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header25 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch24 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header24 = __toESM(require_strip_cf_connecting_ip_header());
 
 // wrangler-modules-watch:wrangler:modules-watch
 var import_checked_fetch = __toESM(require_checked_fetch());
 var import_strip_cf_connecting_ip_header = __toESM(require_strip_cf_connecting_ip_header());
 
 // .wrangler/tmp/bundle-A4FJ2T/middleware-insertion-facade.js
-var import_checked_fetch23 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header23 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch21 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header21 = __toESM(require_strip_cf_connecting_ip_header());
 
 // .wrangler/tmp/pages-vWUL8o/functionsWorker-0.3235284441687719.mjs
 var import_checked_fetch2 = __toESM(require_checked_fetch(), 1);
@@ -116,7 +116,7 @@ var __toESM2 = /* @__PURE__ */ __name((mod, isNodeMode, target) => (target = mod
   mod
 )), "__toESM");
 var require_checked_fetch2 = __commonJS2({
-  "../.wrangler/tmp/bundle-k6D5SM/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-IcxX4U/checked-fetch.js"() {
     var urls = /* @__PURE__ */ new Set();
     function checkURL(request, init) {
       const url = request instanceof URL ? request : new URL(
@@ -145,7 +145,7 @@ var require_checked_fetch2 = __commonJS2({
   }
 });
 var require_strip_cf_connecting_ip_header2 = __commonJS2({
-  "../.wrangler/tmp/bundle-k6D5SM/strip-cf-connecting-ip-header.js"() {
+  "../.wrangler/tmp/bundle-IcxX4U/strip-cf-connecting-ip-header.js"() {
     function stripCfConnectingIPHeader(input, init) {
       const request = new Request(input, init);
       request.headers.delete("CF-Connecting-IP");
@@ -6565,32 +6565,6 @@ __name(onRequestOptions7, "onRequestOptions7");
 __name2(onRequestOptions7, "onRequestOptions");
 var import_checked_fetch11 = __toESM2(require_checked_fetch2());
 var import_strip_cf_connecting_ip_header11 = __toESM2(require_strip_cf_connecting_ip_header2());
-async function onRequestGet6(context) {
-  const { env, request } = context;
-  try {
-    const sql = cs(env.DATABASE_URL);
-    const testId = "test-" + Date.now();
-    const result = await sql`
-            INSERT INTO products (id, name, category, price, description)
-            VALUES (${testId}, 'Test Ürünü', 'test', 99.99, 'Bu bir bağlantı testidir.')
-            RETURNING *
-        `;
-    return jsonResponse({
-      success: true,
-      message: "Neon DB Ba\u011Flant\u0131s\u0131 Ba\u015Far\u0131l\u0131! Test verisi yaz\u0131ld\u0131.",
-      data: result[0]
-    }, 200, request);
-  } catch (e) {
-    return jsonResponse({
-      success: false,
-      message: "Ba\u011Flant\u0131 Hatas\u0131: " + e.message
-    }, 500, request);
-  }
-}
-__name(onRequestGet6, "onRequestGet6");
-__name2(onRequestGet6, "onRequestGet");
-var import_checked_fetch12 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header12 = __toESM2(require_strip_cf_connecting_ip_header2());
 async function onRequest(context) {
   const { request, next, env } = context;
   const url = new URL(request.url);
@@ -6754,13 +6728,6 @@ var routes = [
     modules: [onRequestPut3]
   },
   {
-    routePath: "/api/test-write",
-    mountPath: "/api",
-    method: "GET",
-    middlewares: [],
-    modules: [onRequestGet6]
-  },
-  {
     routePath: "/admin",
     mountPath: "/admin",
     method: "",
@@ -6768,14 +6735,14 @@ var routes = [
     modules: []
   }
 ];
-var import_checked_fetch19 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header19 = __toESM2(require_strip_cf_connecting_ip_header2());
-var import_checked_fetch17 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header17 = __toESM2(require_strip_cf_connecting_ip_header2());
-var import_checked_fetch14 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header14 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch18 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header18 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch16 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header16 = __toESM2(require_strip_cf_connecting_ip_header2());
 var import_checked_fetch13 = __toESM2(require_checked_fetch2());
 var import_strip_cf_connecting_ip_header13 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch12 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header12 = __toESM2(require_strip_cf_connecting_ip_header2());
 function lexer(str) {
   var tokens = [];
   var i = 0;
@@ -7230,8 +7197,8 @@ var cloneResponse = /* @__PURE__ */ __name2((response) => (
     response
   )
 ), "cloneResponse");
-var import_checked_fetch15 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header15 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch14 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header14 = __toESM2(require_strip_cf_connecting_ip_header2());
 var drainBody = /* @__PURE__ */ __name2(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -7248,8 +7215,8 @@ var drainBody = /* @__PURE__ */ __name2(async (request, env, _ctx, middlewareCtx
   }
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
-var import_checked_fetch16 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header16 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch15 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header15 = __toESM2(require_strip_cf_connecting_ip_header2());
 function reduceError(e) {
   return {
     name: e?.name,
@@ -7277,8 +7244,8 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_miniflare3_json_error_default
 ];
 var middleware_insertion_facade_default = pages_template_worker_default;
-var import_checked_fetch18 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header18 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch17 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header17 = __toESM2(require_strip_cf_connecting_ip_header2());
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
@@ -7402,8 +7369,8 @@ if (typeof middleware_insertion_facade_default === "object") {
 var middleware_loader_entry_default = WRAPPED_ENTRY;
 
 // node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-var import_checked_fetch20 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header20 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch19 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header19 = __toESM(require_strip_cf_connecting_ip_header());
 var drainBody2 = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -7422,8 +7389,8 @@ var drainBody2 = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx
 var middleware_ensure_req_body_drained_default2 = drainBody2;
 
 // node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
-var import_checked_fetch21 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header21 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch20 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header20 = __toESM(require_strip_cf_connecting_ip_header());
 function reduceError2(e) {
   return {
     name: e?.name,
@@ -7454,8 +7421,8 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__2 = [
 var middleware_insertion_facade_default2 = middleware_loader_entry_default;
 
 // node_modules/wrangler/templates/middleware/common.ts
-var import_checked_fetch24 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header24 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch23 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header23 = __toESM(require_strip_cf_connecting_ip_header());
 var __facade_middleware__2 = [];
 function __facade_register__2(...args) {
   __facade_middleware__2.push(...args.flat());

@@ -111,6 +111,11 @@
                 <button class="filter-btn" data-filter="bilgisayar">💻 Bilgisayar</button>
                 <button class="filter-btn" data-filter="saat">⌚ Saat</button>
             </div>
+            <div class="filter-bar" id="conditionBar">
+                <button class="filter-btn active" data-condition="hepsi">Tümü</button>
+                <button class="filter-btn" data-condition="sifir">Sıfır</button>
+                <button class="filter-btn" data-condition="ikinciel">2. El</button>
+            </div>
 
             <!-- Products Grid -->
             <div class="urunler-grid" id="productGrid">
@@ -183,6 +188,8 @@
     <script>
         // --- CANLI VERİ TABANI BAĞLANTISI ---
         let allProducts = [];
+        let currentCategory = 'hepsi';
+        let currentCondition = 'hepsi';
 
         async function fetchAllProducts() {
             try {
@@ -198,20 +205,26 @@
                     if (btn) {
                         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
-                        renderProducts(category);
+                        currentCategory = category;
+                        renderProducts(currentCategory, currentCondition);
                         return;
                     }
                 }
-                renderProducts('hepsi');
+                renderProducts(currentCategory, currentCondition);
             } catch (err) {
                 console.error('Ürünler yüklenemedi:', err);
                 document.getElementById('productGrid').innerHTML = '<p>Ürünler şu an yüklenemiyor.</p>';
             }
         }
 
-        function renderProducts(filter) {
+        function renderProducts(filter, conditionFilter) {
             const grid = document.getElementById('productGrid');
-            const filtered = filter === 'hepsi' ? allProducts : allProducts.filter(p => p.category === filter);
+            let filtered = filter === 'hepsi' ? allProducts : allProducts.filter(p => p.category === filter);
+
+            if (conditionFilter && conditionFilter !== 'hepsi') {
+                const normalize = (value) => (value || '').toLowerCase();
+                filtered = filtered.filter(p => normalize(p.condition) === conditionFilter);
+            }
 
             if (filtered.length === 0) {
                 grid.innerHTML = '<p class="text-muted">Bu kategoride henüz ürün bulunmuyor.</p>';
@@ -246,9 +259,19 @@
         // Filter bar handler
         document.getElementById('filterBar').addEventListener('click', (e) => {
             if (e.target.classList.contains('filter-btn')) {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('#filterBar .filter-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
-                renderProducts(e.target.dataset.filter);
+                currentCategory = e.target.dataset.filter;
+                renderProducts(currentCategory, currentCondition);
+            }
+        });
+
+        document.getElementById('conditionBar').addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('#conditionBar .filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                currentCondition = e.target.dataset.condition;
+                renderProducts(currentCategory, currentCondition);
             }
         });
 
@@ -284,9 +307,27 @@
                 "Marka": product.brand || 'Belirtilmedi'
             };
 
+            const emojiMap = {
+                'Pil': '🔋',
+                'RAM': '🧠',
+                'Depolama': '💾',
+                'Ekran': '📱',
+                'Kamera': '📸',
+                'İşlemci': '⚡',
+                'Islemci': '⚡',
+                'Renk': '🎨',
+                'Garanti': '🛡️',
+                'Kılavuz': '📖',
+                'Kutu Durumu': '📦',
+                'Model': '🏷️',
+                'Seri': '🔢',
+                'Kategori': '📁',
+                'Marka': '🏢'
+            };
+
             specsContainer.innerHTML = Object.entries(specs).map(([label, value]) => `
                 <div class="spec-card">
-                    <i class="fas fa-check-circle"></i>
+                    <div class="spec-icon">${emojiMap[label] || '✨'}</div>
                     <div>
                         <span class="spec-label">${label}</span>
                         <span class="spec-val">${value}</span>

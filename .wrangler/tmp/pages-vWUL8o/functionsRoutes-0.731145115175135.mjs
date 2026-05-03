@@ -19,7 +19,6 @@ import { onRequestPost as __api_service_index_js_onRequestPost } from "D:\\Proje
 import { onRequestGet as __api_settings_index_js_onRequestGet } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\settings\\index.js"
 import { onRequestOptions as __api_settings_index_js_onRequestOptions } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\settings\\index.js"
 import { onRequestPut as __api_settings_index_js_onRequestPut } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\settings\\index.js"
-import { onRequestGet as __api_test_write_js_onRequestGet } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\test-write.js"
 import { onRequest as __admin__middleware_js_onRequest } from "D:\\Project\\ClkTeknolojiWeb\\functions\\admin\\_middleware.js"
 
 export const routes = [
@@ -169,13 +168,6 @@ export const routes = [
       method: "PUT",
       middlewares: [],
       modules: [__api_settings_index_js_onRequestPut],
-    },
-  {
-      routePath: "/api/test-write",
-      mountPath: "/api",
-      method: "GET",
-      middlewares: [],
-      modules: [__api_test_write_js_onRequestGet],
     },
   {
       routePath: "/admin",

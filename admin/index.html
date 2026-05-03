@@ -59,9 +59,9 @@
                     <div class="page-actions">
                         <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Yeni Ürün Ekle</button>
                     </div>
-                    <div class="data-card"><div class="card-header"><h3>📱 Telefonlar</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-telefon"></tbody></table></div>
-                    <div class="data-card"><div class="card-header"><h3>💻 Bilgisayarlar</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-bilgisayar"></tbody></table></div>
-                    <div class="data-card"><div class="card-header"><h3>⌚ Saatler</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-saat"></tbody></table></div>
+                    <div class="data-card"><div class="card-header"><h3>📱 Telefonlar</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Durum</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-telefon"></tbody></table></div>
+                    <div class="data-card"><div class="card-header"><h3>💻 Bilgisayarlar</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Durum</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-bilgisayar"></tbody></table></div>
+                    <div class="data-card"><div class="card-header"><h3>⌚ Saatler</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Durum</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-saat"></tbody></table></div>
                 </section>
 
                 <!-- Settings -->
@@ -132,10 +132,23 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group">
+                        <label>Durum</label>
+                        <select name="condition" class="form-control">
+                            <option value="sifir">Sıfır</option>
+                            <option value="ikinciel">2. El</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label><input type="checkbox" name="is_featured"> Ana sayfada öne çıksın</label>
                 </div>
-                <div class="form-group"><label>Teknik Özellikler</label><div id="specs-container"></div><button type="button" class="btn-sm btn-ghost" onclick="addSpecRow()">+ Özellik Ekle</button></div>
+                <div class="form-group">
+                    <label>Teknik Özellikler</label>
+                    <div id="specs-container"></div>
+                    <div class="form-hint">Sadece seçilen özellikler üründe gösterilir.</div>
+                </div>
                 <div class="form-group"><label>Açıklama</label><textarea name="description" class="form-control"></textarea></div>
                 <div class="form-group">
                     <label>Görsel</label>

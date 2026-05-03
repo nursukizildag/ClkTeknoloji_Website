@@ -481,12 +481,14 @@ body {
 
 /* Specs Row UI */
 .spec-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: 24px 140px 1fr;
     gap: 10px;
+    align-items: center;
     margin-bottom: 8px;
 }
 
-.spec-row input {
+.spec-row input[type="text"] {
     flex: 1;
     padding: 8px 12px;
     border: 1px solid var(--border);
@@ -494,11 +496,14 @@ body {
     font-size: 0.85rem;
 }
 
-.spec-row .btn-remove {
-    padding: 8px;
-    color: #ef4444;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-size: 1rem;
+.spec-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
 }
+
+.form-hint {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+

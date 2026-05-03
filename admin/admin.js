@@ -54,6 +54,20 @@ function showConfirm(message) {
 let cachedProducts = [];
 let cachedSettings = null;
 
+const SPEC_FIELDS = [
+    'Pil',
+    'RAM',
+    'Depolama',
+    'Ekran',
+    'Kamera',
+    'Islemci',
+    'Renk',
+    'Garanti',
+    'Kutu Durumu',
+    'Model',
+    'Seri'
+];
+
 // --- PAGE NAVIGATION ---
 function switchPage(pageId) {
     document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
@@ -131,6 +145,7 @@ function renderProducts(products = []) {
             <td><img src="${p.image || '../assets/img/no-image.jpg'}" class="product-img-sm"></td>
             <td><strong>${p.name || 'İsimsiz Ürün'}</strong></td>
             <td>₺${p.price ? Number(p.price).toLocaleString() : '0'}</td>
+            <td>${(p.condition || 'sifir') === 'sifir' ? 'Sıfır' : '2. El'}</td>
             <td>
                 <button class="btn-star ${p.is_featured ? 'active' : ''}" onclick="toggleFeatured('${p.id}')">
                     <i class="${p.is_featured ? 'fas' : 'far'} fa-star"></i>
@@ -221,6 +236,7 @@ function openProductModal(id = null) {
     previewContainer.innerHTML = '+ Görsel Yükle';
     document.getElementById('product-image-data').value = '';
     specsContainer.innerHTML = '';
+    renderSpecFields({});
     
     if (id) {
         const p = cachedProducts.find(x => x.id === id);
@@ -239,7 +255,7 @@ function openProductModal(id = null) {
                 document.getElementById('product-image-data').value = p.image;
             }
             if (p.specs && typeof p.specs === 'object') {
-                Object.entries(p.specs).forEach(([k, v]) => addSpecRow(k, v));
+                renderSpecFields(p.specs);
             }
         }
     }
@@ -247,16 +263,34 @@ function openProductModal(id = null) {
     modalContainer.style.display = 'flex';
 }
 
-function addSpecRow(key = '', value = '') {
+function renderSpecFields(specs = {}) {
     const container = document.getElementById('specs-container');
-    const row = document.createElement('div');
-    row.className = 'spec-row';
-    row.innerHTML = `
-        <input type="text" placeholder="Özellik" class="spec-key" value="${key}">
-        <input type="text" placeholder="Değer" class="spec-val" value="${value}">
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-    `;
-    container.appendChild(row);
+    if (!container) return;
+    container.innerHTML = '';
+
+    SPEC_FIELDS.forEach((label) => {
+        const value = specs[label] || '';
+        const checked = value !== '';
+        const row = document.createElement('div');
+        row.className = 'spec-row';
+        row.innerHTML = `
+            <input type="checkbox" class="spec-check" ${checked ? 'checked' : ''}>
+            <span class="spec-label">${label}</span>
+            <input type="text" class="spec-val" placeholder="Değer" value="${value}">
+        `;
+
+        const checkbox = row.querySelector('.spec-check');
+        const input = row.querySelector('.spec-val');
+        input.disabled = !checked;
+
+        checkbox.addEventListener('change', () => {
+            const enabled = checkbox.checked;
+            input.disabled = !enabled;
+            if (!enabled) input.value = '';
+        });
+
+        container.appendChild(row);
+    });
 }
 
 function closeModal() {
@@ -272,9 +306,10 @@ async function saveProduct() {
     
     const specs = {};
     document.querySelectorAll('.spec-row').forEach(row => {
-        const k = row.querySelector('.spec-key').value.trim();
-        const v = row.querySelector('.spec-val').value.trim();
-        if (k) specs[k] = v;
+        const key = row.querySelector('.spec-label')?.textContent?.trim();
+        const checked = row.querySelector('.spec-check')?.checked;
+        const val = row.querySelector('.spec-val')?.value?.trim();
+        if (checked && key && val) specs[key] = val;
     });
     data.specs = specs;
     
@@ -361,7 +396,6 @@ window.switchPage = switchPage;
 window.openProductModal = openProductModal;
 window.closeModal = closeModal;
 window.saveProduct = saveProduct;
-window.addSpecRow = addSpecRow;
 window.handleImageUpload = handleImageUpload;
 window.moveProduct = moveProduct;
 window.toggleFeatured = toggleFeatured;

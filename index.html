@@ -289,9 +289,27 @@
                 "Marka": product.brand || 'Belirtilmedi'
             };
             
+            const emojiMap = {
+                'Pil': '🔋',
+                'RAM': '🧠',
+                'Depolama': '💾',
+                'Ekran': '📱',
+                'Kamera': '📸',
+                'İşlemci': '⚡',
+                'Islemci': '⚡',
+                'Renk': '🎨',
+                'Garanti': '🛡️',
+                'Kılavuz': '📖',
+                'Kutu Durumu': '📦',
+                'Model': '🏷️',
+                'Seri': '🔢',
+                'Kategori': '📁',
+                'Marka': '🏢'
+            };
+            
             specsContainer.innerHTML = Object.entries(specs).map(([label, value]) => `
                 <div class="spec-card">
-                    <i class="fas fa-check-circle"></i>
+                    <div class="spec-icon">${emojiMap[label] || '✨'}</div>
                     <div>
                         <span class="spec-label">${label}</span>
                         <span class="spec-val">${value}</span>

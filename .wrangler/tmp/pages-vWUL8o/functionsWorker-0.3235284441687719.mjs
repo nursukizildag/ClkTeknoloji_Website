@@ -25,9 +25,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../.wrangler/tmp/bundle-k6D5SM/checked-fetch.js
+// ../.wrangler/tmp/bundle-IcxX4U/checked-fetch.js
 var require_checked_fetch = __commonJS({
-  "../.wrangler/tmp/bundle-k6D5SM/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-IcxX4U/checked-fetch.js"() {
     var urls = /* @__PURE__ */ new Set();
     function checkURL(request, init) {
       const url = request instanceof URL ? request : new URL(
@@ -55,9 +55,9 @@ var require_checked_fetch = __commonJS({
   }
 });
 
-// ../.wrangler/tmp/bundle-k6D5SM/strip-cf-connecting-ip-header.js
+// ../.wrangler/tmp/bundle-IcxX4U/strip-cf-connecting-ip-header.js
 var require_strip_cf_connecting_ip_header = __commonJS({
-  "../.wrangler/tmp/bundle-k6D5SM/strip-cf-connecting-ip-header.js"() {
+  "../.wrangler/tmp/bundle-IcxX4U/strip-cf-connecting-ip-header.js"() {
     function stripCfConnectingIPHeader(input, init) {
       const request = new Request(input, init);
       request.headers.delete("CF-Connecting-IP");
@@ -6317,36 +6317,9 @@ async function onRequestOptions7() {
 }
 __name(onRequestOptions7, "onRequestOptions");
 
-// api/test-write.js
+// admin/_middleware.js
 var import_checked_fetch11 = __toESM(require_checked_fetch());
 var import_strip_cf_connecting_ip_header11 = __toESM(require_strip_cf_connecting_ip_header());
-async function onRequestGet6(context) {
-  const { env, request } = context;
-  try {
-    const sql = cs(env.DATABASE_URL);
-    const testId = "test-" + Date.now();
-    const result = await sql`
-            INSERT INTO products (id, name, category, price, description)
-            VALUES (${testId}, 'Test Ürünü', 'test', 99.99, 'Bu bir bağlantı testidir.')
-            RETURNING *
-        `;
-    return jsonResponse({
-      success: true,
-      message: "Neon DB Ba\u011Flant\u0131s\u0131 Ba\u015Far\u0131l\u0131! Test verisi yaz\u0131ld\u0131.",
-      data: result[0]
-    }, 200, request);
-  } catch (e) {
-    return jsonResponse({
-      success: false,
-      message: "Ba\u011Flant\u0131 Hatas\u0131: " + e.message
-    }, 500, request);
-  }
-}
-__name(onRequestGet6, "onRequestGet");
-
-// admin/_middleware.js
-var import_checked_fetch12 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header12 = __toESM(require_strip_cf_connecting_ip_header());
 async function onRequest(context) {
   const { request, next, env } = context;
   const url = new URL(request.url);
@@ -6511,13 +6484,6 @@ var routes = [
     modules: [onRequestPut3]
   },
   {
-    routePath: "/api/test-write",
-    mountPath: "/api",
-    method: "GET",
-    middlewares: [],
-    modules: [onRequestGet6]
-  },
-  {
     routePath: "/admin",
     mountPath: "/admin",
     method: "",
@@ -6526,21 +6492,21 @@ var routes = [
   }
 ];
 
-// ../.wrangler/tmp/bundle-k6D5SM/middleware-loader.entry.ts
-var import_checked_fetch19 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header19 = __toESM(require_strip_cf_connecting_ip_header());
+// ../.wrangler/tmp/bundle-IcxX4U/middleware-loader.entry.ts
+var import_checked_fetch18 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header18 = __toESM(require_strip_cf_connecting_ip_header());
 
-// ../.wrangler/tmp/bundle-k6D5SM/middleware-insertion-facade.js
-var import_checked_fetch17 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header17 = __toESM(require_strip_cf_connecting_ip_header());
+// ../.wrangler/tmp/bundle-IcxX4U/middleware-insertion-facade.js
+var import_checked_fetch16 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header16 = __toESM(require_strip_cf_connecting_ip_header());
 
 // ../node_modules/wrangler/templates/pages-template-worker.ts
-var import_checked_fetch14 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header14 = __toESM(require_strip_cf_connecting_ip_header());
-
-// ../node_modules/path-to-regexp/dist.es2015/index.js
 var import_checked_fetch13 = __toESM(require_checked_fetch());
 var import_strip_cf_connecting_ip_header13 = __toESM(require_strip_cf_connecting_ip_header());
+
+// ../node_modules/path-to-regexp/dist.es2015/index.js
+var import_checked_fetch12 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header12 = __toESM(require_strip_cf_connecting_ip_header());
 function lexer(str) {
   var tokens = [];
   var i = 0;
@@ -6987,8 +6953,8 @@ var cloneResponse = /* @__PURE__ */ __name((response) => (
 ), "cloneResponse");
 
 // ../node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-var import_checked_fetch15 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header15 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch14 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header14 = __toESM(require_strip_cf_connecting_ip_header());
 var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -7007,8 +6973,8 @@ var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 var middleware_ensure_req_body_drained_default = drainBody;
 
 // ../node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
-var import_checked_fetch16 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header16 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch15 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header15 = __toESM(require_strip_cf_connecting_ip_header());
 function reduceError(e) {
   return {
     name: e?.name,
@@ -7031,7 +6997,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-k6D5SM/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-IcxX4U/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -7039,8 +7005,8 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
 var middleware_insertion_facade_default = pages_template_worker_default;
 
 // ../node_modules/wrangler/templates/middleware/common.ts
-var import_checked_fetch18 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header18 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch17 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header17 = __toESM(require_strip_cf_connecting_ip_header());
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
@@ -7065,7 +7031,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-k6D5SM/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-IcxX4U/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
