@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "This project is a static website developed for a real business.  \r The main goal was to design, develop, and deploy a live website from scratch.",
   "main": "scripts.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nursukizildag/ClkTeknoloji_Website.git"
@@ -18,7 +15,16 @@
     "url": "https://github.com/nursukizildag/ClkTeknoloji_Website/issues"
   },
   "homepage": "https://github.com/nursukizildag/ClkTeknoloji_Website#readme",
+  "scripts": {
+    "dev": "wrangler pages dev . --kv=ADMIN_AUTH",
+    "start": "wrangler pages dev . --kv=ADMIN_AUTH",
+    "db:setup": "node setup-db.js",
+    "db:check": "node check-db-status.js"
+  },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
   }
 }

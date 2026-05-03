@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLK Teknoloji - Ürünler</title>
+    <link rel="icon" href="../assets/img/ClkTeknoloji-logo.jpg" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css?v=3">
+    <style>
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 12px 28px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            background: #fff;
+            color: #334155;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .filter-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .filter-btn.active {
+            background: #3b82f6;
+            color: #fff;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .urunler-content {
+            padding: 60px 0;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .urunler-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header dark-theme" id="site-header">
+        <nav class="site-nav">
+            <div class="nav-container">
+                <a href="../index.html" class="nav-brand">
+                    <img src="../assets/img/ClkTeknoloji-logo.jpg" alt="CLK Teknoloji" class="logo-img">
+                </a>
+                <ul class="desktop-menu">
+                    <li class="desktop-menu-item"><a href="../index.html" class="desktop-link">Ana Sayfa</a></li>
+                    <li class="desktop-menu-item"><a href="index.html" class="desktop-link active">Ürünler</a></li>
+                    <li class="desktop-menu-item"><a href="../servis/index.html" class="desktop-link">Servis</a></li>
+                    <li class="desktop-menu-item"><a href="../hakkimizda/index.html" class="desktop-link">Hakkımızda</a>
+                    </li>
+                    <li class="desktop-menu-item"><a href="../iletisim/index.html" class="desktop-link">İletişim</a>
+                    </li>
+                </ul>
+                <div class="header-actions">
+                    <a href="../servis/index.html" class="btn btn-outline-dark-theme"><i class="fas fa-search"></i>
+                        Servis Sorgula</a>
+                    <a href="https://wa.me/+905071561515" class="btn btn-whatsapp" target="_blank" data-setting="whatsapp_number" data-setting-attr="href" data-setting-format="wa"><i
+                            class="fab fa-whatsapp"></i> WhatsApp</a>
+                </div>
+                <button class="hamburger" id="hamburger-btn">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="subpage-hero">
+        <div class="container">
+            <h1><i class="fas fa-box-open"></i> Tüm Ürünler</h1>
+            <p>Telefon, bilgisayar ve saat ürünlerimizi keşfedin.</p>
+        </div>
+    </div>
+
+    <div class="urunler-content">
+        <div class="container">
+            <!-- Filter Bar -->
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="hepsi">Hepsi</button>
+                <button class="filter-btn" data-filter="telefon">📱 Telefon</button>
+                <button class="filter-btn" data-filter="bilgisayar">💻 Bilgisayar</button>
+                <button class="filter-btn" data-filter="saat">⌚ Saat</button>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="urunler-grid" id="productGrid">
+                <!-- Products will be inserted by JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-dark">
+        <div class="footer-content">
+            <div class="footer-nav">
+                <a href="../index.html">Ana Sayfa</a>
+                <a href="index.html">Ürünler</a>
+                <a href="../servis/index.html">Servis</a>
+                <a href="../hakkimizda/index.html">Hakkımızda</a>
+                <a href="../iletisim/index.html">İletişim</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://wa.me/+905071561515" class="footer-social-link wp" target="_blank" data-setting="whatsapp_number" data-setting-attr="href" data-setting-format="wa">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/clkteknoloji/" class="footer-social-link insta" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CLK Teknoloji. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+
+
+    <!-- Modern Product Detail Modal -->
+    <div class="product-modal-overlay" id="productModal">
+        <div class="product-modal">
+            <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+            
+            <!-- Sol: Görsel Alanı -->
+            <div class="modal-left">
+                <div class="modal-main-image" id="modalMainImage"></div>
+                <div class="modal-thumbnails" id="modalThumbnails" style="display:none;"></div>
+            </div>
+
+            <!-- Sağ: Detaylar -->
+            <div class="modal-right">
+                <span class="modal-badge" id="modalBadge"></span>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <p class="modal-price" id="modalPrice"></p>
+                <p class="modal-description" id="modalDescription"></p>
+                
+                <div class="modal-specs-grid" id="modalSpecs">
+                    <!-- JS ile dolacak -->
+                </div>
+
+                <div class="modal-footer-actions">
+                    <a href="#" target="_blank" class="modal-btn-primary" id="modalWPLink" data-setting="whatsapp_number" data-setting-attr="href" data-setting-format="wa">
+                        <i class="fab fa-whatsapp"></i> WhatsApp ile Sor
+                    </a>
+                    <a href="tel:+905071561515" class="modal-btn-secondary" data-setting="whatsapp_number" data-setting-attr="href" data-setting-format="tel">
+                        <i class="fas fa-phone"></i> Ara
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../site-settings.js?v=1"></script>
+
+    <script>
+        // --- CANLI VERİ TABANI BAĞLANTISI ---
+        let allProducts = [];
+
+        async function fetchAllProducts() {
+            try {
+                const response = await fetch('/api/products');
+                allProducts = await response.json();
+                
+                // URL'den kategori parametresi var mı kontrol et
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category');
+                
+                if (category) {
+                    const btn = document.querySelector(`.filter-btn[data-filter="${category}"]`);
+                    if (btn) {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        renderProducts(category);
+                        return;
+                    }
+                }
+                renderProducts('hepsi');
+            } catch (err) {
+                console.error('Ürünler yüklenemedi:', err);
+                document.getElementById('productGrid').innerHTML = '<p>Ürünler şu an yüklenemiyor.</p>';
+            }
+        }
+
+        function renderProducts(filter) {
+            const grid = document.getElementById('productGrid');
+            const filtered = filter === 'hepsi' ? allProducts : allProducts.filter(p => p.category === filter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p class="text-muted">Bu kategoride henüz ürün bulunmuyor.</p>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map((p, idx) => {
+                // Orijinal dizideki indeksini bul (Modal için)
+                const originalIdx = allProducts.indexOf(p);
+                return `
+                <div class="product-card">
+                    <span class="badge" style="background:#2563eb">${p.condition === 'sifir' ? 'Sıfır' : '2. El'}</span>
+                    <div class="product-img" style="background: #f8fafc; border-radius: 8px; overflow: hidden; height: 180px;">
+                        ${p.image ? `<img src="${p.image}" style="width:100%; height:100%; object-fit:contain;">` : `<i class="fas fa-image" style="font-size: 40px; color: #cbd5e1;"></i>`}
+                    </div>
+                    <h4 class="product-title">${p.name}</h4>
+                    <p class="product-cat">${p.category.toUpperCase()}</p>
+                    <p class="product-price">₺${Number(p.price).toLocaleString()}</p>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openProductModal(${originalIdx})">
+                            <i class="fas fa-info-circle"></i> Özellikler
+                        </button>
+                        <a href="${window.buildWhatsAppLink ? window.buildWhatsAppLink('Merhaba, ' + p.name + ' hakkında bilgi almak istiyorum.') : 'https://wa.me/905071561515?text=' + encodeURIComponent('Merhaba, ' + p.name + ' hakkında bilgi almak istiyorum.')}" target="_blank" class="btn-whatsapp-outline">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // Filter bar handler
+        document.getElementById('filterBar').addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                renderProducts(e.target.dataset.filter);
+            }
+        });
+
+        // ===== MODERN PRODUCT MODAL LOGIC =====
+        function openProductModal(index) {
+            const product = allProducts[index];
+            if (!product) return;
+
+            const modal = document.getElementById('productModal');
+
+            // Badge & Info
+            const badgeEl = document.getElementById('modalBadge');
+            badgeEl.textContent = product.condition === 'sifir' ? 'Sıfır' : '2. El';
+            badgeEl.style.background = '#2563eb20';
+            badgeEl.style.color = '#2563eb';
+
+            document.getElementById('modalTitle').textContent = product.name;
+            document.getElementById('modalPrice').textContent = '₺' + Number(product.price).toLocaleString();
+            document.getElementById('modalDescription').textContent = product.description || 'Bu ürün için açıklama bulunmuyor.';
+
+            // Main Image
+            const mainImg = document.getElementById('modalMainImage');
+            if (product.image) {
+                mainImg.innerHTML = `<img src="${product.image}" style="width:100%; height:100%; object-fit:contain; border-radius:12px;">`;
+            } else {
+                mainImg.innerHTML = `<i class="fas fa-image img-placeholder" style="font-size:120px; color:#e2e8f0;"></i>`;
+            }
+
+            // Specs Grid
+            const specsContainer = document.getElementById('modalSpecs');
+            const specs = product.specs && Object.keys(product.specs).length > 0 ? product.specs : {
+                "Kategori": product.category,
+                "Marka": product.brand || 'Belirtilmedi'
+            };
+
+            specsContainer.innerHTML = Object.entries(specs).map(([label, value]) => `
+                <div class="spec-card">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <span class="spec-label">${label}</span>
+                        <span class="spec-val">${value}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            const wpMsg = `Merhaba, ${product.name} hakkında bilgi almak istiyorum. Fiyat: ₺${Number(product.price).toLocaleString()}`;
+            document.getElementById('modalWPLink').href = window.buildWhatsAppLink
+                ? window.buildWhatsAppLink(wpMsg)
+                : `https://wa.me/905071561515?text=${encodeURIComponent(wpMsg)}`;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeProductModal);
+        document.getElementById('productModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeProductModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeProductModal();
+        });
+
+        // Sayfa açıldığında verileri çek
+        window.addEventListener('DOMContentLoaded', fetchAllProducts);
+    </script>
+</body>
+</html>

@@ -1,459 +1,155 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLK Teknoloji — Admin Paneli</title>
     <link rel="icon" href="../assets/img/ClkTeknoloji-logo.jpg" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
-        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css?v=3">
 </head>
-
 <body>
     <div class="admin-layout">
-
-        <!-- ===== SIDEBAR ===== -->
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar">
             <div class="sidebar-header">
-                <img src="../assets/img/ClkTeknoloji-logo.jpg" alt="Logo" class="sidebar-logo">
-                <div>
-                    <h2 class="sidebar-title">CLK Admin</h2>
-                    <p class="sidebar-subtitle">Yönetim Paneli</p>
-                </div>
+                <img src="../assets/img/ClkTeknoloji-logo.jpg" class="sidebar-logo">
+                <div class="sidebar-info"><h3>CLK Admin</h3><p>Panel</p></div>
             </div>
-
             <nav class="sidebar-nav">
-                <a href="#" class="sidebar-link active" data-page="dashboard">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-                <a href="#" class="sidebar-link" data-page="announcements">
-                    <i class="fas fa-bullhorn"></i> Duyurular
-                </a>
-                <a href="#" class="sidebar-link" data-page="products">
-                    <i class="fas fa-boxes"></i> Ürünler
-                </a>
-                <a href="#" class="sidebar-link" data-page="secondhand">
-                    <i class="fas fa-recycle"></i> 2. El Ürünler
-                </a>
-                <a href="#" class="sidebar-link" data-page="gallery">
-                    <i class="fas fa-images"></i> FotoGaleri
-                </a>
+                <button onclick="switchPage('dashboard')" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</button>
+                <button onclick="switchPage('products')" class="nav-link"><i class="fas fa-box"></i> Ürün Yönetimi</button>
+                <button onclick="switchPage('settings')" class="nav-link"><i class="fas fa-cog"></i> Ayarlar</button>
             </nav>
-
             <div class="sidebar-footer">
-                <a href="/" class="sidebar-link" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> Siteyi Görüntüle
-                </a>
-                <a href="#" class="sidebar-link" id="btn-logout" style="color: #ef4444;">
-                    <i class="fas fa-sign-out-alt"></i> Çıkış Yap
-                </a>
+                <button id="logout-btn" class="nav-link btn-logout"><i class="fas fa-sign-out-alt"></i> Çıkış</button>
             </div>
         </aside>
 
-        <!-- ===== MAIN AREA ===== -->
-        <main class="admin-main">
-
-            <!-- Top Bar -->
-            <header class="admin-topbar">
-                <button class="sidebar-toggle" id="sidebar-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1 class="topbar-title" id="topbar-title">Dashboard</h1>
-                <div class="topbar-user">
-                    <span class="user-name">Admin</span>
-                    <button class="btn-admin btn-admin-ghost" id="btn-logout-topbar"
-                        style="color: #ef4444; border-color: rgba(239,68,68,0.3); margin-left: 12px; padding: 6px 14px; font-size: 0.8rem;"
-                        title="Çıkış Yap">
-                        <i class="fas fa-sign-out-alt"></i> Çıkış
-                    </button>
-                    <div class="user-avatar"><i class="fas fa-user"></i></div>
-                </div>
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="current-page-title">Dashboard</h2>
+                <div class="avatar">CLK</div>
             </header>
 
-            <!-- Content Pages -->
-            <div class="admin-content">
-
-                <!-- ========== DASHBOARD ========== -->
-                <div class="admin-page active" id="page-dashboard">
+            <div class="content-area">
+                <!-- Dashboard -->
+                <section id="page-dashboard" class="admin-page active">
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #2563eb, #3500b0);">
-                                <i class="fas fa-boxes"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-products">0</h3>
-                                <p>Toplam Ürün</p>
-                            </div>
+                            <div class="stat-icon blue"><i class="fas fa-box"></i></div>
+                            <div class="stat-data"><h4 id="stat-total-products">0</h4><p>Ürünler</p></div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #e8872a, #f59e3b);">
-                                <i class="fas fa-bullhorn"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-announcements">0</h3>
-                                <p>Aktif Duyuru</p>
-                            </div>
+                            <div class="stat-icon green"><i class="fas fa-star"></i></div>
+                            <div class="stat-data"><h4 id="stat-featured-products">0</h4><p>Öne Çıkan</p></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
-                                <i class="fas fa-images"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="stat-gallery">0</h3>
-                                <p>Galeri Fotoğrafı</p>
-                            </div>
-                        </div>
-
                     </div>
-
-                    <div class="dashboard-info glass-card-admin">
-                        <h2><i class="fas fa-info-circle"></i> Hoş Geldiniz</h2>
-                        <p>Bu panel üzerinden sitenizi kolayca yönetebilirsiniz:</p>
-                        <ul>
-                            <li><strong>Ürünler:</strong> Yeni ürün ekleyin, mevcut ürünleri düzenleyin veya silin.</li>
-                            <li><strong>Duyurular:</strong> Anasayfadaki kampanya bandını güncelleyin.</li>
-
-                            <li><strong>FotoGaleri:</strong> Galeri sayfasına fotoğraf yükleyin.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- ========== ÜRÜNLER ========== -->
-                <div class="admin-page" id="page-products">
-                    <div class="page-header">
-                        <h2>Ürün Yönetimi</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-add-product">
-                            <i class="fas fa-plus"></i> Yeni Ürün Ekle
-                        </button>
-                    </div>
-
-                    <!-- Add Product Form (Hidden by default) -->
-                    <div class="form-card glass-card-admin" id="product-form" style="display:none;">
-                        <h3 id="product-form-title">Yeni Ürün Ekle</h3>
-                        <form id="product-add-form">
-                            <input type="hidden" id="edit-product-id" value="">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="product-name">Ürün Adı *</label>
-                                    <input type="text" id="product-name" required placeholder="Örn: iPhone 13 Pro">
-                                </div>
-                                <div class="form-group">
-                                    <label for="product-brand">Marka</label>
-                                    <input type="text" id="product-brand" placeholder="Örn: Samsung, Apple, Xiaomi">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="product-category">Kategori *</label>
-                                    <select id="product-category" required>
-                                        <option value="">Seçin...</option>
-                                        <option value="telefon">📱 Telefon Ürünleri</option>
-                                        <option value="bilgisayar">💻 Bilgisayar Ürünleri</option>
-                                        <option value="saat">⌚ Saat</option>
-                                        <option value="aksesuar">🎧 Aksesuar</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Durum</label>
-                                    <input type="text" value="Sıfır" disabled style="opacity:0.6; cursor:not-allowed;">
-                                    <input type="hidden" id="product-condition" value="sifir">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="product-price">Fiyat (₺) <small
-                                            style="color:#64748b;">(Opsiyonel)</small></label>
-                                    <input type="number" id="product-price" placeholder="Örn: 15000">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="product-desc">Açıklama</label>
-                                <textarea id="product-desc" rows="3"
-                                    placeholder="Ürün hakkında kısa bir açıklama..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="product-image">Ürün Fotoğrafı</label>
-                                <div class="file-upload" id="product-upload-area">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-                                    <input type="file" id="product-image" accept="image/*" hidden>
-                                </div>
-                                <div id="product-preview" class="image-preview"></div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
-                                    Kaydet</button>
-                                <button type="button" class="btn-admin btn-admin-ghost"
-                                    id="btn-cancel-product">İptal</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Product List -->
-                    <div class="table-card glass-card-admin">
+                    <div class="data-card">
+                        <div class="card-header"><h3>Son Eklenenler</h3></div>
                         <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 40px;"></th>
-                                    <th>Fotoğraf</th>
-                                    <th>Ürün Adı</th>
-                                    <th>Marka</th>
-                                    <th>Kategori</th>
-                                    <th>Fiyat</th>
-                                    <th>Durum</th>
-                                    <th>İşlemler</th>
-                                </tr>
-                            </thead>
-                            <tbody id="products-table-body">
-                                <tr class="empty-row">
-                                    <td colspan="8">Henüz ürün eklenmedi. Yukarıdaki butonu kullanarak yeni ürün
-                                        ekleyin.</td>
-                                </tr>
-                            </tbody>
+                            <thead><tr><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Tip</th></tr></thead>
+                            <tbody id="recent-products-list"></tbody>
                         </table>
                     </div>
-                </div>
+                </section>
 
-                <!-- ========== DUYURULAR / KAMPANYA ========== -->
-                <div class="admin-page" id="page-announcements">
-                    <div class="page-header">
-                        <h2>Duyuru / Kampanya Yönetimi</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-add-announcement">
-                            <i class="fas fa-plus"></i> Yeni Duyuru Ekle
-                        </button>
+                <!-- Products -->
+                <section id="page-products" class="admin-page">
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Yeni Ürün Ekle</button>
                     </div>
+                    <div class="data-card"><div class="card-header"><h3>📱 Telefonlar</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-telefon"></tbody></table></div>
+                    <div class="data-card"><div class="card-header"><h3>💻 Bilgisayarlar</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-bilgisayar"></tbody></table></div>
+                    <div class="data-card"><div class="card-header"><h3>⌚ Saatler</h3></div><table class="admin-table"><thead><tr><th>Sıra</th><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Öne Çıkan</th><th>İşlemler</th></tr></thead><tbody id="list-saat"></tbody></table></div>
+                </section>
 
-                    <p class="page-desc">Bu duyurular anasayfadaki turuncu kampanya bandında gösterilir. Birden fazla
-                        duyuru eklerseniz otomatik olarak döner.</p>
-
-                    <!-- Add Announcement Form -->
-                    <div class="form-card glass-card-admin" id="announcement-form" style="display:none;">
-                        <h3>Yeni Duyuru Ekle</h3>
-                        <form id="announcement-add-form">
-                            <div class="form-row">
+                <!-- Settings -->
+                <section id="page-settings" class="admin-page">
+                    <div class="data-card">
+                        <h3>Site Ayarları</h3>
+                        <form id="settings-form" class="admin-form">
+                            <div class="form-row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                                 <div class="form-group">
-                                    <label for="ann-badge">Etiket *</label>
-                                    <select id="ann-badge" required>
-                                        <option value="FIRSAT">FIRSAT</option>
-                                        <option value="YENİ">YENİ</option>
-                                        <option value="KAMPANYA">KAMPANYA</option>
-                                        <option value="DUYURU">DUYURU</option>
-                                        <option value="ACİL">ACİL</option>
-                                    </select>
+                                    <label>Site Başlığı</label>
+                                    <input type="text" name="site_title" class="form-control" placeholder="CLK Teknoloji">
                                 </div>
-                                <div class="form-group" style="flex:2;">
-                                    <label for="ann-text">Duyuru Metni *</label>
-                                    <input type="text" id="ann-text" required
-                                        placeholder="Örn: 2. El telefonlarda özel fiyatlar!">
+                                <div class="form-group">
+                                    <label>WhatsApp Numarası</label>
+                                    <input type="text" name="whatsapp_number" class="form-control" placeholder="+90 5xx xxx xx xx">
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="form-row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                                 <div class="form-group">
-                                    <label for="ann-duration">Süre (saniye)</label>
-                                    <input type="number" id="ann-duration" min="1" max="30" value="4" placeholder="4">
-                                    <small style="color:#64748b;">Bu duyuru kaç saniye gösterilsin</small>
+                                    <label>İletişim E-posta</label>
+                                    <input type="email" name="contact_email" class="form-control" placeholder="info@clkteknoloji.com">
                                 </div>
                                 <div class="form-group">
-                                    <label for="ann-link">"İncele" Butonu Hedefi</label>
-                                    <select id="ann-link">
-                                        <option value="products">Ürünler</option>
-                                        <option value="secondhand">2. El Cihazlar</option>
-                                        <option value="service">Teknik Servis</option>
-                                        <option value="watches">Saat</option>
-                                        <option value="contact">İletişim</option>
-                                        <option value="gallery">FotoGaleri</option>
-                                    </select>
+                                    <label>Adres</label>
+                                    <input type="text" name="contact_address" class="form-control" placeholder="Merkez Mah.">
                                 </div>
                             </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
-                                    Kaydet</button>
-                                <button type="button" class="btn-admin btn-admin-ghost"
-                                    id="btn-cancel-announcement">İptal</button>
+                            <div class="form-group">
+                                <label>Hakkımızda Kısa Metin</label>
+                                <textarea name="about_short" class="form-control" rows="3" placeholder="Kısa tanıtım metni"></textarea>
+                            </div>
+                            <div class="modal-footer" style="justify-content:flex-end;">
+                                <span id="settings-status" style="margin-right:10px; font-size:12px; color:#2f855a; display:none;">Kaydedildi</span>
+                                <button type="button" id="settings-save" class="btn btn-primary">Kaydet</button>
                             </div>
                         </form>
                     </div>
-
-                    <!-- Announcement List -->
-                    <div class="announcements-list" id="announcements-list">
-                        <!-- Filled by JS -->
-                    </div>
-                </div>
-
-                <!-- ========== 2. EL CİHAZLAR ========== -->
-                <div class="admin-page" id="page-secondhand">
-                    <div class="page-header">
-                        <h2>2. El Cihazlar Yönetimi</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-add-secondhand">
-                            <i class="fas fa-plus"></i> 2. El Ürün Ekle
-                        </button>
-                    </div>
-
-                    <p class="page-desc">2. El cihazları buradan ekleyip yönetebilirsiniz. Eklediğiniz özellikler (RAM,
-                        Depolama vb.) ana sitede otomatik gösterilir.</p>
-
-                    <!-- Add 2nd Hand Product Form -->
-                    <div class="form-card glass-card-admin" id="secondhand-form" style="display:none;">
-                        <h3 id="secondhand-form-title"><i class="fas fa-recycle"></i> Yeni 2. El Ürün Ekle</h3>
-                        <form id="secondhand-add-form">
-                            <input type="hidden" id="edit-secondhand-id" value="">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="sh-name">Ürün Adı *</label>
-                                    <input type="text" id="sh-name" required placeholder="Örn: iPhone 13 Pro Max">
-                                </div>
-                                <div class="form-group">
-                                    <label for="sh-brand">Marka *</label>
-                                    <input type="text" id="sh-brand" required placeholder="Örn: Apple, Samsung">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="sh-category">Kategori *</label>
-                                    <select id="sh-category" required>
-                                        <option value="">Seçin...</option>
-                                        <option value="telefon">📱 Telefon</option>
-                                        <option value="bilgisayar">💻 Bilgisayar</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="sh-price">Fiyat (₺)</label>
-                                    <input type="number" id="sh-price" placeholder="Örn: 25000 (Opsiyonel)">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="sh-desc">Açıklama</label>
-                                <textarea id="sh-desc" rows="2" placeholder="Ürün hakkında kısa bir not..."></textarea>
-                            </div>
-
-                            <!-- Spec Fields -->
-                            <div class="spec-fields-section">
-                                <h4 style="margin-bottom: 12px; color: #e8872a;"><i class="fas fa-microchip"></i> Teknik
-                                    Özellikler</h4>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="sh-storage"><i class="fas fa-hdd"></i> Depolama</label>
-                                        <input type="text" id="sh-storage" placeholder="Örn: 128 GB">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sh-ram"><i class="fas fa-memory"></i> RAM</label>
-                                        <input type="text" id="sh-ram" placeholder="Örn: 6 GB">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="sh-battery"><i class="fas fa-battery-three-quarters"></i> Pil
-                                            Ömrü</label>
-                                        <input type="text" id="sh-battery" placeholder="Örn: %85">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sh-screen"><i class="fas fa-mobile-alt"></i> Ekran Boyutu</label>
-                                        <input type="text" id="sh-screen" placeholder="Örn: 6.7 inç">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="sh-processor"><i class="fas fa-bolt"></i> İşlemci</label>
-                                        <input type="text" id="sh-processor" placeholder="Örn: A15 Bionic">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="sh-color"><i class="fas fa-palette"></i> Renk</label>
-                                        <input type="text" id="sh-color" placeholder="Örn: Siyah">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="sh-image">Ürün Fotoğrafı</label>
-                                <div class="file-upload" id="sh-upload-area">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-                                    <input type="file" id="sh-image" accept="image/*" hidden>
-                                </div>
-                                <div id="sh-preview" class="image-preview"></div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
-                                    Kaydet</button>
-                                <button type="button" class="btn-admin btn-admin-ghost"
-                                    id="btn-cancel-secondhand">İptal</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- 2. El Ürün Listesi (Kategorize Edilmiş) -->
-                    <div style="margin-top:24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <!-- Telefonlar -->
-                        <div class="table-card glass-card-admin">
-                            <h3 style="color: #60a5fa;"><i class="fas fa-mobile-alt"></i> 2. El Telefonlar</h3>
-                            <div id="secondhand-list-telefon" class="secondhand-admin-grid-vertical">
-                                <p class="empty-message">Yükleniyor...</p>
-                            </div>
-                        </div>
-
-                        <!-- Bilgisayarlar -->
-                        <div class="table-card glass-card-admin">
-                            <h3 style="color: #fca5a5;"><i class="fas fa-laptop"></i> 2. El Bilgisayarlar</h3>
-                            <div id="secondhand-list-bilgisayar" class="secondhand-admin-grid-vertical">
-                                <p class="empty-message">Yükleniyor...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!-- ========== FOTOGALERİ ========== -->
-                <div class="admin-page" id="page-gallery">
-                    <div class="page-header">
-                        <h2>FotoGaleri Yönetimi</h2>
-                        <button class="btn-admin btn-admin-primary" id="btn-add-gallery">
-                            <i class="fas fa-plus"></i> Fotoğraf Yükle
-                        </button>
-                    </div>
-
-                    <!-- Upload Form -->
-                    <div class="form-card glass-card-admin" id="gallery-form" style="display:none;">
-                        <h3>Fotoğraf Yükle</h3>
-                        <form id="gallery-add-form">
-                            <div class="form-group">
-                                <label for="gallery-title">Başlık</label>
-                                <input type="text" id="gallery-title" placeholder="Fotoğraf başlığı (opsiyonel)">
-                            </div>
-                            <div class="form-group">
-                                <label for="gallery-image">Fotoğraf *</label>
-                                <div class="file-upload" id="gallery-upload-area">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-                                    <input type="file" id="gallery-image" accept="image/*" required hidden>
-                                </div>
-                                <div id="gallery-preview" class="image-preview"></div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="submit" class="btn-admin btn-admin-primary"><i class="fas fa-save"></i>
-                                    Yükle</button>
-                                <button type="button" class="btn-admin btn-admin-ghost"
-                                    id="btn-cancel-gallery">İptal</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="gallery-admin-grid" id="gallery-admin-grid">
-                        <p class="empty-message">Henüz fotoğraf yüklenmedi.</p>
-                    </div>
-                </div>
-
+                </section>
             </div>
         </main>
     </div>
 
-    <script src="admin.js"></script>
-</body>
+    <!-- Modal -->
+    <div id="modal-container" class="modal-container" style="display:none;">
+        <div class="modal">
+            <div class="modal-header"><h3>Ürün Detayları</h3><button class="btn-close" onclick="closeModal()">&times;</button></div>
+            <form id="product-form" class="admin-form">
+                <input type="hidden" name="id">
+                <input type="hidden" name="image" id="product-image-data">
+                <div class="form-row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group"><label>Ürün Adı</label><input type="text" name="name" class="form-control" required></div>
+                    <div class="form-group"><label>Fiyat (₺)</label><input type="number" name="price" class="form-control" required></div>
+                </div>
+                <div class="form-row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select name="category" class="form-control">
+                            <option value="telefon">Telefon</option>
+                            <option value="bilgisayar">Bilgisayar</option>
+                            <option value="saat">Saat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ürün Tipi</label>
+                        <select name="type" class="form-control">
+                            <option value="cihaz">Cihaz</option>
+                            <option value="aksesuar">Aksesuar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" name="is_featured"> Ana sayfada öne çıksın</label>
+                </div>
+                <div class="form-group"><label>Teknik Özellikler</label><div id="specs-container"></div><button type="button" class="btn-sm btn-ghost" onclick="addSpecRow()">+ Özellik Ekle</button></div>
+                <div class="form-group"><label>Açıklama</label><textarea name="description" class="form-control"></textarea></div>
+                <div class="form-group">
+                    <label>Görsel</label>
+                    <div class="image-preview-container" id="image-preview" onclick="document.getElementById('file-input').click()">+ Görsel Yükle</div>
+                    <input type="file" id="file-input" style="display:none" onchange="handleImageUpload(this)">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Vazgeç</button>
+                    <button type="button" id="product-form-submit" class="btn btn-primary" onclick="saveProduct()">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <script src="admin.js?v=4"></script>
+</body>
 </html>

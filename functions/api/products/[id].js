@@ -1,147 +1,104 @@
 import { neon } from '@neondatabase/serverless';
-import { isAuthenticated } from '../_shared/auth.js';
+import { isAuthenticated, jsonResponse, optionsResponse } from '../_shared/auth.js';
+
+export async function onRequestGet(context) {
+    const { request, env } = context;
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
+
+    try {
+        const sql = neon(env.DATABASE_URL);
+        const result = await sql`SELECT * FROM products WHERE id = ${id}`;
+        if (result.length === 0) return jsonResponse({ error: 'Not found' }, 404, request);
+        return jsonResponse(result[0], 200, request);
+    } catch (e) {
+        return jsonResponse({ error: e.message }, 500, request);
+    }
+}
 
 export async function onRequestPut(context) {
-    const { request, env, params } = context;
-    const id = params.id;
+    const { request, env } = context;
+    if (!(await isAuthenticated(request, env))) return jsonResponse({ error: 'Unauthorized' }, 401, request);
 
-    // Auth Check
-    const authed = await isAuthenticated(request, env);
-    if (!authed) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-            status: 401,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
-    }
-
-    if (!env.DATABASE_URL) {
-        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
-            status: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
-    }
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
 
     try {
         const sql = neon(env.DATABASE_URL);
         const data = await request.json();
 
-        const result = await sql`
-            UPDATE products 
-            SET name = ${data.name || ''}, 
-                brand = ${data.brand || ''}, 
-                category = ${data.category || ''}, 
-                condition = ${data.condition || ''}, 
-                price = ${data.price || null}, 
-                code = ${data.code || ''}, 
-                description = ${data.description || ''}, 
-                image = ${data.image || ''},
-                specs = ${JSON.stringify(data.specs || {})}
-            WHERE id = ${id}
-            RETURNING *
-        `;
+        // --- SIRALAMA DEĞİŞTİRME MANTIĞI ---
+        if (data.move) {
+            const current = await sql`SELECT id, category, sort_order FROM products WHERE id = ${id}`;
+            if (current.length === 0) return jsonResponse({ error: 'Not found' }, 404, request);
+            
+            const curr = current[0];
+            let neighbor;
 
-        if (result.length === 0) {
-            return new Response(JSON.stringify({ error: "Product not found" }), {
-                status: 404,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            });
+            if (data.move === 'up') {
+                neighbor = await sql`
+                    SELECT id, sort_order FROM products 
+                    WHERE category = ${curr.category} AND sort_order < ${curr.sort_order}
+                    ORDER BY sort_order DESC LIMIT 1
+                `;
+            } else {
+                neighbor = await sql`
+                    SELECT id, sort_order FROM products 
+                    WHERE category = ${curr.category} AND sort_order > ${curr.sort_order}
+                    ORDER BY sort_order ASC LIMIT 1
+                `;
+            }
+
+            if (neighbor.length > 0) {
+                const nei = neighbor[0];
+                // Swap sort_orders
+                await sql`UPDATE products SET sort_order = ${nei.sort_order} WHERE id = ${curr.id}`;
+                await sql`UPDATE products SET sort_order = ${curr.sort_order} WHERE id = ${nei.id}`;
+                return jsonResponse({ success: true }, 200, request);
+            }
+            return jsonResponse({ success: true, message: 'Bound reached' }, 200, request);
         }
 
-        return new Response(JSON.stringify({ success: true, product: result[0] }), {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+        // Toggle featured only
+        if (data.toggle_featured !== undefined) {
+            const result = await sql`
+                UPDATE products SET is_featured = NOT is_featured, updated_at = NOW()
+                WHERE id = ${id} RETURNING *
+            `;
+            return jsonResponse({ success: true, product: result[0] }, 200, request);
+        }
+
+        const result = await sql`
+            UPDATE products SET
+                name = ${data.name}, brand = ${data.brand || ''}, category = ${data.category},
+                condition = ${data.condition || 'sifir'}, price = ${data.price || null},
+                description = ${data.description || ''}, image = ${data.image || ''},
+                images = ${JSON.stringify(data.images || [])}::jsonb, specs = ${JSON.stringify(data.specs || {})}::jsonb,
+                is_featured = ${data.is_featured || false}, updated_at = NOW()
+            WHERE id = ${id} RETURNING *
+        `;
+
+        if (result.length === 0) return jsonResponse({ error: 'Not found' }, 404, request);
+        return jsonResponse({ success: true, product: result[0] }, 200, request);
     } catch (e) {
-        console.error("DB Update Error:", e);
-        return new Response(JSON.stringify({ error: e.message }), {
-            status: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+        return jsonResponse({ error: e.message }, 500, request);
     }
 }
 
 export async function onRequestDelete(context) {
-    const { request, env, params } = context;
-    const id = params.id;
+    const { request, env } = context;
+    if (!(await isAuthenticated(request, env))) return jsonResponse({ error: 'Unauthorized' }, 401, request);
 
-    // Auth Check
-    const authed = await isAuthenticated(request, env);
-    if (!authed) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), {
-            status: 401,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
-    }
-
-    if (!env.DATABASE_URL) {
-        return new Response(JSON.stringify({ error: "DATABASE_URL is missing" }), {
-            status: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
-    }
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop();
 
     try {
         const sql = neon(env.DATABASE_URL);
-
-        const result = await sql`
-            DELETE FROM products WHERE id = ${id} RETURNING id
-        `;
-
-        if (result.length === 0) {
-            return new Response(JSON.stringify({ error: "Product not found" }), {
-                status: 404,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            });
-        }
-
-        return new Response(JSON.stringify({ success: true, deleted_id: id }), {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+        await sql`DELETE FROM products WHERE id = ${id}`;
+        return jsonResponse({ success: true }, 200, request);
     } catch (e) {
-        console.error("DB Delete Error:", e);
-        return new Response(JSON.stringify({ error: e.message }), {
-            status: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
+        return jsonResponse({ error: e.message }, 500, request);
     }
 }
 
-export async function onRequestOptions() {
-    return new Response(null, {
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '86400'
-        }
-    });
-}
+export async function onRequestOptions() { return optionsResponse(); }
