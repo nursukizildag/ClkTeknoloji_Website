@@ -9,6 +9,47 @@ async function apiFetch(url, options = {}) {
     return res.json();
 }
 
+function showToast(message, type = 'error', timeout = 2200) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.remove();
+    }, timeout);
+}
+
+function showConfirm(message) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('confirm-modal');
+        const text = document.getElementById('confirm-message');
+        const okBtn = document.getElementById('confirm-ok');
+        const cancelBtn = document.getElementById('confirm-cancel');
+        if (!modal || !text || !okBtn || !cancelBtn) {
+            resolve(window.confirm(message));
+            return;
+        }
+
+        text.textContent = message;
+        modal.style.display = 'flex';
+
+        const cleanup = (result) => {
+            modal.style.display = 'none';
+            okBtn.removeEventListener('click', onOk);
+            cancelBtn.removeEventListener('click', onCancel);
+            resolve(result);
+        };
+
+        const onOk = () => cleanup(true);
+        const onCancel = () => cleanup(false);
+
+        okBtn.addEventListener('click', onOk);
+        cancelBtn.addEventListener('click', onCancel);
+    });
+}
+
 // --- APP STATE ---
 let cachedProducts = [];
 let cachedSettings = null;
@@ -156,7 +197,7 @@ async function saveSettings() {
             setTimeout(() => { status.style.display = 'none'; }, 1500);
         }
     } catch (err) {
-        alert('Hata: ' + err.message);
+        showToast('Hata: ' + err.message, 'error');
     } finally {
         btn.disabled = false;
         btn.textContent = 'Kaydet';
@@ -252,7 +293,7 @@ async function saveProduct() {
         closeModal();
         await refreshAllData();
     } catch (err) {
-        alert('Hata: ' + err.message);
+        showToast('Hata: ' + err.message, 'error');
     } finally {
         btn.disabled = false;
         btn.innerHTML = 'Kaydet';
@@ -286,22 +327,23 @@ async function moveProduct(id, direction) {
     try {
         await apiFetch(`/api/products/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ move: direction }) });
         refreshAllData();
-    } catch (err) { alert(err.message); }
+    } catch (err) { showToast(err.message, 'error'); }
 }
 
 async function toggleFeatured(id) {
     try {
         await apiFetch(`/api/products/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ toggle_featured: true }) });
         refreshAllData();
-    } catch (err) { alert(err.message); }
+    } catch (err) { showToast(err.message, 'error'); }
 }
 
 async function deleteProduct(id) {
-    if (!confirm('Emin misiniz?')) return;
+    const ok = await showConfirm('Emin misiniz?');
+    if (!ok) return;
     try {
         await apiFetch(`/api/products/${id}`, { method: 'DELETE' });
         refreshAllData();
-    } catch (err) { alert(err.message); }
+    } catch (err) { showToast(err.message, 'error'); }
 }
 
 // --- INIT ---

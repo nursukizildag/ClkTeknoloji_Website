@@ -175,6 +175,78 @@ body {
 
 .admin-page.active { display: block; }
 
+/* Toasts */
+.toast-container {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2000;
+}
+
+.toast {
+    background: #111827;
+    color: #fff;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 240px;
+    max-width: 360px;
+    animation: toastIn 0.2s ease-out;
+}
+
+.toast.success { background: #065f46; }
+.toast.error { background: #b91c1c; }
+.toast.warn { background: #92400e; }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Confirm modal */
+.confirm-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2100;
+}
+
+.confirm-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 22px;
+    width: 92%;
+    max-width: 420px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+}
+
+.confirm-card h3 {
+    margin-bottom: 6px;
+    font-size: 1.05rem;
+}
+
+.confirm-card p {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
