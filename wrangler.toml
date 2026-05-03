@@ -1,3 +1,7 @@
 name = "clkteknoloji-website"
 compatibility_date = "2024-05-01"
 pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "ADMIN_AUTH"
+id = "0e7128d7c9714ca886d0c818bbf08355"
