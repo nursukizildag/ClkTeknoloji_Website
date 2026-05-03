@@ -1,7 +1,3 @@
 name = "clkteknoloji-website"
 compatibility_date = "2024-05-01"
 pages_build_output_dir = "."
-
-[[kv_namespaces]]
-binding = "ADMIN_AUTH"
-id = "local_admin_auth" # Yerel kullanım için sembolik ID
