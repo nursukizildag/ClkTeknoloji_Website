@@ -304,16 +304,19 @@ function initSettingsHandlers() {
 }
 
 // --- MODAL & FORM ---
+// --- MODAL & FORM ---
+let currentProductImages = [];
+
 function openProductModal(id = null) {
     const modalContainer = document.getElementById('modal-container');
     const form = document.getElementById('product-form');
-    const previewContainer = document.getElementById('image-preview');
     const specsContainer = document.getElementById('specs-container');
     
     form.reset();
     form.elements['id'].value = '';
-    previewContainer.innerHTML = '+ Görsel Yükle';
-    document.getElementById('product-image-data').value = '';
+    currentProductImages = [];
+    renderAdminGallery();
+    
     specsContainer.innerHTML = '';
     renderSpecFields({});
     
@@ -329,10 +332,14 @@ function openProductModal(id = null) {
             form.elements['is_featured'].checked = !!p.is_featured;
             form.elements['description'].value = p.description || '';
             
-            if (p.image) {
-                previewContainer.innerHTML = `<img src="${p.image}" style="width:100%;height:100%;object-fit:contain;">`;
-                document.getElementById('product-image-data').value = p.image;
+            // Görselleri yükle
+            if (p.images && Array.isArray(p.images)) {
+                currentProductImages = [...p.images];
+            } else if (p.image) {
+                currentProductImages = [p.image];
             }
+            renderAdminGallery();
+
             if (p.specs && typeof p.specs === 'object') {
                 renderSpecFields(p.specs);
             }
@@ -340,6 +347,22 @@ function openProductModal(id = null) {
     }
 
     modalContainer.style.display = 'flex';
+}
+
+function renderAdminGallery() {
+    const gallery = document.getElementById('image-gallery-admin');
+    if (!gallery) return;
+    gallery.innerHTML = currentProductImages.map((img, idx) => `
+        <div class="image-item-admin">
+            <img src="${img}">
+            <button type="button" class="btn-remove" onclick="removeImage(${idx})"><i class="fas fa-times"></i></button>
+        </div>
+    `).join('');
+}
+
+function removeImage(idx) {
+    currentProductImages.splice(idx, 1);
+    renderAdminGallery();
 }
 
 function renderSpecFields(specs = {}) {
@@ -392,6 +415,10 @@ async function saveProduct() {
     });
     data.specs = specs;
     
+    // Görselleri ayarla
+    data.images = currentProductImages;
+    data.image = currentProductImages.length > 0 ? currentProductImages[0] : '';
+    
     const id = data.id;
     const method = id ? 'PUT' : 'POST';
     const url = id ? `/api/products/${id}` : '/api/products';
@@ -415,25 +442,32 @@ async function saveProduct() {
 }
 
 // --- IMAGE UPLOAD ---
-function handleImageUpload(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let w = img.width, h = img.height;
-            if (w > 800) { h *= 800/w; w = 800; }
-            canvas.width = w; canvas.height = h;
-            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-            const base64 = canvas.toDataURL('image/jpeg', 0.7);
-            document.getElementById('image-preview').innerHTML = `<img src="${base64}" style="width:100%;height:100%;object-fit:contain;">`;
-            document.getElementById('product-image-data').value = base64;
-        };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+async function handleImageUpload(input) {
+    const files = Array.from(input.files);
+    if (files.length === 0) return;
+
+    for (const file of files) {
+        await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    if (w > 800) { h *= 800/w; w = 800; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                    currentProductImages.push(base64);
+                    renderAdminGallery();
+                    resolve();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+    input.value = ''; // Inputu temizle ki aynı dosyayı tekrar seçebilsin
 }
 
 // --- OPERATIONS ---

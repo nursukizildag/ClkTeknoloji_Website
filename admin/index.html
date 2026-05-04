@@ -177,9 +177,15 @@
                 </div>
                 <div class="form-group"><label>Açıklama</label><textarea name="description" class="form-control"></textarea></div>
                 <div class="form-group">
-                    <label>Görsel</label>
-                    <div class="image-preview-container" id="image-preview" onclick="document.getElementById('file-input').click()">+ Görsel Yükle</div>
-                    <input type="file" id="file-input" style="display:none" onchange="handleImageUpload(this)">
+                    <label>Ürün Görselleri</label>
+                    <div class="image-gallery-admin" id="image-gallery-admin">
+                        <!-- Görseller buraya gelecek -->
+                    </div>
+                    <div class="image-upload-trigger" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-plus"></i> Görsel Ekle
+                    </div>
+                    <input type="file" id="file-input" style="display:none" multiple onchange="handleImageUpload(this)">
+                    <div class="form-hint">Birden fazla görsel seçebilirsiniz. İlk görsel ana görsel olacaktır.</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-ghost" onclick="closeModal()">Vazgeç</button>

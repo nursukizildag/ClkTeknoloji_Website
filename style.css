@@ -311,10 +311,86 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
     z-index: 1;
 }
 .modal-main-image img {
-    max-width: 88%;
+    max-width: 100%;
     max-height: 400px;
     object-fit: contain;
     filter: drop-shadow(0 24px 34px rgba(15, 23, 42, 0.15));
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+}
+.modal-main-image img:hover {
+    transform: scale(1.02);
+}
+
+.modal-thumbnails {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    z-index: 2;
+}
+
+.modal-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.modal-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.modal-thumb:hover {
+    transform: translateY(-2px);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.modal-thumb.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+}
+
+/* Lightbox */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    cursor: zoom-out;
+}
+
+.lightbox-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.lightbox-overlay.active .lightbox-img {
+    transform: scale(1);
 }
 
 /* Sağ Taraf: Bilgi Alanı */

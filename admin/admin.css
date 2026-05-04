@@ -451,50 +451,65 @@ body {
     transform: scale(1.2);
 }
 
-/* Image Upload UI */
-.image-upload-wrapper {
-    width: 100%;
+/* Image Upload UI - Multiple */
+.image-gallery-admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
-.image-preview-container {
-    width: 100%;
-    height: 180px;
-    border: 2px dashed var(--border);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.2s ease;
-    background-color: var(--bg-main);
+.image-item-admin {
     position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f8fafc;
 }
 
-.image-preview-container:hover {
-    border-color: var(--primary);
-    background-color: var(--primary-light);
-}
-
-.image-preview-container i {
-    font-size: 2rem;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-}
-
-.image-preview-container p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.image-preview-container img {
+.image-item-admin img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.image-item-admin .btn-remove {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.image-upload-trigger {
+    width: 100%;
+    padding: 20px;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.image-upload-trigger:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
 }
 
 /* Specs Row UI */
