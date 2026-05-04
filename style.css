@@ -46,9 +46,12 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
     text-decoration: none; 
 }
 .logo-img { 
-    height: 70px; /* Logoyu çok daha belirgin ve büyük yaptık */
-    border-radius: 10px; 
-    object-fit: contain; /* Logonun kesilmemesi için */
+    height: 85px; /* Navbar'a tam sığacak ama önceki halinden daha büyük olacak */
+    width: 120px; /* Sabit bir genişlik vererek çerçevenin oranını ayarlıyoruz */
+    object-fit: cover; /* İçindeki logonun kırpılarak çerçevenin tamamını, hiç boşluk bırakmadan doldurmasını sağlar (gerekirse dışı kırpılır) */
+    object-position: center; /* Kesilmiş görüntünün merkezden itibaren hizalanmasını sağlar */
+    border-radius: 6px; 
+    mix-blend-mode: lighten; /* Logodaki arka plan rengi ile navbar rengini kaynaştırarak eşitsizliği giderir */
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .nav-brand:hover .logo-img { 
@@ -80,19 +83,19 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
 .btn-whatsapp:hover { background: var(--whatsapp-hover); }
 
 /* HERO DARK */
-.hero-dark { background: var(--dark-bg); color: var(--white); padding: 85px 0 15px; position: relative; overflow: hidden; text-align: left; }
+.hero-dark { background: var(--dark-bg); color: var(--white); padding: 90px 0 10px; position: relative; overflow: hidden; text-align: left; }
 .hero-dark-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
-.hero-dark-content { flex: 1; max-width: 600px; z-index: 2; margin: 0; display: block; }
-.hero-dark-content h1 { font-size: 2.3rem; line-height: 1.1; margin-bottom: 12px; font-weight: 800; text-transform: uppercase; }
-.hero-dark-content p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 16px; line-height: 1.4; }
+.hero-dark-content { flex: 1; max-width: 750px; z-index: 2; margin: 0; display: block; }
+.hero-dark-content h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 8px; font-weight: 800; text-transform: uppercase; }
+.hero-dark-content p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 12px; line-height: 1.4; }
 .hero-badges { display: flex; justify-content: flex-start; gap: 16px; }
-.hero-badges span { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #e2e8f0; font-weight: 500; }
-.hero-badges i { font-size: 0.95rem; }
+.hero-badges span { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #e2e8f0; font-weight: 500; }
+.hero-badges i { font-size: 0.9rem; }
 
-.hero-dark-image { width: 420px; height: 210px; position: relative; }
-.hero-item-laptop { position: absolute; width: 260px; left: 80px; bottom: -15px; z-index: 1; mix-blend-mode: screen; transition: transform 0.4s ease; object-fit: contain; }
-.hero-item-phone { position: absolute; width: 100px; left: 15px; bottom: 20px; z-index: 2; mix-blend-mode: screen; transition: transform 0.4s ease; object-fit: contain; }
-.hero-item-watch { position: absolute; width: 100px; right: 15px; bottom: 30px; z-index: 3; mix-blend-mode: screen; transition: transform 0.4s ease; object-fit: contain; }
+.hero-dark-image { width: 380px; height: 160px; position: relative; display: flex; align-items: flex-end; justify-content: center; }
+.hero-item-laptop { position: absolute; width: 220px; left: 80px; bottom: -35px; z-index: 1; mix-blend-mode: screen; transition: transform 0.4s ease; object-fit: contain; }
+.hero-item-phone { position: absolute; width: 85px; left: 15px; bottom: 0px; z-index: 2; mix-blend-mode: screen; transition: transform 0.4s ease; object-fit: contain; }
+.hero-item-watch { position: absolute; width: 85px; right: 15px; bottom: 0px; z-index: 3; mix-blend-mode: screen; transition: transform 0.4s ease; object-fit: contain; }
 
 .hero-item-laptop:hover, .hero-item-phone:hover, .hero-item-watch:hover { transform: translateY(-5px); }
 /* SUBPAGE HERO */
@@ -101,22 +104,22 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
 .subpage-hero p { color: rgba(255,255,255,0.7); font-size: 1.1rem; }
 
 /* MAIN LAYOUT GRID */
-.main-layout { padding: 40px 0 80px; }
+.main-layout { padding: 25px 0 80px; }
 .layout-grid { display: grid; grid-template-columns: 3fr 1fr; gap: 32px; align-items: start; }
 
 /* CATEGORIES ROW */
-.categories-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+.categories-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
 .category-card-small {
-    background: var(--white); border-radius: var(--radius-md); padding: 20px;
-    display: flex; align-items: center; gap: 16px; border: 1px solid var(--border-color);
+    background: var(--white); border-radius: var(--radius-md); padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-color);
     text-decoration: none; color: inherit; position: relative; transition: all 0.2s;
     box-shadow: var(--shadow-sm);
 }
 .category-card-small:hover { border-color: var(--primary-color); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.category-card-small img { height: 60px; width: 60px; object-fit: contain; }
-.cat-info h3 { font-size: 1.1rem; margin-bottom: 4px; color: var(--text-dark); font-weight: 700; }
-.cat-info p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
-.arrow-icon { position: absolute; right: 20px; color: #cbd5e1; font-size: 0.9rem; }
+.category-card-small img { height: 45px; width: 45px; object-fit: contain; }
+.cat-info h3 { font-size: 1.05rem; margin-bottom: 2px; color: var(--text-dark); font-weight: 700; }
+.cat-info p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+.arrow-icon { position: absolute; right: 16px; color: #cbd5e1; font-size: 0.9rem; }
 
 /* FEATURED SECTION */
 .section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
@@ -521,7 +524,7 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
     .categories-row { grid-template-columns: 1fr; }
     .product-grid { grid-template-columns: 1fr; }
     .layout-right { grid-template-columns: 1fr; }
-    .hero-dark-content h1 { font-size: 2.2rem; }
+    .hero-dark-content h1 { font-size: 1.6rem; }
     .hero-badges { flex-direction: column; align-items: center; gap: 15px; }
     .footer-features { grid-template-columns: 1fr; }
 }
