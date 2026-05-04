@@ -82,6 +82,52 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
 }
 .btn-whatsapp:hover { background: var(--whatsapp-hover); }
 
+.mobile-menu {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    right: 0;
+    background: var(--dark-header);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px 16px;
+    transform: translateY(-16px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 999;
+}
+
+.mobile-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-link {
+    display: block;
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 8px;
+    border-radius: 8px;
+}
+
+.mobile-link.active {
+    color: var(--primary-color);
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.mobile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.mobile-actions a {
+    flex: 1;
+    justify-content: center;
+}
+
 /* HERO DARK */
 .hero-dark { background: var(--dark-bg); color: var(--white); padding: 90px 0 10px; position: relative; overflow: hidden; text-align: left; }
 .hero-dark-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
@@ -502,6 +548,9 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
 /* RESPONSIVE */
 .hamburger { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
 .hamburger span { width: 24px; height: 2px; background: var(--white); transition: 0.3s; }
+.hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 @media (max-width: 1200px) {
     .layout-grid { grid-template-columns: 1fr; }
@@ -527,5 +576,85 @@ body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var
     .hero-dark-content h1 { font-size: 1.6rem; }
     .hero-badges { flex-direction: column; align-items: center; gap: 15px; }
     .footer-features { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 0 16px; }
+
+    .nav-container { height: 72px; padding: 0 16px; }
+    .nav-brand { padding-left: 0; }
+    .logo-img { height: 64px; width: 90px; }
+    .mobile-menu { top: 72px; }
+
+    .hero-dark { padding: 78px 0 10px; }
+    .hero-dark-content h1 { font-size: 1.35rem; line-height: 1.25; }
+    .hero-dark-content p { font-size: 0.85rem; }
+    .hero-badges span { font-size: 0.75rem; }
+
+    .main-layout { padding: 16px 0 60px; }
+    .categories-row { gap: 12px; margin-bottom: 20px; }
+    .category-card-small { padding: 12px 14px; gap: 10px; }
+    .category-card-small img { height: 40px; width: 40px; }
+    .cat-info h3 { font-size: 1rem; }
+    .cat-info p { font-size: 0.78rem; }
+
+    .section-heading { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .section-heading h2 { font-size: 1.1rem; }
+    .view-all { font-size: 0.85rem; }
+
+    .product-grid { gap: 16px; }
+    .product-card { padding: 16px; }
+    .product-img { height: 150px; margin-bottom: 12px; }
+    .product-title { font-size: 0.95rem; }
+    .product-price { font-size: 1.1rem; }
+    .btn-details, .btn-whatsapp-outline { height: 38px; }
+
+    .sidebar-box { padding: 18px; }
+    .service-box h3 { font-size: 1rem; }
+    .service-box p { font-size: 0.85rem; }
+    .service-form input { font-size: 0.9rem; }
+    .btn-blue-full { font-size: 0.95rem; }
+
+    .footer-content { padding: 0 16px 15px; gap: 12px; }
+    .footer-nav { gap: 12px; }
+    .footer-nav a { font-size: 0.8rem; }
+    .footer-social-link { width: 32px; height: 32px; font-size: 0.9rem; }
+    .footer-bottom p { font-size: 0.75rem; }
+
+    .subpage-hero { padding: 32px 0 24px; margin-top: 72px; }
+    .subpage-hero h1 { font-size: 1.5rem; }
+    .subpage-hero p { font-size: 0.9rem; }
+
+    .urunler-content { padding: 40px 0; }
+    .urunler-grid { grid-template-columns: 1fr; gap: 18px; }
+    .filter-bar { gap: 8px; margin-bottom: 20px; }
+    .filter-btn { padding: 10px 18px; font-size: 0.85rem; }
+
+    .servis-grid { gap: 16px; padding: 24px 0; }
+    .servis-card { padding: 22px 18px; }
+    .servis-card i { font-size: 28px; }
+    .servis-card h3 { font-size: 1rem; }
+    .servis-card p { font-size: 0.85rem; }
+
+    .about-grid { grid-template-columns: 1fr; gap: 24px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 24px 0; }
+    .stat-card { padding: 20px 14px; }
+    .stat-card .stat-number { font-size: 1.6rem; }
+    .stat-card .stat-label { font-size: 0.8rem; }
+    .values-grid { padding: 24px 0; }
+    .value-card { flex: 1 1 100%; max-width: 100%; }
+
+    .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+    .contact-info h2, .contact-form h2 { font-size: 1.2rem; }
+    .contact-item i { font-size: 18px; }
+    .form-submit { width: 100%; }
+    .map-section iframe { height: 240px; }
+
+    .product-modal { height: 92vh; }
+    .modal-right { padding: 22px; }
+    .modal-title { font-size: 1.35rem; }
+    .modal-price { font-size: 1.2rem; }
+    .modal-footer-actions { flex-direction: column; }
+    .modal-btn-primary, .modal-btn-secondary { height: 48px; }
 }
 

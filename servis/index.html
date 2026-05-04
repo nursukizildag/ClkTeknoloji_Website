@@ -12,7 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style.css?v=6">
+    <link rel="stylesheet" href="../style.css?v=7">
     <style>
         .subpage-content {
             padding-top: calc(80px + 40px);
@@ -167,6 +167,18 @@
         </nav>
     </header>
 
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="../index.html" class="mobile-link">Ana Sayfa</a>
+        <a href="../urunler/index.html" class="mobile-link">Ürünler</a>
+        <a href="index.html" class="mobile-link active">Servis</a>
+        <a href="../hakkimizda/index.html" class="mobile-link">Hakkımızda</a>
+        <a href="../iletisim/index.html" class="mobile-link">İletişim</a>
+        <div class="mobile-actions">
+            <a href="index.html" class="btn-outline-dark-theme"><i class="fas fa-search"></i> Servis Sorgula</a>
+            <a href="https://wa.me/+905071561515" class="btn-whatsapp" target="_blank" data-setting="whatsapp_number" data-setting-attr="href" data-setting-format="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+    </div>
+
     <div class="subpage-hero">
         <div class="container">
             <h1><i class="fas fa-tools"></i> Teknik Servis</h1>
@@ -198,10 +210,10 @@
         <div class="container">
             <h2><i class="fas fa-search"></i> Servis Sorgulama</h2>
             <p>Cihazınızın servis durumunu öğrenmek için kodunuzu girin.</p>
-            <div class="servis-input-group">
-                <input type="text" placeholder="Servis kodunuzu girin...">
-                <button><i class="fas fa-search"></i> Sorgula</button>
-            </div>
+            <form class="service-form servis-input-group">
+                <input type="text" placeholder="CLK-XXXX" required>
+                <button type="submit"><i class="fas fa-search"></i> Sorgula</button>
+            </form>
         </div>
     </div>
 
@@ -229,6 +241,7 @@
         </div>
     </footer>
 
+    <script src="../scripts.js?v=4"></script>
     <script src="../site-settings.js?v=2"></script>
 </body>
 

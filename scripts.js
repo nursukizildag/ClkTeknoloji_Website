@@ -61,6 +61,20 @@ function initEventListeners() {
             window.open(link, '_blank');
         });
     }
+
+    // Service Tracking Redirect
+    const serviceForms = document.querySelectorAll('.service-form');
+    serviceForms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = form.querySelector('input');
+            if (input && input.value.trim()) {
+                const code = input.value.trim();
+                const trackUrl = `https://serviscep.com/track?code=${encodeURIComponent(code)}`;
+                window.location.href = trackUrl;
+            }
+        });
+    });
 }
 
 // ============================================

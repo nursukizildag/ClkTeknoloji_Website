@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
     <!-- HEADER -->
@@ -37,6 +37,18 @@
             </div>
         </nav>
     </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="index.html" class="mobile-link active">Ana Sayfa</a>
+        <a href="urunler/index.html" class="mobile-link">Ürünler</a>
+        <a href="servis/index.html" class="mobile-link">Servis</a>
+        <a href="hakkimizda/index.html" class="mobile-link">Hakkımızda</a>
+        <a href="iletisim/index.html" class="mobile-link">İletişim</a>
+        <div class="mobile-actions">
+            <a href="servis/index.html" class="btn-outline-dark-theme"><i class="fas fa-search"></i> Servis Sorgula</a>
+            <a href="https://wa.me/+905071561515" class="btn-whatsapp" target="_blank" data-setting="whatsapp_number" data-setting-attr="href" data-setting-format="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+    </div>
 
     <!-- HERO SECTION -->
     <section class="hero-dark">
@@ -110,8 +122,8 @@
                         <h3>Servis Sorgulama</h3>
                     </div>
                     <p class="text-center">Cihazınızın durumunu öğrenmek için servis kodunuzu girin.</p>
-                    <form action="servis/index.html" class="service-form">
-                        <input type="text" placeholder="Servis kodunuzu girin" required>
+                    <form class="service-form">
+                        <input type="text" placeholder="CLK-XXXX" required>
                         <button type="submit" class="btn-blue-full"><i class="fas fa-search"></i> Sorgula</button>
                     </form>
                 </div>
