@@ -39,6 +39,22 @@
         });
     }
 
+    function trackVisit() {
+        const payload = JSON.stringify({ path: window.location.pathname });
+        if (navigator.sendBeacon) {
+            const blob = new Blob([payload], { type: 'application/json' });
+            navigator.sendBeacon('/api/analytics', blob);
+            return;
+        }
+
+        fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true
+        }).catch(() => {});
+    }
+
     async function loadSettings() {
         let settings = { ...defaultSettings };
         try {
@@ -64,5 +80,8 @@
         applySettings(settings);
     }
 
-    document.addEventListener('DOMContentLoaded', loadSettings);
+    document.addEventListener('DOMContentLoaded', () => {
+        loadSettings();
+        trackVisit();
+    });
 })();

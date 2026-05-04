@@ -53,6 +53,7 @@ function showConfirm(message) {
 // --- APP STATE ---
 let cachedProducts = [];
 let cachedSettings = null;
+let cachedAnalytics = null;
 
 const SPEC_FIELDS = [
     'Pil',
@@ -79,11 +80,18 @@ function switchPage(pageId) {
     const navBtn = document.querySelector(`button[onclick="switchPage('${pageId}')"]`);
     if (navBtn) navBtn.classList.add('active');
 
-    const titles = { 'dashboard': 'Dashboard', 'products': 'Ürün Yönetimi', 'settings': 'Ayarlar' };
+    const titles = { 'dashboard': 'Dashboard', 'products': 'Ürün Yönetimi', 'visits': 'Ziyaretler', 'settings': 'Ayarlar' };
     document.getElementById('current-page-title').textContent = titles[pageId] || 'Panel';
 
     if (pageId === 'dashboard') renderDashboardStats(cachedProducts);
     if (pageId === 'products') renderProducts(cachedProducts);
+    if (pageId === 'visits') {
+        if (cachedAnalytics) {
+            renderAnalytics(cachedAnalytics);
+        } else {
+            loadAnalytics();
+        }
+    }
     if (pageId === 'settings' && !cachedSettings) loadSettings();
 }
 
@@ -95,6 +103,7 @@ async function refreshAllData() {
         
         renderDashboardStats(products);
         renderProducts(products);
+        loadAnalytics();
     } catch (err) {
         console.error('Veri yüklenme hatası:', err.message);
     }
@@ -159,6 +168,76 @@ function renderProducts(products = []) {
             </td>
         `;
         list.appendChild(row);
+    });
+}
+
+// --- ANALYTICS ---
+async function loadAnalytics() {
+    try {
+        const data = await apiFetch('/api/analytics?days=30');
+        cachedAnalytics = data;
+        renderAnalytics(data);
+    } catch (err) {
+        console.error('Ziyaret verisi yüklenemedi:', err.message);
+    }
+}
+
+function renderAnalytics(data) {
+    if (!data || !Array.isArray(data.series)) return;
+
+    const totalEl = document.getElementById('stat-total-visits');
+    if (totalEl) totalEl.textContent = data.total || 0;
+
+    const rangeEl = document.getElementById('visits-range');
+    const totalTextEl = document.getElementById('visits-total');
+    if (rangeEl && data.series.length > 0) {
+        const first = data.series[0].date;
+        const last = data.series[data.series.length - 1].date;
+        rangeEl.textContent = `${first} - ${last}`;
+    }
+    if (totalTextEl) totalTextEl.textContent = `Toplam: ${data.total || 0}`;
+
+    drawVisitsChart(data.series);
+}
+
+function drawVisitsChart(series) {
+    const canvas = document.getElementById('visits-chart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const width = canvas.clientWidth || canvas.width;
+    const height = canvas.clientHeight || canvas.height;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ctx.clearRect(0, 0, width, height);
+
+    const padding = 28;
+    const chartWidth = width - padding * 2;
+    const chartHeight = height - padding * 2;
+    const maxValue = Math.max(1, ...series.map(s => s.count || 0));
+    const barGap = 8;
+    const barWidth = series.length > 0
+        ? (chartWidth - barGap * (series.length - 1)) / series.length
+        : chartWidth;
+
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, height - padding + 0.5);
+    ctx.lineTo(width - padding, height - padding + 0.5);
+    ctx.stroke();
+
+    series.forEach((point, index) => {
+        const value = point.count || 0;
+        const barHeight = (value / maxValue) * chartHeight;
+        const x = padding + index * (barWidth + barGap);
+        const y = height - padding - barHeight;
+
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(x, y, Math.max(2, barWidth), barHeight);
     });
 }
 
@@ -386,6 +465,9 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshAllData();
     loadSettings();
     initSettingsHandlers();
+    window.addEventListener('resize', () => {
+        if (cachedAnalytics) renderAnalytics(cachedAnalytics);
+    });
     document.getElementById('logout-btn')?.addEventListener('click', () => {
         document.cookie = "admin_session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href = '/login.html';

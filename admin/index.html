@@ -7,7 +7,7 @@
     <link rel="icon" href="../assets/img/ClkTeknoloji-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=3">
+    <link rel="stylesheet" href="admin.css?v=5">
 </head>
 <body>
     <div class="admin-layout">
@@ -19,6 +19,7 @@
             <nav class="sidebar-nav">
                 <button onclick="switchPage('dashboard')" class="nav-link active"><i class="fas fa-th-large"></i> Dashboard</button>
                 <button onclick="switchPage('products')" class="nav-link"><i class="fas fa-box"></i> Ürün Yönetimi</button>
+                <button onclick="switchPage('visits')" class="nav-link"><i class="fas fa-chart-line"></i> Ziyaretler</button>
                 <button onclick="switchPage('settings')" class="nav-link"><i class="fas fa-cog"></i> Ayarlar</button>
             </nav>
             <div class="sidebar-footer">
@@ -54,6 +55,28 @@
                             <thead><tr><th>Görsel</th><th>Ad</th><th>Fiyat</th><th>Tip</th></tr></thead>
                             <tbody id="recent-products-list"></tbody>
                         </table>
+                    </div>
+                </section>
+
+                <!-- Visits -->
+                <section id="page-visits" class="admin-page">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fas fa-chart-line"></i></div>
+                            <div class="stat-data"><h4 id="stat-total-visits">0</h4><p>Ziyaret</p></div>
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <div class="card-header">
+                            <h3>Ziyaret Grafiği (Son 30 Gün)</h3>
+                            <div class="chart-meta">
+                                <span id="visits-range">-</span>
+                                <span id="visits-total">Toplam: 0</span>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="visits-chart" class="chart-canvas" height="220"></canvas>
+                        </div>
                     </div>
                 </section>
 
@@ -179,6 +202,6 @@
         </div>
     </div>
 
-    <script src="admin.js?v=4"></script>
+    <script src="admin.js?v=5"></script>
 </body>
 </html>

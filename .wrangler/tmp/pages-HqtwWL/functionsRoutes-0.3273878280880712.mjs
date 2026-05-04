@@ -7,6 +7,9 @@ import { onRequestPut as __api_products__id__js_onRequestPut } from "D:\\Project
 import { onRequestDelete as __api_service__id__js_onRequestDelete } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\service\\[id].js"
 import { onRequestOptions as __api_service__id__js_onRequestOptions } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\service\\[id].js"
 import { onRequestPut as __api_service__id__js_onRequestPut } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\service\\[id].js"
+import { onRequestGet as __api_analytics_index_js_onRequestGet } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\analytics\\index.js"
+import { onRequestOptions as __api_analytics_index_js_onRequestOptions } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\analytics\\index.js"
+import { onRequestPost as __api_analytics_index_js_onRequestPost } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\analytics\\index.js"
 import { onRequestOptions as __api_login_js_onRequestOptions } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\login.js"
 import { onRequestPost as __api_login_js_onRequestPost } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\login.js"
 import { onRequestPost as __api_logout_js_onRequestPost } from "D:\\Project\\ClkTeknolojiWeb\\functions\\api\\logout.js"
@@ -84,6 +87,27 @@ export const routes = [
       method: "PUT",
       middlewares: [],
       modules: [__api_service__id__js_onRequestPut],
+    },
+  {
+      routePath: "/api/analytics",
+      mountPath: "/api/analytics",
+      method: "GET",
+      middlewares: [],
+      modules: [__api_analytics_index_js_onRequestGet],
+    },
+  {
+      routePath: "/api/analytics",
+      mountPath: "/api/analytics",
+      method: "OPTIONS",
+      middlewares: [],
+      modules: [__api_analytics_index_js_onRequestOptions],
+    },
+  {
+      routePath: "/api/analytics",
+      mountPath: "/api/analytics",
+      method: "POST",
+      middlewares: [],
+      modules: [__api_analytics_index_js_onRequestPost],
     },
   {
       routePath: "/api/login",

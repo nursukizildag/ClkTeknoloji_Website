@@ -75,16 +75,16 @@ var require_strip_cf_connecting_ip_header = __commonJS({
 });
 
 // .wrangler/tmp/bundle-kJtSkG/middleware-loader.entry.ts
-var import_checked_fetch24 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header24 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch25 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header25 = __toESM(require_strip_cf_connecting_ip_header());
 
 // wrangler-modules-watch:wrangler:modules-watch
 var import_checked_fetch = __toESM(require_checked_fetch());
 var import_strip_cf_connecting_ip_header = __toESM(require_strip_cf_connecting_ip_header());
 
 // .wrangler/tmp/bundle-kJtSkG/middleware-insertion-facade.js
-var import_checked_fetch21 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header21 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch23 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header23 = __toESM(require_strip_cf_connecting_ip_header());
 
 // .wrangler/tmp/pages-HqtwWL/functionsWorker-0.45053713327365075.mjs
 var import_checked_fetch2 = __toESM(require_checked_fetch(), 1);
@@ -116,7 +116,7 @@ var __toESM2 = /* @__PURE__ */ __name((mod, isNodeMode, target) => (target = mod
   mod
 )), "__toESM");
 var require_checked_fetch2 = __commonJS2({
-  "../.wrangler/tmp/bundle-HMoOEV/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-z1bvjQ/checked-fetch.js"() {
     var urls = /* @__PURE__ */ new Set();
     function checkURL(request, init) {
       const url = request instanceof URL ? request : new URL(
@@ -145,7 +145,7 @@ var require_checked_fetch2 = __commonJS2({
   }
 });
 var require_strip_cf_connecting_ip_header2 = __commonJS2({
-  "../.wrangler/tmp/bundle-HMoOEV/strip-cf-connecting-ip-header.js"() {
+  "../.wrangler/tmp/bundle-z1bvjQ/strip-cf-connecting-ip-header.js"() {
     function stripCfConnectingIPHeader(input, init) {
       const request = new Request(input, init);
       request.headers.delete("CF-Connecting-IP");
@@ -6314,6 +6314,60 @@ __name(onRequestOptions3, "onRequestOptions3");
 __name2(onRequestOptions3, "onRequestOptions");
 var import_checked_fetch6 = __toESM2(require_checked_fetch2());
 var import_strip_cf_connecting_ip_header6 = __toESM2(require_strip_cf_connecting_ip_header2());
+async function onRequestPost(context) {
+  const { request, env } = context;
+  try {
+    const sql = cs(env.DATABASE_URL);
+    await sql`
+            INSERT INTO page_visits (visit_date, visit_count, updated_at)
+            VALUES (CURRENT_DATE, 1, NOW())
+            ON CONFLICT (visit_date)
+            DO UPDATE SET visit_count = page_visits.visit_count + 1, updated_at = NOW()
+        `;
+    return jsonResponse({ success: true }, 200, request);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, request);
+  }
+}
+__name(onRequestPost, "onRequestPost");
+__name2(onRequestPost, "onRequestPost");
+async function onRequestGet3(context) {
+  const { request, env } = context;
+  if (!await isAuthenticated(request, env))
+    return jsonResponse({ error: "Unauthorized" }, 401, request);
+  try {
+    const url = new URL(request.url);
+    const daysRaw = parseInt(url.searchParams.get("days") || "14", 10);
+    const days = Number.isFinite(daysRaw) ? Math.min(Math.max(daysRaw, 1), 90) : 14;
+    const sql = cs(env.DATABASE_URL);
+    const totalResult = await sql`SELECT COALESCE(SUM(visit_count), 0) AS total FROM page_visits`;
+    const rows = await sql`
+            SELECT visit_date, visit_count
+            FROM page_visits
+            ORDER BY visit_date DESC
+            LIMIT ${days}
+        `;
+    const series = rows.map((row) => ({
+      date: row.visit_date instanceof Date ? row.visit_date.toISOString().slice(0, 10) : String(row.visit_date),
+      count: Number(row.visit_count || 0)
+    })).reverse();
+    return jsonResponse({
+      total: Number(totalResult[0]?.total || 0),
+      series
+    }, 200, request);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, request);
+  }
+}
+__name(onRequestGet3, "onRequestGet3");
+__name2(onRequestGet3, "onRequestGet");
+async function onRequestOptions4() {
+  return optionsResponse();
+}
+__name(onRequestOptions4, "onRequestOptions4");
+__name2(onRequestOptions4, "onRequestOptions");
+var import_checked_fetch7 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header7 = __toESM2(require_strip_cf_connecting_ip_header2());
 async function sha256(message) {
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
@@ -6323,7 +6377,7 @@ async function sha256(message) {
 }
 __name(sha256, "sha256");
 __name2(sha256, "sha256");
-async function onRequestPost(context) {
+async function onRequestPost2(context) {
   const { request, env } = context;
   const headers = { ...corsHeaders(request) };
   try {
@@ -6366,9 +6420,9 @@ async function onRequestPost(context) {
     return new Response(JSON.stringify({ success: false, message: err.message }), { status: 500, headers });
   }
 }
-__name(onRequestPost, "onRequestPost");
-__name2(onRequestPost, "onRequestPost");
-async function onRequestOptions4() {
+__name(onRequestPost2, "onRequestPost2");
+__name2(onRequestPost2, "onRequestPost");
+async function onRequestOptions5() {
   return new Response(null, {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -6377,11 +6431,11 @@ async function onRequestOptions4() {
     }
   });
 }
-__name(onRequestOptions4, "onRequestOptions4");
-__name2(onRequestOptions4, "onRequestOptions");
-var import_checked_fetch7 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header7 = __toESM2(require_strip_cf_connecting_ip_header2());
-async function onRequestPost2(context) {
+__name(onRequestOptions5, "onRequestOptions5");
+__name2(onRequestOptions5, "onRequestOptions");
+var import_checked_fetch8 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header8 = __toESM2(require_strip_cf_connecting_ip_header2());
+async function onRequestPost3(context) {
   const { request, env } = context;
   const cookieHeader = request.headers.get("Cookie") || "";
   const match2 = cookieHeader.match(/admin_session=([^;]*)/);
@@ -6399,11 +6453,11 @@ async function onRequestPost2(context) {
     }
   });
 }
-__name(onRequestPost2, "onRequestPost2");
-__name2(onRequestPost2, "onRequestPost");
-var import_checked_fetch8 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header8 = __toESM2(require_strip_cf_connecting_ip_header2());
-async function onRequestGet3(context) {
+__name(onRequestPost3, "onRequestPost3");
+__name2(onRequestPost3, "onRequestPost");
+var import_checked_fetch9 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header9 = __toESM2(require_strip_cf_connecting_ip_header2());
+async function onRequestGet4(context) {
   const { request, env } = context;
   try {
     const sql = cs(env.DATABASE_URL);
@@ -6423,9 +6477,9 @@ async function onRequestGet3(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestGet3, "onRequestGet3");
-__name2(onRequestGet3, "onRequestGet");
-async function onRequestPost3(context) {
+__name(onRequestGet4, "onRequestGet4");
+__name2(onRequestGet4, "onRequestGet");
+async function onRequestPost4(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
     return jsonResponse({ error: "Unauthorized" }, 401, request);
@@ -6450,15 +6504,15 @@ async function onRequestPost3(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestPost3, "onRequestPost3");
-__name2(onRequestPost3, "onRequestPost");
-async function onRequestOptions5() {
+__name(onRequestPost4, "onRequestPost4");
+__name2(onRequestPost4, "onRequestPost");
+async function onRequestOptions6() {
   return optionsResponse();
 }
-__name(onRequestOptions5, "onRequestOptions5");
-__name2(onRequestOptions5, "onRequestOptions");
-var import_checked_fetch9 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header9 = __toESM2(require_strip_cf_connecting_ip_header2());
+__name(onRequestOptions6, "onRequestOptions6");
+__name2(onRequestOptions6, "onRequestOptions");
+var import_checked_fetch10 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header10 = __toESM2(require_strip_cf_connecting_ip_header2());
 function generateServiceCode() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = "SRV-";
@@ -6468,7 +6522,7 @@ function generateServiceCode() {
 }
 __name(generateServiceCode, "generateServiceCode");
 __name2(generateServiceCode, "generateServiceCode");
-async function onRequestGet4(context) {
+async function onRequestGet5(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
     return jsonResponse({ error: "Unauthorized" }, 401, request);
@@ -6487,9 +6541,9 @@ async function onRequestGet4(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestGet4, "onRequestGet4");
-__name2(onRequestGet4, "onRequestGet");
-async function onRequestPost4(context) {
+__name(onRequestGet5, "onRequestGet5");
+__name2(onRequestGet5, "onRequestGet");
+async function onRequestPost5(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
     return jsonResponse({ error: "Unauthorized" }, 401, request);
@@ -6512,16 +6566,16 @@ async function onRequestPost4(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestPost4, "onRequestPost4");
-__name2(onRequestPost4, "onRequestPost");
-async function onRequestOptions6() {
+__name(onRequestPost5, "onRequestPost5");
+__name2(onRequestPost5, "onRequestPost");
+async function onRequestOptions7() {
   return optionsResponse();
 }
-__name(onRequestOptions6, "onRequestOptions6");
-__name2(onRequestOptions6, "onRequestOptions");
-var import_checked_fetch10 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header10 = __toESM2(require_strip_cf_connecting_ip_header2());
-async function onRequestGet5(context) {
+__name(onRequestOptions7, "onRequestOptions7");
+__name2(onRequestOptions7, "onRequestOptions");
+var import_checked_fetch11 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header11 = __toESM2(require_strip_cf_connecting_ip_header2());
+async function onRequestGet6(context) {
   const { request, env } = context;
   try {
     const sql = cs(env.DATABASE_URL);
@@ -6535,8 +6589,8 @@ async function onRequestGet5(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestGet5, "onRequestGet5");
-__name2(onRequestGet5, "onRequestGet");
+__name(onRequestGet6, "onRequestGet6");
+__name2(onRequestGet6, "onRequestGet");
 async function onRequestPut3(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
@@ -6558,13 +6612,13 @@ async function onRequestPut3(context) {
 }
 __name(onRequestPut3, "onRequestPut3");
 __name2(onRequestPut3, "onRequestPut");
-async function onRequestOptions7() {
+async function onRequestOptions8() {
   return optionsResponse();
 }
-__name(onRequestOptions7, "onRequestOptions7");
-__name2(onRequestOptions7, "onRequestOptions");
-var import_checked_fetch11 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header11 = __toESM2(require_strip_cf_connecting_ip_header2());
+__name(onRequestOptions8, "onRequestOptions8");
+__name2(onRequestOptions8, "onRequestOptions");
+var import_checked_fetch12 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header12 = __toESM2(require_strip_cf_connecting_ip_header2());
 async function onRequest(context) {
   const { request, next, env } = context;
   const url = new URL(request.url);
@@ -6644,81 +6698,102 @@ var routes = [
     modules: [onRequestPut2]
   },
   {
-    routePath: "/api/login",
-    mountPath: "/api",
+    routePath: "/api/analytics",
+    mountPath: "/api/analytics",
+    method: "GET",
+    middlewares: [],
+    modules: [onRequestGet3]
+  },
+  {
+    routePath: "/api/analytics",
+    mountPath: "/api/analytics",
     method: "OPTIONS",
     middlewares: [],
     modules: [onRequestOptions4]
   },
   {
-    routePath: "/api/login",
-    mountPath: "/api",
+    routePath: "/api/analytics",
+    mountPath: "/api/analytics",
     method: "POST",
     middlewares: [],
     modules: [onRequestPost]
   },
   {
-    routePath: "/api/logout",
+    routePath: "/api/login",
+    mountPath: "/api",
+    method: "OPTIONS",
+    middlewares: [],
+    modules: [onRequestOptions5]
+  },
+  {
+    routePath: "/api/login",
     mountPath: "/api",
     method: "POST",
     middlewares: [],
     modules: [onRequestPost2]
   },
   {
-    routePath: "/api/products",
-    mountPath: "/api/products",
-    method: "GET",
-    middlewares: [],
-    modules: [onRequestGet3]
-  },
-  {
-    routePath: "/api/products",
-    mountPath: "/api/products",
-    method: "OPTIONS",
-    middlewares: [],
-    modules: [onRequestOptions5]
-  },
-  {
-    routePath: "/api/products",
-    mountPath: "/api/products",
+    routePath: "/api/logout",
+    mountPath: "/api",
     method: "POST",
     middlewares: [],
     modules: [onRequestPost3]
   },
   {
+    routePath: "/api/products",
+    mountPath: "/api/products",
+    method: "GET",
+    middlewares: [],
+    modules: [onRequestGet4]
+  },
+  {
+    routePath: "/api/products",
+    mountPath: "/api/products",
+    method: "OPTIONS",
+    middlewares: [],
+    modules: [onRequestOptions6]
+  },
+  {
+    routePath: "/api/products",
+    mountPath: "/api/products",
+    method: "POST",
+    middlewares: [],
+    modules: [onRequestPost4]
+  },
+  {
     routePath: "/api/service",
     mountPath: "/api/service",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet4]
+    modules: [onRequestGet5]
   },
   {
     routePath: "/api/service",
     mountPath: "/api/service",
     method: "OPTIONS",
     middlewares: [],
-    modules: [onRequestOptions6]
+    modules: [onRequestOptions7]
   },
   {
     routePath: "/api/service",
     mountPath: "/api/service",
     method: "POST",
     middlewares: [],
-    modules: [onRequestPost4]
+    modules: [onRequestPost5]
   },
   {
     routePath: "/api/settings",
     mountPath: "/api/settings",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet5]
+    modules: [onRequestGet6]
   },
   {
     routePath: "/api/settings",
     mountPath: "/api/settings",
     method: "OPTIONS",
     middlewares: [],
-    modules: [onRequestOptions7]
+    modules: [onRequestOptions8]
   },
   {
     routePath: "/api/settings",
@@ -6735,14 +6810,14 @@ var routes = [
     modules: []
   }
 ];
-var import_checked_fetch18 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header18 = __toESM2(require_strip_cf_connecting_ip_header2());
-var import_checked_fetch16 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header16 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch19 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header19 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch17 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header17 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch14 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header14 = __toESM2(require_strip_cf_connecting_ip_header2());
 var import_checked_fetch13 = __toESM2(require_checked_fetch2());
 var import_strip_cf_connecting_ip_header13 = __toESM2(require_strip_cf_connecting_ip_header2());
-var import_checked_fetch12 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header12 = __toESM2(require_strip_cf_connecting_ip_header2());
 function lexer(str) {
   var tokens = [];
   var i = 0;
@@ -7197,8 +7272,8 @@ var cloneResponse = /* @__PURE__ */ __name2((response) => (
     response
   )
 ), "cloneResponse");
-var import_checked_fetch14 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header14 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch15 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header15 = __toESM2(require_strip_cf_connecting_ip_header2());
 var drainBody = /* @__PURE__ */ __name2(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -7215,8 +7290,8 @@ var drainBody = /* @__PURE__ */ __name2(async (request, env, _ctx, middlewareCtx
   }
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
-var import_checked_fetch15 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header15 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch16 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header16 = __toESM2(require_strip_cf_connecting_ip_header2());
 function reduceError(e) {
   return {
     name: e?.name,
@@ -7244,8 +7319,8 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_miniflare3_json_error_default
 ];
 var middleware_insertion_facade_default = pages_template_worker_default;
-var import_checked_fetch17 = __toESM2(require_checked_fetch2());
-var import_strip_cf_connecting_ip_header17 = __toESM2(require_strip_cf_connecting_ip_header2());
+var import_checked_fetch18 = __toESM2(require_checked_fetch2());
+var import_strip_cf_connecting_ip_header18 = __toESM2(require_strip_cf_connecting_ip_header2());
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
@@ -7369,8 +7444,8 @@ if (typeof middleware_insertion_facade_default === "object") {
 var middleware_loader_entry_default = WRAPPED_ENTRY;
 
 // node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-var import_checked_fetch19 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header19 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch20 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header20 = __toESM(require_strip_cf_connecting_ip_header());
 var drainBody2 = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -7389,8 +7464,8 @@ var drainBody2 = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx
 var middleware_ensure_req_body_drained_default2 = drainBody2;
 
 // node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
-var import_checked_fetch20 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header20 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch21 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header21 = __toESM(require_strip_cf_connecting_ip_header());
 function reduceError2(e) {
   return {
     name: e?.name,
@@ -7421,8 +7496,8 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__2 = [
 var middleware_insertion_facade_default2 = middleware_loader_entry_default;
 
 // node_modules/wrangler/templates/middleware/common.ts
-var import_checked_fetch23 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header23 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch24 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header24 = __toESM(require_strip_cf_connecting_ip_header());
 var __facade_middleware__2 = [];
 function __facade_register__2(...args) {
   __facade_middleware__2.push(...args.flat());

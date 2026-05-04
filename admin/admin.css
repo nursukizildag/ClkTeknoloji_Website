@@ -284,6 +284,7 @@ body {
 .stat-icon.blue { background: var(--primary-light); color: var(--primary); }
 .stat-icon.orange { background: var(--warning-light); color: var(--warning); }
 .stat-icon.green { background: var(--success-light); color: var(--success); }
+.stat-icon.purple { background: #ede9fe; color: #7c3aed; }
 
 .stat-data h4 { font-size: 1.5rem; font-weight: 700; margin-bottom: 2px; }
 .stat-data p { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
@@ -306,6 +307,23 @@ body {
 }
 
 .card-header h3 { font-size: 1rem; font-weight: 700; }
+
+.chart-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.chart-body {
+    padding: 16px 24px 24px;
+}
+
+.chart-canvas {
+    width: 100%;
+    display: block;
+}
 
 .admin-table { width: 100%; border-collapse: collapse; }
 .admin-table th {

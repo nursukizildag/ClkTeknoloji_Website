@@ -25,9 +25,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../.wrangler/tmp/bundle-HMoOEV/checked-fetch.js
+// ../.wrangler/tmp/bundle-z1bvjQ/checked-fetch.js
 var require_checked_fetch = __commonJS({
-  "../.wrangler/tmp/bundle-HMoOEV/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-z1bvjQ/checked-fetch.js"() {
     var urls = /* @__PURE__ */ new Set();
     function checkURL(request, init) {
       const url = request instanceof URL ? request : new URL(
@@ -55,9 +55,9 @@ var require_checked_fetch = __commonJS({
   }
 });
 
-// ../.wrangler/tmp/bundle-HMoOEV/strip-cf-connecting-ip-header.js
+// ../.wrangler/tmp/bundle-z1bvjQ/strip-cf-connecting-ip-header.js
 var require_strip_cf_connecting_ip_header = __commonJS({
-  "../.wrangler/tmp/bundle-HMoOEV/strip-cf-connecting-ip-header.js"() {
+  "../.wrangler/tmp/bundle-z1bvjQ/strip-cf-connecting-ip-header.js"() {
     function stripCfConnectingIPHeader(input, init) {
       const request = new Request(input, init);
       request.headers.delete("CF-Connecting-IP");
@@ -6070,9 +6070,62 @@ async function onRequestOptions3() {
 }
 __name(onRequestOptions3, "onRequestOptions");
 
-// api/login.js
+// api/analytics/index.js
 var import_checked_fetch6 = __toESM(require_checked_fetch());
 var import_strip_cf_connecting_ip_header6 = __toESM(require_strip_cf_connecting_ip_header());
+async function onRequestPost(context) {
+  const { request, env } = context;
+  try {
+    const sql = cs(env.DATABASE_URL);
+    await sql`
+            INSERT INTO page_visits (visit_date, visit_count, updated_at)
+            VALUES (CURRENT_DATE, 1, NOW())
+            ON CONFLICT (visit_date)
+            DO UPDATE SET visit_count = page_visits.visit_count + 1, updated_at = NOW()
+        `;
+    return jsonResponse({ success: true }, 200, request);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, request);
+  }
+}
+__name(onRequestPost, "onRequestPost");
+async function onRequestGet3(context) {
+  const { request, env } = context;
+  if (!await isAuthenticated(request, env))
+    return jsonResponse({ error: "Unauthorized" }, 401, request);
+  try {
+    const url = new URL(request.url);
+    const daysRaw = parseInt(url.searchParams.get("days") || "14", 10);
+    const days = Number.isFinite(daysRaw) ? Math.min(Math.max(daysRaw, 1), 90) : 14;
+    const sql = cs(env.DATABASE_URL);
+    const totalResult = await sql`SELECT COALESCE(SUM(visit_count), 0) AS total FROM page_visits`;
+    const rows = await sql`
+            SELECT visit_date, visit_count
+            FROM page_visits
+            ORDER BY visit_date DESC
+            LIMIT ${days}
+        `;
+    const series = rows.map((row) => ({
+      date: row.visit_date instanceof Date ? row.visit_date.toISOString().slice(0, 10) : String(row.visit_date),
+      count: Number(row.visit_count || 0)
+    })).reverse();
+    return jsonResponse({
+      total: Number(totalResult[0]?.total || 0),
+      series
+    }, 200, request);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, request);
+  }
+}
+__name(onRequestGet3, "onRequestGet");
+async function onRequestOptions4() {
+  return optionsResponse();
+}
+__name(onRequestOptions4, "onRequestOptions");
+
+// api/login.js
+var import_checked_fetch7 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header7 = __toESM(require_strip_cf_connecting_ip_header());
 async function sha256(message) {
   const encoder = new TextEncoder();
   const data = encoder.encode(message);
@@ -6081,7 +6134,7 @@ async function sha256(message) {
   return hashArray.map((b2) => b2.toString(16).padStart(2, "0")).join("");
 }
 __name(sha256, "sha256");
-async function onRequestPost(context) {
+async function onRequestPost2(context) {
   const { request, env } = context;
   const headers = { ...corsHeaders(request) };
   try {
@@ -6124,8 +6177,8 @@ async function onRequestPost(context) {
     return new Response(JSON.stringify({ success: false, message: err.message }), { status: 500, headers });
   }
 }
-__name(onRequestPost, "onRequestPost");
-async function onRequestOptions4() {
+__name(onRequestPost2, "onRequestPost");
+async function onRequestOptions5() {
   return new Response(null, {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -6134,12 +6187,12 @@ async function onRequestOptions4() {
     }
   });
 }
-__name(onRequestOptions4, "onRequestOptions");
+__name(onRequestOptions5, "onRequestOptions");
 
 // api/logout.js
-var import_checked_fetch7 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header7 = __toESM(require_strip_cf_connecting_ip_header());
-async function onRequestPost2(context) {
+var import_checked_fetch8 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header8 = __toESM(require_strip_cf_connecting_ip_header());
+async function onRequestPost3(context) {
   const { request, env } = context;
   const cookieHeader = request.headers.get("Cookie") || "";
   const match2 = cookieHeader.match(/admin_session=([^;]*)/);
@@ -6157,12 +6210,12 @@ async function onRequestPost2(context) {
     }
   });
 }
-__name(onRequestPost2, "onRequestPost");
+__name(onRequestPost3, "onRequestPost");
 
 // api/products/index.js
-var import_checked_fetch8 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header8 = __toESM(require_strip_cf_connecting_ip_header());
-async function onRequestGet3(context) {
+var import_checked_fetch9 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header9 = __toESM(require_strip_cf_connecting_ip_header());
+async function onRequestGet4(context) {
   const { request, env } = context;
   try {
     const sql = cs(env.DATABASE_URL);
@@ -6182,8 +6235,8 @@ async function onRequestGet3(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestGet3, "onRequestGet");
-async function onRequestPost3(context) {
+__name(onRequestGet4, "onRequestGet");
+async function onRequestPost4(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
     return jsonResponse({ error: "Unauthorized" }, 401, request);
@@ -6208,15 +6261,15 @@ async function onRequestPost3(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestPost3, "onRequestPost");
-async function onRequestOptions5() {
+__name(onRequestPost4, "onRequestPost");
+async function onRequestOptions6() {
   return optionsResponse();
 }
-__name(onRequestOptions5, "onRequestOptions");
+__name(onRequestOptions6, "onRequestOptions");
 
 // api/service/index.js
-var import_checked_fetch9 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header9 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch10 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header10 = __toESM(require_strip_cf_connecting_ip_header());
 function generateServiceCode() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = "SRV-";
@@ -6225,7 +6278,7 @@ function generateServiceCode() {
   return code;
 }
 __name(generateServiceCode, "generateServiceCode");
-async function onRequestGet4(context) {
+async function onRequestGet5(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
     return jsonResponse({ error: "Unauthorized" }, 401, request);
@@ -6244,8 +6297,8 @@ async function onRequestGet4(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestGet4, "onRequestGet");
-async function onRequestPost4(context) {
+__name(onRequestGet5, "onRequestGet");
+async function onRequestPost5(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
     return jsonResponse({ error: "Unauthorized" }, 401, request);
@@ -6268,16 +6321,16 @@ async function onRequestPost4(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestPost4, "onRequestPost");
-async function onRequestOptions6() {
+__name(onRequestPost5, "onRequestPost");
+async function onRequestOptions7() {
   return optionsResponse();
 }
-__name(onRequestOptions6, "onRequestOptions");
+__name(onRequestOptions7, "onRequestOptions");
 
 // api/settings/index.js
-var import_checked_fetch10 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header10 = __toESM(require_strip_cf_connecting_ip_header());
-async function onRequestGet5(context) {
+var import_checked_fetch11 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header11 = __toESM(require_strip_cf_connecting_ip_header());
+async function onRequestGet6(context) {
   const { request, env } = context;
   try {
     const sql = cs(env.DATABASE_URL);
@@ -6291,7 +6344,7 @@ async function onRequestGet5(context) {
     return jsonResponse({ error: e.message }, 500, request);
   }
 }
-__name(onRequestGet5, "onRequestGet");
+__name(onRequestGet6, "onRequestGet");
 async function onRequestPut3(context) {
   const { request, env } = context;
   if (!await isAuthenticated(request, env))
@@ -6312,14 +6365,14 @@ async function onRequestPut3(context) {
   }
 }
 __name(onRequestPut3, "onRequestPut");
-async function onRequestOptions7() {
+async function onRequestOptions8() {
   return optionsResponse();
 }
-__name(onRequestOptions7, "onRequestOptions");
+__name(onRequestOptions8, "onRequestOptions");
 
 // admin/_middleware.js
-var import_checked_fetch11 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header11 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch12 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header12 = __toESM(require_strip_cf_connecting_ip_header());
 async function onRequest(context) {
   const { request, next, env } = context;
   const url = new URL(request.url);
@@ -6400,81 +6453,102 @@ var routes = [
     modules: [onRequestPut2]
   },
   {
-    routePath: "/api/login",
-    mountPath: "/api",
+    routePath: "/api/analytics",
+    mountPath: "/api/analytics",
+    method: "GET",
+    middlewares: [],
+    modules: [onRequestGet3]
+  },
+  {
+    routePath: "/api/analytics",
+    mountPath: "/api/analytics",
     method: "OPTIONS",
     middlewares: [],
     modules: [onRequestOptions4]
   },
   {
-    routePath: "/api/login",
-    mountPath: "/api",
+    routePath: "/api/analytics",
+    mountPath: "/api/analytics",
     method: "POST",
     middlewares: [],
     modules: [onRequestPost]
   },
   {
-    routePath: "/api/logout",
+    routePath: "/api/login",
+    mountPath: "/api",
+    method: "OPTIONS",
+    middlewares: [],
+    modules: [onRequestOptions5]
+  },
+  {
+    routePath: "/api/login",
     mountPath: "/api",
     method: "POST",
     middlewares: [],
     modules: [onRequestPost2]
   },
   {
-    routePath: "/api/products",
-    mountPath: "/api/products",
-    method: "GET",
-    middlewares: [],
-    modules: [onRequestGet3]
-  },
-  {
-    routePath: "/api/products",
-    mountPath: "/api/products",
-    method: "OPTIONS",
-    middlewares: [],
-    modules: [onRequestOptions5]
-  },
-  {
-    routePath: "/api/products",
-    mountPath: "/api/products",
+    routePath: "/api/logout",
+    mountPath: "/api",
     method: "POST",
     middlewares: [],
     modules: [onRequestPost3]
   },
   {
+    routePath: "/api/products",
+    mountPath: "/api/products",
+    method: "GET",
+    middlewares: [],
+    modules: [onRequestGet4]
+  },
+  {
+    routePath: "/api/products",
+    mountPath: "/api/products",
+    method: "OPTIONS",
+    middlewares: [],
+    modules: [onRequestOptions6]
+  },
+  {
+    routePath: "/api/products",
+    mountPath: "/api/products",
+    method: "POST",
+    middlewares: [],
+    modules: [onRequestPost4]
+  },
+  {
     routePath: "/api/service",
     mountPath: "/api/service",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet4]
+    modules: [onRequestGet5]
   },
   {
     routePath: "/api/service",
     mountPath: "/api/service",
     method: "OPTIONS",
     middlewares: [],
-    modules: [onRequestOptions6]
+    modules: [onRequestOptions7]
   },
   {
     routePath: "/api/service",
     mountPath: "/api/service",
     method: "POST",
     middlewares: [],
-    modules: [onRequestPost4]
+    modules: [onRequestPost5]
   },
   {
     routePath: "/api/settings",
     mountPath: "/api/settings",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet5]
+    modules: [onRequestGet6]
   },
   {
     routePath: "/api/settings",
     mountPath: "/api/settings",
     method: "OPTIONS",
     middlewares: [],
-    modules: [onRequestOptions7]
+    modules: [onRequestOptions8]
   },
   {
     routePath: "/api/settings",
@@ -6492,21 +6566,21 @@ var routes = [
   }
 ];
 
-// ../.wrangler/tmp/bundle-HMoOEV/middleware-loader.entry.ts
-var import_checked_fetch18 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header18 = __toESM(require_strip_cf_connecting_ip_header());
+// ../.wrangler/tmp/bundle-z1bvjQ/middleware-loader.entry.ts
+var import_checked_fetch19 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header19 = __toESM(require_strip_cf_connecting_ip_header());
 
-// ../.wrangler/tmp/bundle-HMoOEV/middleware-insertion-facade.js
-var import_checked_fetch16 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header16 = __toESM(require_strip_cf_connecting_ip_header());
+// ../.wrangler/tmp/bundle-z1bvjQ/middleware-insertion-facade.js
+var import_checked_fetch17 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header17 = __toESM(require_strip_cf_connecting_ip_header());
 
 // ../node_modules/wrangler/templates/pages-template-worker.ts
-var import_checked_fetch13 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header13 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch14 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header14 = __toESM(require_strip_cf_connecting_ip_header());
 
 // ../node_modules/path-to-regexp/dist.es2015/index.js
-var import_checked_fetch12 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header12 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch13 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header13 = __toESM(require_strip_cf_connecting_ip_header());
 function lexer(str) {
   var tokens = [];
   var i = 0;
@@ -6953,8 +7027,8 @@ var cloneResponse = /* @__PURE__ */ __name((response) => (
 ), "cloneResponse");
 
 // ../node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-var import_checked_fetch14 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header14 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch15 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header15 = __toESM(require_strip_cf_connecting_ip_header());
 var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -6973,8 +7047,8 @@ var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 var middleware_ensure_req_body_drained_default = drainBody;
 
 // ../node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
-var import_checked_fetch15 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header15 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch16 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header16 = __toESM(require_strip_cf_connecting_ip_header());
 function reduceError(e) {
   return {
     name: e?.name,
@@ -6997,7 +7071,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-HMoOEV/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-z1bvjQ/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -7005,8 +7079,8 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
 var middleware_insertion_facade_default = pages_template_worker_default;
 
 // ../node_modules/wrangler/templates/middleware/common.ts
-var import_checked_fetch17 = __toESM(require_checked_fetch());
-var import_strip_cf_connecting_ip_header17 = __toESM(require_strip_cf_connecting_ip_header());
+var import_checked_fetch18 = __toESM(require_checked_fetch());
+var import_strip_cf_connecting_ip_header18 = __toESM(require_strip_cf_connecting_ip_header());
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
@@ -7031,7 +7105,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-HMoOEV/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-z1bvjQ/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

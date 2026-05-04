@@ -59,6 +59,15 @@ async function setupNewDatabase() {
             );
         `;
 
+        // 4. Ziyaret Sayaçları Tablosu
+        await sql`
+            CREATE TABLE IF NOT EXISTS page_visits (
+                visit_date DATE PRIMARY KEY,
+                visit_count INTEGER NOT NULL DEFAULT 0,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
         // Varsayılan Ayarları Ekle
         await sql`INSERT INTO site_settings (key, value) VALUES ('site_title', 'CLK Teknoloji'), ('whatsapp_number', '+905071561515') ON CONFLICT DO NOTHING`;
 
